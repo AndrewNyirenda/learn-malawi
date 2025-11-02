@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import studyResources from "../Data/studyResources";
 import ResourceCard from "./ResourceCard";
 import "../styles/studyNotes.css";
+import Footer from "../components/Footer.jsx";
+
 
 const StudyNotes = () => {
   const [level, setLevel] = useState("primary");
@@ -30,6 +32,7 @@ const StudyNotes = () => {
   const closeViewer = () => setViewingResource(null);
 
   return (
+    <>
     <div className="study-notes-wrapper">
       <h1>Study Notes & References</h1>
       <p className="description-text">
@@ -138,6 +141,9 @@ const StudyNotes = () => {
         </div>
       )}
     </div>
+    
+      <Footer />
+    </>
   );
 };
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { quizzes } from "../Data/quizzes";
 import "../styles/quizes.css";
+import Footer from "../components/Footer.jsx"
 
 const Quizes = () => {
   const [level, setLevel] = useState("primary");
@@ -95,6 +96,7 @@ const Quizes = () => {
   };
 
   return (
+    <>
     <div>
       {!selectedQuiz && (
         <>
@@ -245,6 +247,9 @@ const Quizes = () => {
         </div>
       )}
     </div>
+    
+      <Footer />
+      </>
   );
 };
 

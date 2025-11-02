@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { tutorials } from "../Data/tutorials";
 import "../styles/tutorials.css";
+import Footer from "../components/Footer.jsx";
 
 const Tutorials = () => {
   const [level, setLevel] = useState("secondary"); 
@@ -39,6 +40,7 @@ const Tutorials = () => {
   };
 
   return (
+    <>
     <div className="tutorials-wrapper">
       <h1 className="tutorials-title">Educational Tutorials</h1>
 
@@ -166,6 +168,9 @@ const Tutorials = () => {
         )}
       </div>
     </div>
+    
+      <Footer />
+    </>
   );
 };
 

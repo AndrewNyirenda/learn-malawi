@@ -3,6 +3,7 @@ import "../styles/abouts.css";
 import { FaUsers, FaBullseye, FaLightbulb, FaChalkboardTeacher, FaBookOpen, FaClock, FaProjectDiagram } from "react-icons/fa";
 import inno from "../images/inno.jpg";
 import willard from "../images/willard.JPG";
+import Footer from "../components/Footer.jsx";
 
 const About = () => {
   const teamMembers = [
@@ -41,6 +42,7 @@ const About = () => {
   ];
 
   return (
+    <>
     <div className="about-wrapper">
       <section className="story-section">
         <h2>Our Story</h2>
@@ -129,7 +131,11 @@ const About = () => {
           <button type="submit">Send Message</button>
         </form>
       </section>
+      
     </div>
+    
+      <Footer />
+    </>
   );
 };
 

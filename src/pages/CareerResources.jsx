@@ -1,9 +1,11 @@
 import React from "react";
 import { careerResources } from "../Data/careerResources";
 import "../styles/careerResources.css";
+import Footer from "../components/Footer.jsx"
 
 const CareerResources = () => {
   return (
+    <>
     <div className="career-resources-wrapper">
       <h1 className="career-resources-title">Career Resources</h1>
       <p className="career-resources-intro">
@@ -64,6 +66,9 @@ const CareerResources = () => {
         </div>
       </div>
     </div>
+    
+      <Footer />
+      </>
   );
 };
 

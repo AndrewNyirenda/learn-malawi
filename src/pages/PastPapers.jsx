@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import studyResources from "../Data/studyResources";
 import ResourceCard from "./ResourceCard";
 import "../styles/pastPapers.css";
+import Footer from "../components/Footer.jsx";
 
 const PastPapers = () => {
   const [level, setLevel] = useState("primary");
@@ -32,6 +33,7 @@ const PastPapers = () => {
   const closeViewer = () => setViewingResource(null);
 
   return (
+    <>
     <div className="pastpapers-wrapper">
       <h1>Past Papers And Reviews</h1>
       <p className="description-text">
@@ -129,6 +131,9 @@ const PastPapers = () => {
   </div>
 )}
     </div>
+    
+      <Footer />
+    </>
   );
 };
 
