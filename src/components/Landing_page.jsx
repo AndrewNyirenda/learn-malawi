@@ -86,7 +86,7 @@ const LandingPage = () => {
             <div className="hero-content-wrapper">
               <div className="hero-description">
                 <p>
-                  Learn Malawi is a free digital education platform dedicated to one powerful goal: Free, Quality Education for Every Malawian Student. We provide comprehensive, Curriculum-aligned learning resources for JCE and MSCE students across Malawi, leveling the playing field for learners in both urban and rural schools. Our platform offers structured notes, past papers, interactive quizzes, and multimedia tutorials-all designed for offline access and low-bandwidth areas. 
+                  Learn Malawi is a free digital education platform dedicated to one powerful goal: Free, Quality Education for Every Malawian Student. We provide comprehensive, Curriculum-aligned learning resources for JCE and MSCE students across Malawi, leveling the playing field for learners in both urban and rural schools. Our platform offers structured notes, past papers, interactive quizzes, and multimedia tutorials-all designed for offline access and low-bandwidth areas. We bridge Malawi's educational divide with technology to empower students and build a brighter future.
                 </p>
               </div>
               <div className="hero-image">
