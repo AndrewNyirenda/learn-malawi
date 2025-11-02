@@ -1,12 +1,16 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   preview: {
     port: 4173,
     host: true,
-    allowedHosts: true 
+    allowedHosts: [
+      'learn-malawi.onrender.com',
+      '.onrender.com'
+    ]
   },
   server: {
     port: 4173,
