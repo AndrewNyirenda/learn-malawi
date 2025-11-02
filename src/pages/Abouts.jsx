@@ -6,10 +6,17 @@ import willard from "../images/willard.JPG";
 import Footer from "../components/Footer.jsx";
 
 const About = () => {
-  const teamMembers = [
-    { name: "Willard Zimba", role: "Founder", bio: "Passionate about education in Malawi.", image: willard },
-    { name: "Willard Zimba", role: "Content Lead", bio: "Ensures quality learning resources.", image: willard },
+  
+  /*
+  
+      { name: "Willard Zimba", role: "Content Lead", bio: "Ensures quality learning resources.", image: willard },
     { name: "Innocent Frank Gomwa", role: "Developer", bio: "Builds the Learn Malawi platform.", image: inno },
+  
+  
+  */
+  
+  const teamMembers = [
+    { name: "Willard Zimba", role: "Founder", bio: "Passionate about education in Malawi.", image: willard }
   ];
 
   const missionVision = [
@@ -117,19 +124,6 @@ const About = () => {
             </div>
           ))}
         </div>
-      </section>
-
-      
-      <section className="contact-section">
-        <h2>Contact Us</h2>
-        <p>If you have any questions or suggestions, feel free to reach out to us!</p>
-        <p>Mr Willard Zimba on +265 997 67 47 58 OR Mr Innocent Gomwa on +265 883 36 08 44</p>
-        <form className="contact-form">
-          <input type="text" name="name" placeholder="Your Name" required />
-          <input type="email" name="email" placeholder="Your Email" required />
-          <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
-          <button type="submit">Send Message</button>
-        </form>
       </section>
       
     </div>

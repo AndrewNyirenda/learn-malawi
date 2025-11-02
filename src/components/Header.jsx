@@ -51,6 +51,13 @@ const Header = () => {
 
   return (
     <header className="HeaderWrapper">
+      {/* Desktop Logo */}
+      {!isMobile && (
+        <div className="LogoWrapper">
+          <img src={logo} alt="Learn Malawi logo" id="Logo" />
+        </div>
+      )}
+
       {/* Mobile Top Bar */}
       <div className="mobile-top-bar">
         {/* Logo */}
@@ -151,6 +158,15 @@ const Header = () => {
           }
         >
           About Us
+        </NavLink>
+        <NavLink
+          to="/contact"
+          onClick={closeMenu}
+          className={({ isActive }) =>
+            isActive ? "nav-link active" : "nav-link"
+          }
+        >
+          Contact
         </NavLink>
       </div>
 

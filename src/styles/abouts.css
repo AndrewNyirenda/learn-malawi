@@ -85,62 +85,6 @@
   margin-bottom: 1rem;
 }
 
-.contact-section {
-  margin-top: 3rem;
-  padding: 2rem;
-  background-color: rgba(0, 0, 0, 0.05);
-  border-radius: 16px;
-  text-align: center;
-}
-
-.contact-section h2 {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-  background: rgba(0, 0, 0, 0.726);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.contact-section p {
-  font-size: 1.1rem;
-  margin-bottom: 1.5rem;
-  color: rgba(0, 0, 0, 0.7);
-}
-
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-
-.contact-form input,
-.contact-form textarea {
-  width: 100%;
-  max-width: 500px;
-  padding: 0.8rem 1rem;
-  border-radius: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  font-size: 1rem;
-}
-
-.contact-form button {
-  padding: 0.8rem 1.5rem;
-  border-radius: 12px;
-  border: none;
-  background: linear-gradient(to right, #3b8efc, #91dbad, #bfc973);
-  color: #121212;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.contact-form button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(96, 177, 180, 0.5);
-}
-
 .mv-icon, .value-icon, .phil-icon {
   font-size: 2.2rem;
   color: #3b8efc;
@@ -155,11 +99,6 @@
   align-items: center;
   text-align: center;
 }
-
-
-
-
-
 
 @media (max-width: 768px) {
   .team-grid,
@@ -265,5 +204,3 @@
 .philosophy-list li:hover {
   transform: translateX(3px);
 }
-
-

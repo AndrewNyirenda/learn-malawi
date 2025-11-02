@@ -27,7 +27,8 @@ body {
     flex-flow: column;
     align-items: center;
     padding: 2rem;
-    margin-bottom: 2rem;
+    margin-top: -2rem;
+    
 }
 
 
@@ -38,7 +39,7 @@ body {
 }
 
 .hero-main-title h1 {
-    font-size: 2.5rem;
+    font-size: 2.3rem;
     font-weight: 900;
     opacity: 0.9;
     line-height: 1.2;
@@ -118,7 +119,8 @@ body {
         to right,
         rgba(32, 33, 34, 0.863)
     );
-    margin-top: 4rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -429,7 +431,7 @@ form {
 
 /* Trust Section Styles */
 .trust-section {
-  margin: 4rem auto;
+  margin: 2rem auto;
   padding: 2rem;
   text-align: center;
   width: 90%;

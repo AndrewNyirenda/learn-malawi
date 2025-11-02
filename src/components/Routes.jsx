@@ -6,6 +6,7 @@ import Quizes from "../pages/Quizes";
 import StudyNotes from "../pages/StudyNotes";
 import Tutorials from "../pages/Tutorials";
 import About from "../pages/Abouts";
+import Contact from "../pages/Contact";
 
 const RoutesComponent = () => {
   return (
@@ -16,7 +17,8 @@ const RoutesComponent = () => {
       <Route path="/tutorials" element={<Tutorials />} />
       <Route path="/quizes" element={<Quizes />} />
       <Route path="/career-resources" element={<CareerResources />} />
-      <Route path="/abouts" element={<About/>}/>   
+      <Route path="/abouts" element={<About/>}/>
+      <Route path="/contact" element={<Contact/>}/>
     </Routes>
   );
 };
