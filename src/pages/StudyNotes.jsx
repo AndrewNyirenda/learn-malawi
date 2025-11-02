@@ -1,4 +1,10 @@
+/*
+
 import React, { useState } from "react";
+
+
+*/
+
 import studyResources from "../Data/studyResources";
 import ResourceCard from "./ResourceCard";
 import "../styles/studyNotes.css";
