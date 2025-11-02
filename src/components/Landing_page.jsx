@@ -78,19 +78,19 @@ const LandingPage = () => {
         <>
           {/* Hero Section */}
           <div className="hero-section">
+            {/* Title above everything */}
+            <div className="hero-main-title">
+              <h1>Free, Quality Education For Every Student In Malawi</h1>
+            </div>
+            
             <div className="hero-content-wrapper">
               <div className="hero-description">
                 <p>
-                  Learn Malawi is a free digital education platform dedicated to one powerful goal: Free, Quality Education for Every Malawian Student. We provide comprehensive, Curriculum-aligned learning resources for JCE and MSCE students across Malawi, leveling the playing field for learners in both urban and rural schools. Our platform offers structured notes, past papers, interactive quizzes, and multimedia tutorials-all designed for offline access and low-bandwidth areas.
+                  Learn Malawi is a free digital education platform dedicated to one powerful goal: Free, Quality Education for Every Malawian Student. We provide comprehensive, Curriculum-aligned learning resources for JCE and MSCE students across Malawi, leveling the playing field for learners in both urban and rural schools. Our platform offers structured notes, past papers, interactive quizzes, and multimedia tutorials-all designed for offline access and low-bandwidth areas. 
                 </p>
               </div>
-              <div className="hero-image-section">
-                <div className="hero-title">
-                  <h1>Free, Quality Education For Every Student In Malawi</h1>
-                </div>
-                <div className="hero-image">
-                  <Heroslideshow />
-                </div>
+              <div className="hero-image">
+                <Heroslideshow />
               </div>
             </div>
           </div>

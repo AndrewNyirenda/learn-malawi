@@ -84,9 +84,7 @@ const Footer = () => {
         <a href="https://www.facebook.com/share/172CUpW5Hw/" target="_blank" rel="noopener noreferrer" aria-label="Visit our Facebook">
           <FaFacebook />
         </a>
-        <a href="https://www.facebook.com/share/172CUpW5Hw/" target="_blank" rel="noopener noreferrer" aria-label="Visit our Facebook page">
-          <FaFacebook />
-        </a>
+
       </div>
 
       <hr />

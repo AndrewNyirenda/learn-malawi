@@ -7,7 +7,7 @@ html {
 }
 
 .FooterWrapper {
-  background: linear-gradient(to right, #14140b96, #2b9b5dda, #1f2733c4);
+  background: linear-gradient(to right, #14140b, #2b9b5d, #1f2733);
   color: white;
   margin-top: 4rem;
   padding: 2rem;
@@ -28,6 +28,7 @@ html {
   height: 50px;
   width: auto;
   transition: transform 0.3s ease-in-out;
+  filter: brightness(1.1);
 }
 
 .footer-logo img:hover {
@@ -41,14 +42,15 @@ html {
 
 .footer-section h3 {
   margin-bottom: 1rem;
-  color: #1f1d1dd7; 
+  color: #fff; 
+  font-weight: 600;
 }
 
 .footer-section p,
 .footer-section a,
 .footer-bottom p {
   font-size: 0.95rem;
-  color: #18171794;
+  color: #fff; 
   margin: 0.3rem 0;
   text-decoration: none;
   transition: color 0.3s ease, text-decoration 0.3s ease;
@@ -66,7 +68,7 @@ html {
 
 .footer-section a:hover {
   text-decoration: underline;
-  color: #ffffff;
+  color: #f0f0f0;
 }
 
 .footer-section a:focus,
@@ -76,26 +78,26 @@ html {
 }
 
 .footer-box {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(255, 255, 255, 0.15); 
   padding: 1rem 1.2rem;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2); 
   width: 100%;
   max-width: 300px;
   transition: transform 0.3s ease;
+  backdrop-filter: blur(5px); 
 }
 
 .footer-box:hover {
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: rgba(255, 255, 255, 0.2); 
   transform: translateY(-8px);
 }
 
 .footer-icon {
   margin-right: 0.5rem;
   vertical-align: middle;
-  color: #1f72dd; 
+  color: #4a90e2; 
 }
-
 
 .social-icons {
   margin: 1.5rem 0;
@@ -111,23 +113,22 @@ html {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.08);
-  color: #3a59a7cc; 
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff; 
   font-size: 1.2rem;
   transition: all 0.3s ease;
 }
 
 .social-icons a:hover {
-  background-color: #f0f1f8;
-  color: #0a0a0a;
+  background-color: #ffffff; 
+  color: #1f2733; 
   transform: scale(1.1);
 }
-
 
 footer hr {
   border: 0;
   height: 1px;
-  background: rgba(7, 7, 7, 0.1);
+  background: rgba(255, 255, 255, 0.3); 
   margin: 1.5rem 0;
 }
 
@@ -147,12 +148,12 @@ footer hr {
 }
 
 .legal-links a {
-  color: #0a0a0a;
+  color: #ffffff; 
   transition: color 0.3s ease;
 }
 
 .legal-links a:hover {
-  color: #136de2;
+  color: #b99213; 
 }
 
 .footer-section.contact {
@@ -160,6 +161,15 @@ footer hr {
 }
 
 
+#Logo {
+  filter: brightness(1) !important
+}
+
+
+.resource-card img {
+  opacity: 1 !important;
+  filter: brightness(1) !important;
+}
 
 @media (max-width: 768px) {
   .footer-content {
@@ -203,7 +213,6 @@ footer hr {
     width: 100%;
   }
 }
-
 
 @media (max-width: 400px) {
   .footer-box {
