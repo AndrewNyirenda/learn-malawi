@@ -17,7 +17,7 @@ import {
 
 const Footer = () => {
   const contactDetails = {
-    email: "info@learnmalawi.org",
+    email: "learnmalaw@gmail.com",
     whatsapp: "+265 997 674 758",
     office: "Area 8, Biwi, Lilongwe",
   };
