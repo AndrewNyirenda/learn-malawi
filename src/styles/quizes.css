@@ -10,7 +10,7 @@
 
 .quiz-title {
   text-align: center;
-  font-size: 2.2rem;
+  font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 2rem;
   background: linear-gradient(to right, #0288d1, #045a72, #3b8efc); 
@@ -176,11 +176,6 @@
 
 .quiz-description h1 {
   font-size: 2.5rem;
-  background-color: linear-gradient(to right, #0288d1, #045a72, #3b68fc);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  margin-bottom: 1rem;
 }
 
 .quiz-description p {

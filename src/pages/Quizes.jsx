@@ -101,7 +101,7 @@ const Quizes = () => {
       {!selectedQuiz && (
         <>
           <div className="quiz-description">
-            <h2>Interactive Quizzes</h2>
+            <h1>Interactive Quizzes</h1>
             <p>
               Test your knowledge across various subjects. Select your level and subject to get started. Each quiz is timed and provides instant feedback upon completion!
             </p>

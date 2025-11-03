@@ -19,7 +19,7 @@ export const tutorials = [
     subject: "English",
     level: "primary",
     description: "Understand the basic building blocks of English language including nouns, verbs, adjectives and more.",
-    videoUrl: "https://www.youtube.com/embed/SSbZUn8hCho",
+    videoUrl: "https://www.youtube.com/embed/Bl5kY4G5k6A",
     attachments: [
       {
         name: "English Grammar Guide",

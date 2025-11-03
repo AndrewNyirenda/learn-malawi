@@ -28,6 +28,7 @@ html {
   width: auto;
   transition: transform 0.3s ease-in-out;
   filter: brightness(1.1);
+  margin-top: 5rem;
 }
 
 .footer-logo img:hover {
@@ -134,7 +135,7 @@ footer hr {
 .footer-bottom {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   font-size: 0.9rem;
   padding-top: 1rem;

@@ -26,7 +26,7 @@ const Footer = () => {
     { name: "Study Notes", link: "/study-notes", icon: <FaBook className="footer-icon" /> },
     { name: "Past Papers", link: "/past-papers", icon: <FaFileAlt className="footer-icon" /> },
     { name: "Video Tutorials", link: "/tutorials", icon: <FaVideo className="footer-icon" /> },
-    { name: "Practice Quizzes", link: "/quizzes", icon: <FaQuestionCircle className="footer-icon" /> },
+    { name: "Practice Quizzes", link: "/quizes", icon: <FaQuestionCircle className="footer-icon" /> },
   ];
 
   return (
@@ -92,11 +92,15 @@ const Footer = () => {
       
       <div className="footer-bottom">
         <p>© {new Date().getFullYear()} Learn Malawi. All Rights Reserved.</p>
+        
+        {/*
         <div className="legal-links">
+        
           <Link to="/privacy-policy">Privacy Policy</Link>
           <Link to="/terms">Terms of Service</Link>
           <Link to="/support">Support</Link>
         </div>
+        */}
       </div>
     </footer>
   );
