@@ -140,32 +140,12 @@ const Tutorials = () => {
                   </div>
                 )}
               </div>
-
-              {tut.attachments && tut.attachments.length > 0 && (
-                <div className="attachments">
-                  <h4>Study Materials:</h4>
-                  <ul>
-                    {tut.attachments.map((file, idx) => (
-                      <li key={idx}>
-                        <a
-                          href={file.url}
-                          download
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="attachment-link"
-                        >
-                          📎 {file.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
             </div>
           ))
         ) : (
           <p className="no-results">No tutorials available for this selection.</p>
         )}
+      
       </div>
     </div>
     
