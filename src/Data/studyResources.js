@@ -8,7 +8,7 @@ const studyResources = {
         downloadLink: "/Agriculture 3.pdf",
         downloadName: "Agriculture_Form_3.pdf",
         category: "Agriculture",
-        year: 2023,
+        class: "Form 3",
       },
       {
         id: 2,
@@ -17,7 +17,7 @@ const studyResources = {
         downloadLink: "/BIOLOGY 2.pdf",
         downloadName: "Biology_Form_2.pdf",
         category: "Biology",
-        year: 2023,
+        class: "Form 2",
       },
       {
         id: 3,
@@ -26,7 +26,7 @@ const studyResources = {
         downloadLink: "/CHEMISTRY 3.pdf",
         downloadName: "Chemistry_Form_3.pdf",
         category: "Chemistry",
-        year: 2023,
+        class: "Form 3",
       },
       {
         id: 4,
@@ -35,7 +35,7 @@ const studyResources = {
         downloadLink: "/Physics Excell 4.pdf",
         downloadName: "Physics_Form_4.pdf",
         category: "Physics",
-        year: 2023,
+        class: "Form 4",
       },
       {
         id: 5,
@@ -44,7 +44,7 @@ const studyResources = {
         downloadLink: "/Mathematics Excel 3.pdf",
         downloadName: "Mathematics_Form_3.pdf",
         category: "Mathematics",
-        year: 2023,
+        class: "Form 3",
       },
       {
         id: 6,
@@ -53,7 +53,7 @@ const studyResources = {
         downloadLink: "/ENGLISH GRAMMAR.pdf",
         downloadName: "English_Grammar.pdf",
         category: "English",
-        year: 2022,
+        class: "Form 1-4",
       },
       {
         id: 7,
@@ -62,7 +62,7 @@ const studyResources = {
         downloadLink: "/CHICHEWA GALAMALA.pdf",
         downloadName: "Chichewa_Galamala.pdf",
         category: "Chichewa",
-        year: 2022,
+        class: "Form 1-4",
       },
       {
         id: 8,
@@ -71,7 +71,7 @@ const studyResources = {
         downloadLink: "/Computer.pdf",
         downloadName: "Computer_Studies.pdf",
         category: "Computer",
-        year: 2023,
+        class: "Form 1-4",
       },
       {
         id: 9,
@@ -80,7 +80,7 @@ const studyResources = {
         downloadLink: "/Complete Geography.pdf",
         downloadName: "Geography.pdf",
         category: "Geography",
-        year: 2023,
+        class: "Form 1-4",
       },
       {
         id: 10,
@@ -89,7 +89,7 @@ const studyResources = {
         downloadLink: "/HISTORY 3.pdf",
         downloadName: "History_Form_3.pdf",
         category: "History",
-        year: 2023,
+        class: "Form 3",
       },
       {
         id: 11,
@@ -98,7 +98,7 @@ const studyResources = {
         downloadLink: "/Target in Morden World History.pdf",
         downloadName: "World_History.pdf",
         category: "History",
-        year: 2022,
+        class: "Form 1-4",
       },
       {
         id: 12,
@@ -107,7 +107,7 @@ const studyResources = {
         downloadLink: "/Bible knowledge.pdf",
         downloadName: "Bible_Knowledge.pdf",
         category: "Religious Studies",
-        year: 2022,
+        class: "Form 1-4",
       },
       {
         id: 13,
@@ -116,7 +116,7 @@ const studyResources = {
         downloadLink: "/NOTE MAKING.pdf",
         downloadName: "Note_Making.pdf",
         category: "Study Skills",
-        year: 2022,
+        class: "Form 1-4",
       },
       {
         id: 14,
@@ -125,7 +125,7 @@ const studyResources = {
         downloadLink: "/Macbeth Themes.pdf",
         downloadName: "Macbeth_Themes.pdf",
         category: "Literature",
-        year: 2023,
+        class: "Form 3-4",
       },
       {
         id: 15,
@@ -134,7 +134,7 @@ const studyResources = {
         downloadLink: "/The Pearl Summary.pdf",
         downloadName: "The_Pearl_Summary.pdf",
         category: "Literature",
-        year: 2023,
+        class: "Form 3-4",
       },
       {
         id: 16,
@@ -143,7 +143,7 @@ const studyResources = {
         downloadLink: "/NTHONDO.pdf",
         downloadName: "Nthondo.pdf",
         category: "Literature",
-        year: 2023,
+        class: "Form 3-4",
       },
     ],
     pastPapers: [
@@ -155,6 +155,7 @@ const studyResources = {
         downloadName: "2024_MANEB_Agriculture_I.pdf",
         category: "Agriculture",
         year: 2024,
+        class: "Form 4",
       },
       {
         id: 18,
@@ -164,6 +165,7 @@ const studyResources = {
         downloadName: "2024_MANEB_Chemistry_II.pdf",
         category: "Chemistry",
         year: 2024,
+        class: "Form 4",
       },
       {
         id: 19,
@@ -173,6 +175,7 @@ const studyResources = {
         downloadName: "2025_CEED_Biology_I.pdf",
         category: "Biology",
         year: 2025,
+        class: "Form 4",
       },
       {
         id: 20,
@@ -182,6 +185,7 @@ const studyResources = {
         downloadName: "2025_CEED_Biology_II.pdf",
         category: "Biology",
         year: 2025,
+        class: "Form 4",
       },
       {
         id: 21,
@@ -191,6 +195,7 @@ const studyResources = {
         downloadName: "2025_CEED_English_I.pdf",
         category: "English",
         year: 2025,
+        class: "Form 4",
       },
       {
         id: 22,
@@ -200,6 +205,7 @@ const studyResources = {
         downloadName: "2025_CEED_English_II.pdf",
         category: "English",
         year: 2025,
+        class: "Form 4",
       },
       {
         id: 23,
@@ -209,6 +215,7 @@ const studyResources = {
         downloadName: "2025_CEED_English_III.pdf",
         category: "English",
         year: 2025,
+        class: "Form 4",
       },
       {
         id: 24,
@@ -218,6 +225,7 @@ const studyResources = {
         downloadName: "2025_CEED_Chichewa_2.pdf",
         category: "Chichewa",
         year: 2025,
+        class: "Form 4",
       },
       {
         id: 25,
@@ -227,6 +235,7 @@ const studyResources = {
         downloadName: "2025_CEED_Chichewa_3.pdf",
         category: "Chichewa",
         year: 2025,
+        class: "Form 4",
       },
       {
         id: 26,
@@ -236,6 +245,7 @@ const studyResources = {
         downloadName: "2025_CEED_Mathematics_I.pdf",
         category: "Mathematics",
         year: 2025,
+        class: "Form 4",
       },
       {
         id: 27,
@@ -245,6 +255,7 @@ const studyResources = {
         downloadName: "2025_CEED_Mathematics_II.pdf",
         category: "Mathematics",
         year: 2025,
+        class: "Form 4",
       },
       {
         id: 28,
@@ -254,6 +265,7 @@ const studyResources = {
         downloadName: "2025_Additional_Mathematics_I.pdf",
         category: "Mathematics",
         year: 2025,
+        class: "Form 4",
       },
       {
         id: 29,
@@ -263,6 +275,7 @@ const studyResources = {
         downloadName: "2025_Additional_Mathematics_II.pdf",
         category: "Mathematics",
         year: 2025,
+        class: "Form 4",
       },
     ],
   },
@@ -276,7 +289,7 @@ const studyResources = {
         downloadLink: "/pastpapers/PRIMARY SCHOOL/BIBLE KNOWLEDGE 7.pdf",
         downloadName: "Bible_Knowledge_Std7.pdf",
         category: "Religious Studies",
-        year: 2023,
+        class: "Standard 7",
       },
       {
         id: 31,
@@ -285,7 +298,7 @@ const studyResources = {
         downloadLink: "/pastpapers/PRIMARY SCHOOL/BIBLE KNOWLEDGE 8.pdf",
         downloadName: "Bible_Knowledge_Std8.pdf",
         category: "Religious Studies",
-        year: 2023,
+        class: "Standard 8",
       },
       {
         id: 32,
@@ -294,7 +307,7 @@ const studyResources = {
         downloadLink: "/pastpapers/PRIMARY SCHOOL/BIBLE kNOWLEDGE.pdf",
         downloadName: "Bible_Knowledge_Guide.pdf",
         category: "Religious Studies",
-        year: 2022,
+        class: "Standard 5-8",
       },
       {
         id: 33,
@@ -303,7 +316,7 @@ const studyResources = {
         downloadLink: "/pastpapers/PRIMARY SCHOOL/CHICHEWA.pdf",
         downloadName: "Chichewa_Primary.pdf",
         category: "Chichewa",
-        year: 2023,
+        class: "Standard 1-8",
       },
       {
         id: 34,
@@ -312,7 +325,7 @@ const studyResources = {
         downloadLink: "/pastpapers/PRIMARY SCHOOL/EXPRESSIVE ARTS 8.pdf",
         downloadName: "Expressive_Arts_Std8.pdf",
         category: "Expressive Arts",
-        year: 2023,
+        class: "Standard 8",
       },
       {
         id: 35,
@@ -321,7 +334,7 @@ const studyResources = {
         downloadLink: "/pastpapers/PRIMARY SCHOOL/English 7.pdf",
         downloadName: "English_Std7.pdf",
         category: "English",
-        year: 2023,
+        class: "Standard 7",
       },
       {
         id: 36,
@@ -330,7 +343,7 @@ const studyResources = {
         downloadLink: "/pastpapers/PRIMARY SCHOOL/LIFE SKILLS.pdf",
         downloadName: "Life_Skills_Guide.pdf",
         category: "Life Skills",
-        year: 2022,
+        class: "Standard 1-8",
       },
       {
         id: 37,
@@ -339,7 +352,7 @@ const studyResources = {
         downloadLink: "/pastpapers/PRIMARY SCHOOL/Life Skills Notes.pdf",
         downloadName: "Life_Skills_Notes.pdf",
         category: "Life Skills",
-        year: 2022,
+        class: "Standard 1-8",
       },
       {
         id: 38,
@@ -348,7 +361,7 @@ const studyResources = {
         downloadLink: "/pastpapers/PRIMARY SCHOOL/MATHEMATICS.pdf",
         downloadName: "Mathematics_Primary.pdf",
         category: "Mathematics",
-        year: 2023,
+        class: "Standard 1-8",
       },
       {
         id: 39,
@@ -357,7 +370,7 @@ const studyResources = {
         downloadLink: "/pastpapers/PRIMARY SCHOOL/Maths TG 7.pdf",
         downloadName: "Mathematics_Teacher_Guide_7.pdf",
         category: "Mathematics",
-        year: 2023,
+        class: "Standard 7",
       },
       {
         id: 40,
@@ -366,7 +379,7 @@ const studyResources = {
         downloadLink: "/pastpapers/PRIMARY SCHOOL/SOCIAL 7.pdf",
         downloadName: "Social_Studies_Std7.pdf",
         category: "Social Studies",
-        year: 2023,
+        class: "Standard 7",
       },
       {
         id: 41,
@@ -375,7 +388,7 @@ const studyResources = {
         downloadLink: "/pastpapers/PRIMARY SCHOOL/STD 8 AGRICULTURE.pdf",
         downloadName: "Agriculture_Std8.pdf",
         category: "Agriculture",
-        year: 2023,
+        class: "Standard 8",
       },
     ],
     pastPapers: [
@@ -387,6 +400,7 @@ const studyResources = {
         downloadName: "2025_Primary_Science.pdf",
         category: "Science",
         year: 2025,
+        class: "Standard 8",
       },
       {
         id: 43,
@@ -396,6 +410,7 @@ const studyResources = {
         downloadName: "Agriculture_Questions_Answers.pdf",
         category: "Agriculture",
         year: 2024,
+        class: "Standard 8",
       },
       {
         id: 44,
@@ -405,6 +420,7 @@ const studyResources = {
         downloadName: "Expressive_Arts_Answers.pdf",
         category: "Expressive Arts",
         year: 2024,
+        class: "Standard 8",
       },
       {
         id: 45,
@@ -414,6 +430,7 @@ const studyResources = {
         downloadName: "Questions_Answers_Set1.pdf",
         category: "General",
         year: 2024,
+        class: "Standard 8",
       },
       {
         id: 46,
@@ -423,6 +440,7 @@ const studyResources = {
         downloadName: "Questions_Answers_Set2.pdf",
         category: "General",
         year: 2024,
+        class: "Standard 8",
       },
       {
         id: 47,
@@ -432,6 +450,7 @@ const studyResources = {
         downloadName: "Science_Questions_Answers.pdf",
         category: "Science",
         year: 2024,
+        class: "Standard 8",
       },
     ],
   },
