@@ -400,7 +400,7 @@ const studyResources = {
         downloadName: "2025_Primary_Science.pdf",
         category: "Science",
         year: 2025,
-        class: "Standard 8",
+        class: "Standard 5",
       },
       {
         id: 43,
@@ -410,7 +410,7 @@ const studyResources = {
         downloadName: "Agriculture_Questions_Answers.pdf",
         category: "Agriculture",
         year: 2024,
-        class: "Standard 8",
+        class: "Standard 6",
       },
       {
         id: 44,
