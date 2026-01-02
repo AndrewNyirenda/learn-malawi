@@ -53,7 +53,7 @@ const studyResources = {
         downloadLink: "/ENGLISH GRAMMAR.pdf",
         downloadName: "English_Grammar.pdf",
         category: "English",
-        class: "Form 1-4",
+        class: "Form 4",
       },
       {
         id: 7,
@@ -62,7 +62,7 @@ const studyResources = {
         downloadLink: "/CHICHEWA GALAMALA.pdf",
         downloadName: "Chichewa_Galamala.pdf",
         category: "Chichewa",
-        class: "Form 1-4",
+        class: "Form 4",
       },
       {
         id: 8,
@@ -71,7 +71,7 @@ const studyResources = {
         downloadLink: "/Computer.pdf",
         downloadName: "Computer_Studies.pdf",
         category: "Computer",
-        class: "Form 1-4",
+        class: "Form 4",
       },
       {
         id: 9,
@@ -80,7 +80,7 @@ const studyResources = {
         downloadLink: "/Complete Geography.pdf",
         downloadName: "Geography.pdf",
         category: "Geography",
-        class: "Form 1-4",
+        class: "Form 4",
       },
       {
         id: 10,
@@ -98,7 +98,7 @@ const studyResources = {
         downloadLink: "/Target in Morden World History.pdf",
         downloadName: "World_History.pdf",
         category: "History",
-        class: "Form 1-4",
+        class: "Form 4",
       },
       {
         id: 12,
@@ -107,7 +107,7 @@ const studyResources = {
         downloadLink: "/Bible knowledge.pdf",
         downloadName: "Bible_Knowledge.pdf",
         category: "Religious Studies",
-        class: "Form 1-4",
+        class: "Form 1",
       },
       {
         id: 13,
@@ -116,7 +116,7 @@ const studyResources = {
         downloadLink: "/NOTE MAKING.pdf",
         downloadName: "Note_Making.pdf",
         category: "Study Skills",
-        class: "Form 1-4",
+        class: "Form 2",
       },
       {
         id: 14,
@@ -125,7 +125,7 @@ const studyResources = {
         downloadLink: "/Macbeth Themes.pdf",
         downloadName: "Macbeth_Themes.pdf",
         category: "Literature",
-        class: "Form 3-4",
+        class: "Form 4",
       },
       {
         id: 15,
@@ -134,7 +134,7 @@ const studyResources = {
         downloadLink: "/The Pearl Summary.pdf",
         downloadName: "The_Pearl_Summary.pdf",
         category: "Literature",
-        class: "Form 3-4",
+        class: "Form 4",
       },
       {
         id: 16,
@@ -143,7 +143,7 @@ const studyResources = {
         downloadLink: "/NTHONDO.pdf",
         downloadName: "Nthondo.pdf",
         category: "Literature",
-        class: "Form 3-4",
+        class: "Form 4",
       },
     ],
     pastPapers: [
@@ -307,7 +307,7 @@ const studyResources = {
         downloadLink: "/pastpapers/PRIMARY SCHOOL/BIBLE kNOWLEDGE.pdf",
         downloadName: "Bible_Knowledge_Guide.pdf",
         category: "Religious Studies",
-        class: "Standard 5-8",
+        class: "Standard 8",
       },
       {
         id: 33,
@@ -316,7 +316,7 @@ const studyResources = {
         downloadLink: "/pastpapers/PRIMARY SCHOOL/CHICHEWA.pdf",
         downloadName: "Chichewa_Primary.pdf",
         category: "Chichewa",
-        class: "Standard 1-8",
+        class: "Standard 8",
       },
       {
         id: 34,
@@ -343,7 +343,7 @@ const studyResources = {
         downloadLink: "/pastpapers/PRIMARY SCHOOL/LIFE SKILLS.pdf",
         downloadName: "Life_Skills_Guide.pdf",
         category: "Life Skills",
-        class: "Standard 1-8",
+        class: "Standard 8",
       },
       {
         id: 37,
@@ -352,7 +352,7 @@ const studyResources = {
         downloadLink: "/pastpapers/PRIMARY SCHOOL/Life Skills Notes.pdf",
         downloadName: "Life_Skills_Notes.pdf",
         category: "Life Skills",
-        class: "Standard 1-8",
+        class: "Standard 8",
       },
       {
         id: 38,
@@ -361,7 +361,7 @@ const studyResources = {
         downloadLink: "/pastpapers/PRIMARY SCHOOL/MATHEMATICS.pdf",
         downloadName: "Mathematics_Primary.pdf",
         category: "Mathematics",
-        class: "Standard 1-8",
+        class: "Standard 8",
       },
       {
         id: 39,
