@@ -2,11 +2,23 @@ import React, { useState } from "react";
 import newsData from "../Data/news";
 import "../styles/news.css";
 import Footer from "../components/Footer.jsx";
+import { useNavigate } from "react-router-dom";
+
+
+
+
 
 const News = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [selectedArticle, setSelectedArticle] = useState(null);
+  
+  const navigate = useNavigate();
+  
+  const handleCardClick = (article) => {
+    navigate(`/news/${article.id}`);
+  };
+  
 
   const allCategories = ["all", ...new Set(newsData.map(article => article.category))];
 
@@ -72,7 +84,7 @@ const News = () => {
               <div 
                 key={article.id} 
                 className="news-card"
-                onClick={() => setSelectedArticle(article)}
+                onClick={() => handleCardClick(article)}
               >
                 <div className="news-card-image">
                   <img src={article.imageUrl} alt={article.title} />

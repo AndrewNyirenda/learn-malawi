@@ -8,6 +8,9 @@ import Tutorials from "../pages/Tutorials";
 import About from "../pages/Abouts";
 import Contact from "../pages/Contact";
 import News from "../pages/News";
+import NewsFullStory from "../pages/news-full-story";
+
+
 
 const RoutesComponent = () => {
   return (
@@ -19,6 +22,10 @@ const RoutesComponent = () => {
       <Route path="/quizes" element={<Quizes />} />
       
       <Route path="/news" element={<News />} />
+
+
+<Route path="/news/:id" element={<NewsFullStory />} />
+      
       
       
       <Route path="/career-resources" element={<CareerResources />} />
