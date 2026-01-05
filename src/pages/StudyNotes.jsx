@@ -1,29 +1,56 @@
-
-
-import React, { useState } from "react";
-
-
-
-
+import React, { useState, useEffect } from "react";
 import studyResources from "../Data/studyResources";
 import ResourceCard from "./ResourceCard";
 import "../styles/studyNotes.css";
 import Footer from "../components/Footer.jsx";
 
-
 const StudyNotes = () => {
   const [level, setLevel] = useState("primary");
-  const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("all");
+  const [classFilter, setClassFilter] = useState("all");
+  const [yearFilter, setYearFilter] = useState("all");
   const [viewingResource, setViewingResource] = useState(null);
 
-  const filterResources = (resources) => {
-    return resources.filter(({ title, category: resourceCategory }) => {
-      const matchesSearch = title.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = category === "all" || resourceCategory === category;
-      return matchesSearch && matchesCategory;
+  // Get available classes and years based on current level
+  const getAvailableClasses = () => {
+    const allResources = [
+      ...studyResources[level].books,
+      ...studyResources[level].pastPapers
+    ];
+    
+    const classes = [...new Set(allResources.map(resource => resource.class))];
+    return classes.sort((a, b) => {
+      const aNum = parseInt(a.replace(/\D/g, ''));
+      const bNum = parseInt(b.replace(/\D/g, ''));
+      return aNum - bNum;
     });
   };
+
+  const getAvailableYears = () => {
+    const allResources = studyResources[level].pastPapers;
+    const years = [...new Set(allResources
+      .filter(resource => resource.year)
+      .map(resource => resource.year)
+    )];
+    return years.sort((a, b) => b - a);
+  };
+
+  const filterResources = (resources) => {
+    return resources.filter(({ title, category: resourceCategory, class: resourceClass, year }) => {
+      const matchesCategory = category === "all" || resourceCategory === category;
+      const matchesClass = classFilter === "all" || resourceClass === classFilter;
+      const matchesYear = yearFilter === "all" || year == yearFilter;
+      
+      return matchesCategory && matchesClass && matchesYear;
+    });
+  };
+
+  // Reset filters when level changes
+  useEffect(() => {
+    setCategory("all");
+    setClassFilter("all");
+    setYearFilter("all");
+  }, [level]);
 
   const filteredBooks = filterResources(studyResources[level].books);
   const filteredPastPapers = filterResources(studyResources[level].pastPapers);
@@ -37,117 +64,145 @@ const StudyNotes = () => {
 
   const closeViewer = () => setViewingResource(null);
 
+  const availableClasses = getAvailableClasses();
+  const availableYears = getAvailableYears();
+
   return (
     <>
-    <div className="study-notes-wrapper">
-      <h1>Study Notes & References</h1>
-      <p className="description-text">
-        Access a curated collection of books and past exam papers to support your studies.
-        <br />
-        <br />
-      </p>
+      <div className="study-notes-wrapper">
+        <h1>Study Notes & References</h1>
+        <p className="description-text">
+          Access a curated collection of books and past exam papers to support your studies.
+          <br />
+          <br />
+        </p>
 
-      {/* Level Tabs */}
-      <div className="level-tabs">
-        <button
-          className={level === "primary" ? "active" : ""}
-          onClick={() => setLevel("primary")}
-        >
-          Primary
-        </button>
-        <button
-          className={level === "secondary" ? "active" : ""}
-          onClick={() => setLevel("secondary")}
-        >
-          Secondary
-        </button>
-      </div>
-
-      {/* Search & Filter */}
-      <div className="search-filter-container">
-        <input
-          type="text"
-          placeholder="Search by title..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="search-input"
-        />
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="category-select"
-        >
-          <option value="all">All Categories</option>
-          {allCategories.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Books Section */}
-      <section>
-        <h2>Books</h2>
-        <div className="grid-container">
-          {filteredBooks.length > 0 ? (
-            filteredBooks.map((resource) => (
-              <ResourceCard
-                key={resource.id}
-                title={resource.title}
-                thumbnail={resource.thumbnail}
-                downloadLink={resource.downloadLink}
-                downloadName={resource.downloadName}
-                onView={() => setViewingResource(resource)}
-              />
-            ))
-          ) : (
-            <p className="no-results">No books found.</p>
-          )}
+        {/* Level Tabs */}
+        <div className="level-tabs">
+          <button
+            className={level === "primary" ? "active" : ""}
+            onClick={() => setLevel("primary")}
+          >
+            Primary
+          </button>
+          <button
+            className={level === "secondary" ? "active" : ""}
+            onClick={() => setLevel("secondary")}
+          >
+            Secondary
+          </button>
         </div>
-      </section>
 
-      {/* Past Papers Section */}
-      <section>
-        <h2>Past Papers</h2>
-        <div className="grid-container">
-          {filteredPastPapers.length > 0 ? (
-            filteredPastPapers.map((resource) => (
-              <ResourceCard
-                key={resource.id}
-                title={resource.title}
-                thumbnail={resource.thumbnail}
-                downloadLink={resource.downloadLink}
-                downloadName={resource.downloadName}
-                onView={() => setViewingResource(resource)}
-              />
-            ))
-          ) : (
-            <p className="no-results">No past papers found.</p>
-          )}
-        </div>
-      </section>
+        {/* Filters Container */}
+        <div className="filters-container">
+          <div className="filter-group">
+            <label htmlFor="category">Category</label>
+            <select
+              id="category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="filter-select"
+            >
+              <option value="all">All Categories</option>
+              {allCategories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </div>
 
-      {/* PDF Modal Viewer */}
-      {viewingResource && (
-        <div className="modal-overlay" onClick={closeViewer}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close-btn" onClick={closeViewer}>
-              &times;
-            </button>
-            <h2>{viewingResource.title}</h2>
-            <iframe
-              src={viewingResource.downloadLink}
-              title={viewingResource.title}
-              width="100%"
-              height="600px"
-              style={{ border: "none" }}
-            />
+          <div className="filter-group">
+            <label htmlFor="class">Class / Form</label>
+            <select
+              id="class"
+              value={classFilter}
+              onChange={(e) => setClassFilter(e.target.value)}
+              className="filter-select"
+            >
+              <option value="all">All Classes</option>
+              {availableClasses.map(cls => (
+                <option key={cls} value={cls}>{cls}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="filter-group">
+            <label htmlFor="year">Year</label>
+            <select
+              id="year"
+              value={yearFilter}
+              onChange={(e) => setYearFilter(e.target.value)}
+              className="filter-select"
+              disabled={availableYears.length === 0}
+            >
+              <option value="all">All Years</option>
+              {availableYears.map(year => (
+                <option key={year} value={year}>{year}</option>
+              ))}
+            </select>
+            {availableYears.length === 0 && (
+              <small className="filter-hint">Only available for past papers</small>
+            )}
           </div>
         </div>
-      )}
-    </div>
-    
+
+        {/* Books Section */}
+        <section>
+          <h2>Books</h2>
+          <div className="grid-container">
+            {filteredBooks.length > 0 ? (
+              filteredBooks.map((resource) => (
+                <ResourceCard
+                  key={resource.id}
+                  {...resource}
+                  onView={() => setViewingResource(resource)}
+                />
+              ))
+            ) : (
+              <p className="no-results">No books found matching your filters. Try adjusting your search criteria.</p>
+            )}
+          </div>
+        </section>
+
+        {/* Past Papers Section */}
+        <section>
+          <h2>Past Papers</h2>
+          <div className="grid-container">
+            {filteredPastPapers.length > 0 ? (
+              filteredPastPapers.map((resource) => (
+                <ResourceCard
+                  key={resource.id}
+                  {...resource}
+                  onView={() => setViewingResource(resource)}
+                />
+              ))
+            ) : (
+              <p className="no-results">No past papers found matching your filters. Try adjusting your search criteria.</p>
+            )}
+          </div>
+        </section>
+
+        {/* PDF Modal Viewer */}
+        {viewingResource && (
+          <div className="modal-overlay" onClick={closeViewer}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <button className="modal-close-btn" onClick={closeViewer}>
+                &times;
+              </button>
+              <h2>{viewingResource.title}</h2>
+              <iframe
+                src={viewingResource.downloadLink}
+                title={viewingResource.title}
+                width="100%"
+                height="600px"
+                style={{ border: "none" }}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+      
       <Footer />
     </>
   );

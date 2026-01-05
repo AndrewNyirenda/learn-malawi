@@ -76,7 +76,7 @@ const PastPapers = () => {
         <h1>Past Papers And Reviews</h1>
         <p className="description-text">
           Access a curated collection of past papers and reviews to support your primary and secondary school studies. 
-          Use the search and filters below to quickly find the resources you need.
+          Use the filters below to quickly find the resources you need.
         </p>
 
         <div className="level-tabs">
@@ -96,18 +96,6 @@ const PastPapers = () => {
 
         {/* Filters Container */}
         <div className="filters-container">
-          <div className="filter-group">
-            <label htmlFor="search">Search Resources</label>
-            <input
-              id="search"
-              type="text"
-              placeholder="Search by title..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-input"
-            />
-          </div>
-
           <div className="filter-group">
             <label htmlFor="category">Category</label>
             <select
