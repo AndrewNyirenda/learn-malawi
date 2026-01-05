@@ -7,6 +7,7 @@ import StudyNotes from "../pages/StudyNotes";
 import Tutorials from "../pages/Tutorials";
 import About from "../pages/Abouts";
 import Contact from "../pages/Contact";
+import News from "../pages/News";
 
 const RoutesComponent = () => {
   return (
@@ -16,6 +17,10 @@ const RoutesComponent = () => {
       <Route path="/past-papers" element={<PastPapers />} />
       <Route path="/tutorials" element={<Tutorials />} />
       <Route path="/quizes" element={<Quizes />} />
+      
+      <Route path="/news" element={<News />} />
+      
+      
       <Route path="/career-resources" element={<CareerResources />} />
       <Route path="/abouts" element={<About/>}/>
       <Route path="/contact" element={<Contact/>}/>
