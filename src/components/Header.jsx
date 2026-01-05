@@ -142,6 +142,15 @@ const Header = () => {
           Quizzes
         </NavLink>
         <NavLink
+          to="/news"
+          onClick={closeMenu}
+          className={({ isActive }) =>
+            isActive ? "nav-link active" : "nav-link"
+          }
+        >
+          News
+        </NavLink>
+        <NavLink
           to="/career-resources"
           onClick={closeMenu}
           className={({ isActive }) =>
@@ -157,7 +166,7 @@ const Header = () => {
             isActive ? "nav-link active" : "nav-link"
           }
         >
-          About Us
+          About
         </NavLink>
         <NavLink
           to="/contact"
