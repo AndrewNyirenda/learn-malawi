@@ -32,65 +32,49 @@ body {
 
 .description-text {
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.5rem;
   color: #424242;
   line-height: 1.6;
   font-size: 1.1rem;
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
-  background: rgba(255, 255, 255, 0.7);
-  padding: 1.5rem;
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
-/* Level Tabs */
 .level-tabs {
   display: flex;
   justify-content: center;
-  gap: 1rem;
-  margin-bottom: 3rem;
-  background: linear-gradient(135deg, rgba(59, 142, 252, 0.1), rgba(45, 248, 124, 0.1));
-  padding: 1rem;
-  border-radius: 16px;
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+
 }
 
-.level-tabs button {
-  padding: 0.8rem 2.5rem;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 1.1rem;
-  transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.9);
-  color: #3b8efc;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+.level-tabs button:nth-child(1) {
+  background: linear-gradient(#9e7a37bb); 
+  color: #fff;
 }
 
-.level-tabs button:hover {
-  background: white;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(59, 142, 252, 0.2);
+.level-tabs button:nth-child(1):hover,
+.level-tabs button:nth-child(1).active {
+  background: #eb9a05bb;
+  box-shadow: 0 6px 14px rgba(230, 126, 34, 0.4);
+  color: #fff;
 }
 
-.level-tabs button.active {
-  background: linear-gradient(135deg, #3b8efc, #2df87c);
-  color: white;
-  box-shadow: 0 4px 16px rgba(59, 142, 252, 0.4);
-  transform: translateY(-2px);
+
+.level-tabs button:nth-child(2) {
+  background: linear-gradient(#9e7a37bb); 
+  color: #fff;
 }
 
-/* Filters Container - Same as PastPapers */
+.level-tabs button:nth-child(2):hover,
+.level-tabs button:nth-child(2).active {
+  background: #eb9a05bb;
+  box-shadow: 0 6px 14px rgba(41, 128, 185, 0.4);
+  color: #fff;
+}
+/* Filters Container */
 .filters-container {
   display: flex;
   flex-wrap: wrap;
@@ -214,45 +198,37 @@ section h2::after {
   gap: 1.5rem;
 }
 
-/* Resource Card */
+/* Resource Card - Matching Landing Page Cards */
 .resource-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.95));
-  border-radius: 14px;
-  padding: 1.2rem;
-  text-align: center;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  height: fit-content;
+  background: rgba(153, 166, 192, 0.171);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(24, 24, 24, 0.25);
   display: flex;
   flex-direction: column;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  align-items: center;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: fit-content;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   position: relative;
   overflow: hidden;
 }
 
-.resource-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(to right, #3b8efc, #2df87c);
-}
-
 .resource-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 16px 32px rgba(59, 142, 252, 0.25);
+  transform: translateY(-6px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
 }
 
 .resource-card img {
   width: 100%;
-  height: 130px;
+  height: 140px;
   object-fit: contain;
   border-radius: 8px;
-  margin-bottom: 1.2rem;
-  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-  padding: 0.8rem;
+  margin-bottom: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem;
   transition: transform 0.3s ease;
 }
 
@@ -261,9 +237,9 @@ section h2::after {
 }
 
 .resource-card h3 {
-  font-size: 0.98rem;
-  margin-bottom: 0.6rem;
-  color: #1a237e;
+  font-size: 1rem;
+  margin-bottom: 0.8rem;
+  color: #5c5c59;
   line-height: 1.4;
   flex-grow: 1;
   display: -webkit-box;
@@ -273,19 +249,19 @@ section h2::after {
   font-weight: 600;
 }
 
+/* Update meta tags styling to match the new card */
 .resource-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.8rem;
+  gap: 0.5rem;
   justify-content: center;
   margin-bottom: 1rem;
   padding: 0.8rem 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  width: 100%;
 }
 
 .resource-category {
-  background: rgba(59, 142, 252, 0.1);
+  background: rgba(59, 142, 252, 0.2);
   color: #3b8efc;
   padding: 0.3rem 0.8rem;
   border-radius: 20px;
@@ -294,7 +270,7 @@ section h2::after {
 }
 
 .resource-class {
-  background: rgba(26, 35, 126, 0.1);
+  background: rgba(26, 35, 126, 0.2);
   color: #1a237e;
   padding: 0.3rem 0.8rem;
   border-radius: 20px;
@@ -303,7 +279,7 @@ section h2::after {
 }
 
 .resource-year {
-  background: rgba(255, 107, 107, 0.1);
+  background: rgba(255, 107, 107, 0.2);
   color: #ff6b6b;
   padding: 0.3rem 0.8rem;
   border-radius: 20px;
@@ -313,14 +289,14 @@ section h2::after {
 
 .action-buttons {
   display: flex;
-  gap: 0.6rem;
+  gap: 0.8rem;
   margin-top: auto;
-  justify-content: center;
+  width: 100%;
 }
 
 .action-buttons a,
 .action-buttons button {
-  padding: 0.6rem 1.2rem;
+  padding: 0.6rem 1rem;
   font-size: 0.9rem;
   border-radius: 8px;
   border: none;
@@ -342,7 +318,7 @@ section h2::after {
 }
 
 .action-buttons button {
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: linear-gradient(135deg, #1d4ed8, #1d4ed8);
   color: white;
 }
 
@@ -353,7 +329,7 @@ section h2::after {
 }
 
 .action-buttons button:hover {
-  background: linear-gradient(135deg, #059669, #047857);
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
@@ -363,10 +339,11 @@ section h2::after {
   grid-column: 1 / -1;
   text-align: center;
   padding: 3rem;
-  background: white;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   color: #666;
   font-size: 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Modal */
