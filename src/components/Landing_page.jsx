@@ -2,7 +2,8 @@ import Header from "./Header";
 import "../styles/landing_page.css";
 import { 
   FaDownload, FaBook, FaFileAlt, 
-  FaCheckCircle, FaBookOpen, FaLock, FaUsers 
+  FaCheckCircle, FaBookOpen, FaLock, FaUsers,
+  FaPlay, FaQuestionCircle, FaNewspaper // Added new icons
 } from "react-icons/fa";
 import Footer from "./Footer";
 import studyResources from "../Data/studyResources"; 
@@ -80,7 +81,10 @@ const LandingPage = () => {
           <div className="hero-section">
             {/* Title above everything */}
             <div className="hero-main-title">
-              <h1>Free, Quality Education For Every Student In Malawi</h1>
+              <h1>Welcome To Learn Malawi</h1>
+              <p>
+              Free and Quality Education For Every Student In Malawi
+              </p>
             </div>
             
             {/* Hero Image - Now 100% wide */}
@@ -96,7 +100,7 @@ const LandingPage = () => {
             </div>
           </div>
 
-          <h2 id="service-title">Gallery</h2>
+          <h2 id="service-title">Services</h2>
           <div className="Services">
             <div className="service-card" onClick={() => navigate("/study-notes")}>
               <div className="icon-wrapper"><FaBook /></div>
@@ -108,6 +112,24 @@ const LandingPage = () => {
               <div className="icon-wrapper"><FaFileAlt /></div>
               <h2>Past Papers</h2>
               <p>Access MSCE & JCE past papers with solutions</p>
+            </div>
+
+            <div className="service-card" onClick={() => navigate("/tutorials")}>
+              <div className="icon-wrapper"><FaPlay /></div>
+              <h2>Tutorials</h2>
+              <p>Video tutorials and step-by-step guides for difficult topics</p>
+            </div>
+
+            <div className="service-card" onClick={() => navigate("/quizzes")}>
+              <div className="icon-wrapper"><FaQuestionCircle /></div>
+              <h2>Quizzes</h2>
+              <p>Interactive quizzes to test your knowledge and track progress</p>
+            </div>
+
+            <div className="service-card" onClick={() => navigate("/news")}>
+              <div className="icon-wrapper"><FaNewspaper /></div>
+              <h2>News</h2>
+              <p>Latest education news, exam updates, and scholarship opportunities</p>
             </div>
 
             <div className="service-card" onClick={() => navigate("/career-resources")}>
