@@ -145,7 +145,7 @@ body {
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    font-size: 1.9rem;
+    font-size: 2rem;
     font-family: 'Roboto', sans-serif; 
 }
 
@@ -493,13 +493,13 @@ form {
 }
 
 .trust-section h2 {
-  font-size: 1.7rem;
+  font-size: 1.9rem;
   opacity: 0.9;
   margin-bottom: 2rem;
   background-color: #111111da;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-family: 'Oswald', sans-serif;
+  
 }
 
 .trust-cards {
