@@ -1,20 +1,20 @@
+
+
+
 .tutorials-wrapper {
-  max-width: 900px;
-  margin: 3rem auto 5rem;
-  padding: 2rem 0 1rem;
-  color: #fcf9f9;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  padding: 100px 2rem 3rem;
+  max-width: 1400px;
+  margin: auto;
+  background-color: #e0f7fa;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.tutorials-title {
+.tutorials-wrapper h1 {
   text-align: center;
-  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.9rem;
   font-weight: 700;
-  margin-bottom: 2rem;
-  background: rgba(0, 0, 0, 0.664);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
 }
 
 .level-tabs {
