@@ -1,86 +1,185 @@
-import React, { useState, useEffect } from "react";
+// components/Quizes.jsx
+import React, { useState, useEffect, useRef } from "react";
 import { quizzes } from "../Data/quizzes";
 import "../styles/quizes.css";
-import Footer from "../components/Footer.jsx"
+import Footer from "../components/Footer.jsx";
 
 const Quizes = () => {
   const [level, setLevel] = useState("primary");
   const [subjectFilter, setSubjectFilter] = useState("all");
+  const [classFilter, setClassFilter] = useState("all");
+  const [difficultyFilter, setDifficultyFilter] = useState("all");
   const [selectedQuiz, setSelectedQuiz] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [score, setScore] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(null); 
-
+  const [timeLeft, setTimeLeft] = useState(null);
+  const [timeTaken, setTimeTaken] = useState(0);
+  const [userAnswers, setUserAnswers] = useState([]);
+  const [questionStartTimes, setQuestionStartTimes] = useState([]);
+  const [completionTimes, setCompletionTimes] = useState([]);
+  const timerRef = useRef(null);
+  
+  // Filter quizzes by level
   const filteredQuizzes = quizzes.filter((quiz) => quiz.level === level);
-
-  const allSubjects = [
-    "all",
-    ...new Set(filteredQuizzes.map((quiz) => quiz.subject))
-  ];
-
-  const displayedQuizzes =
-    subjectFilter === "all"
-      ? filteredQuizzes
-      : filteredQuizzes.filter((quiz) => quiz.subject === subjectFilter);
-
-  const currentQuestion =
-    selectedQuiz?.questions[currentQuestionIndex] || null;
-
+  
+  // Get all unique values for filters
+  const allSubjects = ["all", ...new Set(filteredQuizzes.map((quiz) => quiz.subject))];
+  const allClasses = ["all", ...new Set(filteredQuizzes.map((quiz) => quiz.class))];
+  const allDifficulties = ["all", ...new Set(filteredQuizzes.map((quiz) => quiz.difficulty))];
+  
+  // Apply filters to displayed quizzes
+  const displayedQuizzes = filteredQuizzes.filter((quiz) => {
+    const matchesSubject = subjectFilter === "all" || quiz.subject === subjectFilter;
+    const matchesClass = classFilter === "all" || quiz.class === classFilter;
+    const matchesDifficulty = difficultyFilter === "all" || quiz.difficulty === difficultyFilter;
+    
+    return matchesSubject && matchesClass && matchesDifficulty;
+  });
+  
+  const currentQuestion = selectedQuiz?.questions[currentQuestionIndex] || null;
+  
+  // Timer effect - handles individual question timing
   useEffect(() => {
     if (!selectedQuiz || isFinished || timeLeft === null) return;
-
+    
+    // Start timing the question
+    if (questionStartTimes[currentQuestionIndex] === undefined) {
+      setQuestionStartTimes(prev => [...prev, Date.now()]);
+    }
+    
     if (timeLeft <= 0) {
-      setIsFinished(true);
+      // Auto-move to next question when time's up
+      if (currentQuestionIndex + 1 < selectedQuiz.questions.length) {
+        handleNext();
+      } else {
+        finishQuiz();
+      }
       return;
     }
-
-    const timer = setInterval(() => {
+    
+    timerRef.current = setInterval(() => {
       setTimeLeft((prevTime) => prevTime - 1);
+      setTimeTaken((prev) => prev + 1);
     }, 1000);
-
-    return () => clearInterval(timer);
-  }, [timeLeft, isFinished, selectedQuiz]);
-
+    
+    return () => clearInterval(timerRef.current);
+  }, [timeLeft, isFinished, selectedQuiz, currentQuestionIndex]);
+  
+  // Format time helper
   const formatTime = (seconds) => {
+    if (seconds === null || seconds === undefined) return "0:00";
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
   };
-
+  
+  // Calculate passing threshold (70%)
+  const passingThreshold = selectedQuiz 
+    ? Math.ceil(selectedQuiz.questions.length * 0.7) 
+    : 0;
+  
+  // Check if user passed
+  const passed = score >= passingThreshold;
+  
   const handleOptionClick = (option) => {
     setSelectedOption(option);
   };
-
+  
   const handleNext = () => {
+    // Calculate completion time for current question
+    if (questionStartTimes[currentQuestionIndex] !== undefined) {
+      const completionTime = Math.floor((Date.now() - questionStartTimes[currentQuestionIndex]) / 1000);
+      setCompletionTimes(prev => {
+        const newTimes = [...prev];
+        newTimes[currentQuestionIndex] = completionTime;
+        return newTimes;
+      });
+      
+      // Update the quiz data with completion time
+      if (selectedQuiz && selectedQuiz.questions[currentQuestionIndex]) {
+        selectedQuiz.questions[currentQuestionIndex].completionTimePerQuestion = completionTime;
+      }
+    }
+    
+    // Store user's answer
+    const newUserAnswers = [...userAnswers];
+    newUserAnswers[currentQuestionIndex] = {
+      question: currentQuestion.question,
+      selectedOption,
+      correctOption: currentQuestion.answer,
+      isCorrect: selectedOption === currentQuestion.answer
+    };
+    setUserAnswers(newUserAnswers);
+    
+    // Update score
     if (selectedOption === currentQuestion.answer) {
       setScore(score + 1);
     }
-
+    
+    // Move to next question or finish
     if (currentQuestionIndex + 1 < selectedQuiz.questions.length) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      const nextIndex = currentQuestionIndex + 1;
+      setCurrentQuestionIndex(nextIndex);
       setSelectedOption(null);
+      // Reset timer for the next question
+      setTimeLeft(selectedQuiz.questions[nextIndex].timeLimit || 60);
     } else {
-      setIsFinished(true);
+      finishQuiz();
     }
   };
-
+  
+  const finishQuiz = () => {
+    clearInterval(timerRef.current);
+    setIsFinished(true);
+    
+    // Calculate completion time for last question if not already done
+    if (questionStartTimes[currentQuestionIndex] !== undefined && 
+        completionTimes[currentQuestionIndex] === undefined) {
+      const completionTime = Math.floor((Date.now() - questionStartTimes[currentQuestionIndex]) / 1000);
+      setCompletionTimes(prev => {
+        const newTimes = [...prev];
+        newTimes[currentQuestionIndex] = completionTime;
+        return newTimes;
+      });
+    }
+    
+    // Store the last answer if not already stored
+    if (selectedOption !== null && userAnswers.length <= currentQuestionIndex) {
+      const newUserAnswers = [...userAnswers];
+      newUserAnswers[currentQuestionIndex] = {
+        question: currentQuestion.question,
+        selectedOption,
+        correctOption: currentQuestion.answer,
+        isCorrect: selectedOption === currentQuestion.answer
+      };
+      setUserAnswers(newUserAnswers);
+    }
+  };
+  
   const handleQuizSelect = (quiz) => {
     setSelectedQuiz(quiz);
     setShowInstructions(true);
   };
-
+  
   const handleStartQuiz = () => {
     setShowInstructions(false);
     setCurrentQuestionIndex(0);
     setSelectedOption(null);
     setScore(0);
     setIsFinished(false);
-    setTimeLeft(quizDuration()); 
+    setTimeTaken(0);
+    setUserAnswers([]);
+    setQuestionStartTimes([]);
+    setCompletionTimes([]);
+    // Set time to first question's timeLimit
+    if (selectedQuiz && selectedQuiz.questions.length > 0) {
+      setTimeLeft(selectedQuiz.questions[0].timeLimit || 60);
+    }
   };
-
+  
   const handleBackToList = () => {
     setSelectedQuiz(null);
     setCurrentQuestionIndex(0);
@@ -88,168 +187,266 @@ const Quizes = () => {
     setScore(0);
     setIsFinished(false);
     setTimeLeft(null);
+    setTimeTaken(0);
+    setUserAnswers([]);
+    setQuestionStartTimes([]);
+    setCompletionTimes([]);
     setShowInstructions(false);
   };
-
-  const quizDuration = () => {
-    return selectedQuiz.questions.length * 60; 
-  };
-
+  
+  // Reset all filters when level changes
+  useEffect(() => {
+    setSubjectFilter("all");
+    setClassFilter("all");
+    setDifficultyFilter("all");
+  }, [level]);
+  
   return (
     <>
-    <div>
-      {!selectedQuiz && (
-        <>
-          <div className="quiz-description">
-            <h1>Interactive Quizzes</h1>
-            <p>
-              Test your knowledge across various subjects. Select your level and subject to get started. Each quiz is timed and provides instant feedback upon completion!
-            </p>
-          </div>
-
-          <div className="level-tabs">
-            <button
-              className={level === "primary" ? "active" : ""}
-              onClick={() => {
-                setLevel("primary");
-                setSubjectFilter("all");
-              }}
-            >
-              Primary
-            </button>
-            <button
-              className={level === "secondary" ? "active" : ""}
-              onClick={() => {
-                setLevel("secondary");
-                setSubjectFilter("all");
-              }}
-            >
-              Secondary
-            </button>
-          </div>
-
-          <div className="filters-container" style={{ textAlign: "center", marginBottom: "1.5rem" }}>
-            <select
-              value={subjectFilter}
-              onChange={(e) => setSubjectFilter(e.target.value)}
-              className="subject-select"
-            >
-              {allSubjects.map((subject) => (
-                <option key={subject} value={subject}>
-                  {subject === "all" ? "All Subjects" : subject}
-                </option>
-              ))}
-            </select>
-          </div>
-        </>
-      )}
-
-      {!selectedQuiz ? (
-        <div className="quiz-list">
-          {displayedQuizzes.length === 0 ? (
-            <p>No quizzes available for this level and subject.</p>
-          ) : (
-            displayedQuizzes.map((quiz) => (
-              <div key={quiz.id} className="quiz-card">
-                <h3>{quiz.title}</h3>
-                <p>Subject: {quiz.subject}</p>
-                <p>Difficulty: {quiz.difficulty}</p>
-                <button onClick={() => handleQuizSelect(quiz)}>Start Quiz</button>
-              </div>
-            ))
-          )}
-        </div>
-      ) : showInstructions ? (
-        <div className="quiz-container">
-          <h2 className="quiz-title">{selectedQuiz.title}</h2>
-          <div className="instructions">
-            <h3>Instructions</h3>
-            <ul>
-              <li>Read each question carefully before selecting an answer.</li>
-              <li>You will have <strong>1 minute</strong> per question.</li>
-              <li>Once time runs out, your quiz will automatically end.</li>
-              <li>Click "Start" when you are ready.</li>
-            </ul>
-            <button className="nav-button" onClick={handleStartQuiz}>
-              Start Quiz
-            </button>
-          </div>
-        </div>
-      ) : (
-        <div className="quiz-container">
-          <h2 className="quiz-title">{selectedQuiz.title}</h2>
-
-          {!isFinished && (
-            <div className="timer">
-              ⏰ Time Left: <strong>{formatTime(timeLeft)}</strong>
-            </div>
-          )}
-
-          {isFinished ? (
-            <div>
-              <h3>Quiz Completed!</h3>
+      <div className="quizes-wrapper">
+        {!selectedQuiz ? (
+          <>
+            <div className="quiz-description">
+              <h1>Interactive Quizzes</h1>
               <p>
-                Your Score: {score} / {selectedQuiz.questions.length}
+                Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz. 
+                Each question has its own time limit based on difficulty level.
               </p>
-              <div className="quiz-navigation">
-                <button className="nav-button" onClick={handleBackToList}>
-                  Back to Quiz List
+            </div>
+            
+            <div className="level-tabs">
+              <button
+                className={level === "primary" ? "active" : ""}
+                onClick={() => setLevel("primary")}
+              >
+                Primary 
+              </button>
+              <button
+                className={level === "secondary" ? "active" : ""}
+                onClick={() => setLevel("secondary")}
+              >
+                Secondary 
+              </button>
+            </div>
+            
+            {/* Filters Container */}
+            <div className="filters-container">
+              <div className="filter-group">
+                <label htmlFor="subject">Subject</label>
+                <select
+                  id="subject"
+                  value={subjectFilter}
+                  onChange={(e) => setSubjectFilter(e.target.value)}
+                  className="filter-select"
+                >
+                  <option value="all">All Subjects</option>
+                  {allSubjects.map(subject => (
+                    subject !== "all" && (
+                      <option key={subject} value={subject}>{subject}</option>
+                    )
+                  ))}
+                </select>
+              </div>
+              
+              <div className="filter-group">
+                <label htmlFor="class">Class / Form</label>
+                <select
+                  id="class"
+                  value={classFilter}
+                  onChange={(e) => setClassFilter(e.target.value)}
+                  className="filter-select"
+                >
+                  <option value="all">All Classes</option>
+                  {allClasses.map(cls => (
+                    cls !== "all" && (
+                      <option key={cls} value={cls}>{cls}</option>
+                    )
+                  ))}
+                </select>
+              </div>
+              
+              <div className="filter-group">
+                <label htmlFor="difficulty">Difficulty</label>
+                <select
+                  id="difficulty"
+                  value={difficultyFilter}
+                  onChange={(e) => setDifficultyFilter(e.target.value)}
+                  className="filter-select"
+                >
+                  <option value="all">All Difficulties</option>
+                  {allDifficulties.map(diff => (
+                    diff !== "all" && (
+                      <option key={diff} value={diff}>{diff.charAt(0).toUpperCase() + diff.slice(1)}</option>
+                    )
+                  ))}
+                </select>
+              </div>
+            </div>
+            
+            <div className="quiz-list">
+              {displayedQuizzes.length === 0 ? (
+                <div className="no-quizzes">
+                  No quizzes available for the selected filters. Try adjusting your criteria.
+                </div>
+              ) : (
+                displayedQuizzes.map((quiz) => (
+                  <div key={quiz.id} className="quiz-card">
+                    <h3>{quiz.title}</h3>
+                    <div className="quiz-meta">
+                      <span className="quiz-category">{quiz.subject}</span>
+                      <span className="quiz-class">{quiz.class}</span>
+                      <span className="quiz-difficulty">{quiz.difficulty}</span>
+                    </div>
+                    <p><strong>Questions:</strong> {quiz.questions.length}</p>
+                    <p><strong>Total Time:</strong> {formatTime(quiz.totalTime)}</p>
+                    <p><strong>Difficulty:</strong> {quiz.difficulty.charAt(0).toUpperCase() + quiz.difficulty.slice(1)}</p>
+                    <button onClick={() => handleQuizSelect(quiz)}>
+                      Start Quiz
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+          </>
+        ) : showInstructions ? (
+          <div className="quiz-container">
+            <h2 className="quiz-title">{selectedQuiz.title}</h2>
+            <div className="instructions">
+              <h3>Quiz Instructions</h3>
+              <ul>
+                <li><strong>Time per question varies</strong> based on difficulty (shown for each question)</li>
+                <li>You need <strong>70% or more</strong> to pass the quiz</li>
+                <li>Read each question carefully before selecting an answer</li>
+                <li>Once time runs out for a question, you'll automatically move to the next</li>
+                <li>You can't go back to previous questions once answered</li>
+                <li>Click "Start Quiz" when you're ready to begin</li>
+              </ul>
+              <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+                <button 
+                  className="nav-button next-button" 
+                  onClick={handleStartQuiz}
+                  style={{ padding: '1rem 3rem', fontSize: '1.2rem' }}
+                >
+                  Start Quiz
                 </button>
               </div>
             </div>
-          ) : (
-            <>
-              <h4 className="question-number">
-                Question {currentQuestionIndex + 1} of {selectedQuiz.questions.length}
-              </h4>
-              <p className="question-text">{currentQuestion.question}</p>
-
-              <ul className="option-list">
-                {currentQuestion.options.map((option, index) => (
-                  <li key={index}>
-                    <button
-                      onClick={() => handleOptionClick(option)}
-                      className={`option-button ${
-                        selectedOption === option ? "selected" : ""
-                      }`}
-                    >
-                      {option}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="quiz-navigation">
-                {currentQuestionIndex > 0 && (
-                  <button
-                    className="nav-button back-button"
-                    onClick={() => {
-                      setCurrentQuestionIndex(currentQuestionIndex - 1);
-                      setSelectedOption(null);
-                    }}
-                  >
-                    Back
-                  </button>
-                )}
-
-                <button
-                  onClick={handleNext}
-                  disabled={selectedOption === null}
-                  className="nav-button next-button"
-                >
-                  {currentQuestionIndex + 1 === selectedQuiz.questions.length
-                    ? "Finish"
-                    : "Next"}
-                </button>
+          </div>
+        ) : (
+          <div className="quiz-container">
+            <h2 className="quiz-title">{selectedQuiz.title}</h2>
+            
+            {!isFinished && currentQuestion && (
+              <div className="timer-display">
+                <h3>Time Remaining</h3>
+                <div className="time-left">{formatTime(timeLeft)}</div>
+                <div className="question-time-info">
+                  Question {currentQuestionIndex + 1} of {selectedQuiz.questions.length} 
+                  | Time limit: {formatTime(currentQuestion.timeLimit)}
+                </div>
               </div>
-            </>
-          )}
-        </div>
-      )}
-    </div>
-    
+            )}
+            
+            {isFinished ? (
+              <div className="results-container">
+                <h3>Quiz {passed ? "Passed! 🎉" : "Failed! 📝"}</h3>
+                <p className="score-summary">
+                  Your Score: <strong>{score}</strong> / {selectedQuiz.questions.length} 
+                  ({Math.round((score / selectedQuiz.questions.length) * 100)}%)
+                  {!passed && ` (Need ${passingThreshold} to pass)`}
+                </p>
+                <p className="time-summary">
+                  ⏱️ Total Completion Time: <strong>{formatTime(timeTaken)}</strong>
+                </p>
+                
+                {/* Show correct answers if failed */}
+                {!passed && (
+                  <div className="correct-answers-summary">
+                    <h4>Correct Answers Review</h4>
+                    <ul>
+                      {selectedQuiz.questions.map((q, index) => {
+                        const userAnswer = userAnswers[index];
+                        const isCorrect = userAnswer?.isCorrect || false;
+                        return (
+                          <li key={index} className={isCorrect ? "correct" : "incorrect"}>
+                            <div className="question">Q{index + 1}: {q.question}</div>
+                            <div className="answers">
+                              <span>Your answer: {userAnswer?.selectedOption || "No answer"}</span>
+                              <span>Correct answer: {q.answer}</span>
+                            </div>
+                            {completionTimes[index] && (
+                              <div style={{ fontSize: '0.9rem', color: '#666', marginTop: '0.5rem' }}>
+                                Time taken: {formatTime(completionTimes[index])} / {formatTime(q.timeLimit)}
+                              </div>
+                            )}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                )}
+                
+                <div className="quiz-navigation" style={{ justifyContent: 'center' }}>
+                  <button className="nav-button next-button" onClick={handleBackToList}>
+                    Back to Quiz List
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <h4 className="question-number">
+                  Question {currentQuestionIndex + 1} of {selectedQuiz.questions.length}
+                </h4>
+                <p className="question-text">{currentQuestion.question}</p>
+                
+                <ul className="option-list">
+                  {currentQuestion.options.map((option, index) => (
+                    <li key={index}>
+                      <button
+                        onClick={() => handleOptionClick(option)}
+                        className={`option-button ${selectedOption === option ? "selected" : ""}`}
+                        disabled={selectedOption !== null && selectedOption !== option}
+                      >
+                        <span style={{ fontWeight: 'bold' }}>{String.fromCharCode(65 + index)}.</span>
+                        <span>{option}</span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                
+                <div className="quiz-navigation">
+                  {currentQuestionIndex > 0 && (
+                    <button
+                      className="nav-button back-button"
+                      onClick={() => {
+                        setCurrentQuestionIndex(currentQuestionIndex - 1);
+                        setSelectedOption(null);
+                        // Reset timer for previous question
+                        setTimeLeft(selectedQuiz.questions[currentQuestionIndex - 1].timeLimit);
+                      }}
+                    >
+                      Back
+                    </button>
+                  )}
+                  
+                  <div style={{ flex: 1 }}></div>
+                  
+                  <button
+                    onClick={handleNext}
+                    disabled={selectedOption === null}
+                    className="nav-button next-button"
+                  >
+                    {currentQuestionIndex + 1 === selectedQuiz.questions.length ? "Finish" : "Next"}
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+      </div>
+      
       <Footer />
-      </>
+    </>
   );
 };
 
