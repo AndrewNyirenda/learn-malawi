@@ -135,8 +135,9 @@ const Tutorials = () => {
                 <span className="tutorial-subject">{tut.subject}</span>
                 <span className="tutorial-class">{tut.class}</span>
               </div>
-              <p className="tutorial-description">{tut.description}</p>
-
+              
+              {/* DESCRIPTION LINE REMOVED HERE */}
+              
               <div className="video-wrapper">
                 {videoErrors[tut.id] ? (
                   <div className="video-error">

@@ -3,21 +3,14 @@ import "../styles/abouts.css";
 import { FaUsers, FaBullseye, FaLightbulb, FaChalkboardTeacher, FaBookOpen, FaClock, FaProjectDiagram } from "react-icons/fa";
 import inno from "../images/inno.jpg";
 import willard from "../images/willard.JPG";
+import andrew from "../images/andrew.jpg";
 import Footer from "../components/Footer.jsx";
 
 const About = () => {
-  
-  /*
-  
-      { name: "Willard Zimba", role: "Content Lead", bio: "Ensures quality learning resources.", image: willard },
-    { name: "Innocent Frank Gomwa", role: "Developer", bio: "Builds the Learn Malawi platform.", image: inno },
-  
-  
-  */
-  
   const teamMembers = [
     { name: "Willard Zimba", role: "Founder", bio: "Passionate about education in Malawi.", image: willard },
-        { name: "Innocent Frank Gomwa", role: "Developer", bio: "Builds the Learn Malawi platform.", image: inno },
+    { name: "Innocent Frank Gomwa", role: "Developer", bio: "Builds the Learn Malawi platform.", image: inno },
+    { name: "Andrew Kwanjana Nyirenda", role: "Developer", bio: "Builds the Learn Malawi platform.", image: andrew },
   ];
 
   const missionVision = [
@@ -51,84 +44,77 @@ const About = () => {
 
   return (
     <>
-    <div className="about-wrapper">
-      <section className="story-section">
-        <h2>Our Story</h2>
-        <p>
-          <br />
-          Learn Malawi is a free digital education platform dedicated to one
-          powerful goal: Free, Quality Education for Every Malawian Student.
-          <br /> We provide comprehensive, curriculum-aligned learning resources
-          for JCE and MSCE students across Malawi...
-        </p>
-      </section>
+      <div className="about-wrapper">
+        <section className="story-section">
+          <h2>Our Story</h2>
+          <p>
+            Learn Malawi is a free digital education platform dedicated to one
+            powerful goal: Free, Quality Education for Every Malawian Student.
+            <br /> We provide comprehensive, curriculum-aligned learning resources
+            for JCE and MSCE students across Malawi...
+          </p>
+        </section>
 
-      
-      <section className="mission-vision">
-        <h2>Mission & Vision</h2>
-        <div className="mv-grid">
-          {missionVision.map((mv, index) => {
-            const Icon = mv.icon;
-            return (
-              <div key={index} className="mv-card">
-                <Icon className="mv-icon" />
-                <h3>{mv.title}</h3>
-                <p>{mv.description}</p>
+        <section className="mission-vision">
+          <h2>Mission & Vision</h2>
+          <div className="mv-grid">
+            {missionVision.map((mv, index) => {
+              const Icon = mv.icon;
+              return (
+                <div key={index} className="mv-card card-shadow">
+                  <Icon className="mv-icon" />
+                  <h3>{mv.title}</h3>
+                  <p>{mv.description}</p>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="values-section">
+          <h2>Our Values</h2>
+          <div className="values-grid">
+            {values.map((val, index) => {
+              const Icon = val.icon;
+              return (
+                <div key={index} className="value-card card-shadow">
+                  <Icon className="value-icon" />
+                  <h3>{val.title}</h3>
+                  <p>{val.description}</p>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="philosophy-section card-shadow">
+          <h2>Our Educational Philosophy</h2>
+          <ul className="philosophy-list">
+            {philosophyPoints.map((point, index) => {
+              const Icon = point.icon;
+              return (
+                <li key={index}>
+                  <Icon className="phil-icon" /> {point.text}
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+
+        <section className="team-section">
+          <h2>Meet Our Team</h2>
+          <div className="team-grid">
+            {teamMembers.map((member, index) => (
+              <div key={index} className="team-card card-shadow">
+                <img src={member.image} alt={member.name} className="team-image" />
+                <h3>{member.name}</h3>
+                <p>{member.role}</p>
+                <p>{member.bio}</p>
               </div>
-            );
-          })}
-        </div>
-      </section>
-
-      
-      <section className="values-section">
-        <h2>Our Values</h2>
-        <div className="values-grid">
-          {values.map((val, index) => {
-            const Icon = val.icon;
-            return (
-              <div key={index} className="value-card">
-                <Icon className="value-icon" />
-                <h3>{val.title}</h3>
-                <p>{val.description}</p>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      
-      <section className="philosophy-section">
-        <h2>Our Educational Philosophy</h2>
-        <ul className="philosophy-list">
-          {philosophyPoints.map((point, index) => {
-            const Icon = point.icon;
-            return (
-              <li key={index}>
-                <Icon className="philosophy-icon" /> {point.text}
-              </li>
-            );
-          })}
-        </ul>
-      </section>
-
-      
-      <section className="team-section">
-        <h2>Meet Our Team</h2>
-        <div className="team-grid">
-          {teamMembers.map((member, index) => (
-            <div key={index} className="team-card">
-              <img src={member.image} alt={member.name} className="team-image" />
-              <h3>{member.name}</h3>
-              <p>{member.role}</p>
-              <p>{member.bio}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-      
-    </div>
-    
+            ))}
+          </div>
+        </section>
+      </div>
       <Footer />
     </>
   );

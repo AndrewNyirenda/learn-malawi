@@ -7,11 +7,10 @@ html {
 }
 
 .FooterWrapper {
-  background: linear-gradient(to right, #14140b, #2b9b5d, #1f2733);
+  background: linear-gradient(to bottom , #14140b, #2b9b4d, #1f2733);
   color: white;
   margin-top: 4rem;
   padding: 2rem;
-  
   width: 100%;
 }
 
@@ -78,18 +77,17 @@ html {
 }
 
 .footer-box {
-  background-color: rgba(255, 255, 255, 0.15); 
+  background-color: transparent;
   padding: 1rem 1.2rem;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2); 
+  box-shadow: none;
   width: 100%;
   max-width: 300px;
   transition: transform 0.3s ease;
-  backdrop-filter: blur(5px); 
+  backdrop-filter: none;
 }
 
 .footer-box:hover {
-  background-color: rgba(255, 255, 255, 0.2); 
   transform: translateY(-8px);
 }
 
@@ -160,11 +158,9 @@ footer hr {
   font-style: normal;
 }
 
-
 #Logo {
   filter: brightness(1) !important
 }
-
 
 .resource-card img {
   opacity: 1 !important;
@@ -174,24 +170,23 @@ footer hr {
 @media (max-width: 768px) {
   .footer-content {
     flex-direction: column;
-    align-items: center;
-    text-align: center;  
+    align-items: flex-start;
   }
 
   .footer-logo {
     margin-bottom: 1.5rem;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     width: 100%;
   }
 
   .footer-logo img {
-    margin: 0 auto;
+    margin: 0;
   }
 
   .footer-section {
     margin-bottom: 1.5rem;
-    padding: 0 1rem;
+    padding: 0;
     max-width: 100%;
   }
 

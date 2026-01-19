@@ -12,16 +12,12 @@ const PastPapers = () => {
   const [yearFilter, setYearFilter] = useState("all");
   const [viewingResource, setViewingResource] = useState(null); 
 
-  // Get available classes and years based on current level
+  // Get available classes based on current level
   const getAvailableClasses = () => {
-    const allResources = [
-      ...studyResources[level].books,
-      ...studyResources[level].pastPapers
-    ];
+    const allResources = studyResources[level].pastPapers;
     
     const classes = [...new Set(allResources.map(resource => resource.class))];
     return classes.sort((a, b) => {
-      // Sort numerically for better UX
       const aNum = parseInt(a.replace(/\D/g, ''));
       const bNum = parseInt(b.replace(/\D/g, ''));
       return aNum - bNum;
@@ -55,14 +51,10 @@ const PastPapers = () => {
     setYearFilter("all");
   }, [level]);
 
-  const filteredBooks = filterResources(studyResources[level].books);
   const filteredPastPapers = filterResources(studyResources[level].pastPapers);
 
   const allCategories = [
-    ...new Set([
-      ...studyResources[level].books.map(b => b.category),
-      ...studyResources[level].pastPapers.map(p => p.category)
-    ])
+    ...new Set(studyResources[level].pastPapers.map(p => p.category))
   ];
 
   const closeViewer = () => setViewingResource(null);
@@ -73,7 +65,7 @@ const PastPapers = () => {
   return (
     <>
       <div className="pastpapers-wrapper">
-        <h1>Past Papers And Reviews</h1>
+        <h1>Past Papers & Reviews</h1>
         <p className="description-text">
           Access a curated collection of past papers and reviews to support your primary and secondary school studies. 
           Use the filters below to quickly find the resources you need.
@@ -96,6 +88,10 @@ const PastPapers = () => {
 
         {/* Filters Container */}
         <div className="filters-container">
+          
+
+
+
           <div className="filter-group">
             <label htmlFor="category">Category</label>
             <select
@@ -133,38 +129,18 @@ const PastPapers = () => {
               value={yearFilter}
               onChange={(e) => setYearFilter(e.target.value)}
               className="filter-select"
-              disabled={availableYears.length === 0}
             >
               <option value="all">All Years</option>
               {availableYears.map(year => (
                 <option key={year} value={year}>{year}</option>
               ))}
             </select>
-            {availableYears.length === 0 && (
-              <small className="filter-hint">Only available for past papers</small>
-            )}
           </div>
         </div>
 
+        {/* Past Papers Section */}
         <section>
-          <h2>Books & Study Guides</h2>
-          <div className="grid-container">
-            {filteredBooks.length > 0 ? (
-              filteredBooks.map(resource => (
-                <ResourceCard
-                  key={resource.id}
-                  {...resource}
-                  onView={() => setViewingResource(resource)}
-                />
-              ))
-            ) : (
-              <p className="no-results">No books found matching your filters. Try adjusting your search criteria.</p>
-            )}
-          </div>
-        </section>
-
-        <section>
-          <h2>Past Papers</h2>
+          <h2>Past Papers & Reviews</h2>
           <div className="grid-container">
             {filteredPastPapers.length > 0 ? (
               filteredPastPapers.map(resource => (

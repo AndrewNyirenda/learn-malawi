@@ -1,12 +1,12 @@
 .career-resources-wrapper {
-  max-width: 900px;
+  
   margin: 3rem auto;
   
   padding: 2rem 2rem;
   
   background-color: #e0f7fa;
   border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  
  
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -71,9 +71,9 @@
 
 .resource-link {
   padding: 0.5rem 1rem;
-  background: linear-gradient(to right, #d7d8cf, #a5dfbb, #3b8efc);
+  background: #2563eb;
   border-radius: 8px;
-  color: #121212;
+  color: white;
   font-weight: 600;
   text-decoration: none;
   transition: background 0.3s ease;
@@ -81,8 +81,8 @@
 }
 
 .resource-link:hover {
-  background: linear-gradient(to right, #729ace, #91dbad, #bfc973);
-  color: #121212;
+  background: #2563eb;
+  color: white;
 }
 .resource-icon-wrapper {
   margin-bottom: 1rem;

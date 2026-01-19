@@ -8,15 +8,11 @@ const StudyNotes = () => {
   const [level, setLevel] = useState("primary");
   const [category, setCategory] = useState("all");
   const [classFilter, setClassFilter] = useState("all");
-  const [yearFilter, setYearFilter] = useState("all");
   const [viewingResource, setViewingResource] = useState(null);
 
-  // Get available classes and years based on current level
+  // Get available classes based on current level
   const getAvailableClasses = () => {
-    const allResources = [
-      ...studyResources[level].books,
-      ...studyResources[level].pastPapers
-    ];
+    const allResources = studyResources[level].books;
     
     const classes = [...new Set(allResources.map(resource => resource.class))];
     return classes.sort((a, b) => {
@@ -26,22 +22,12 @@ const StudyNotes = () => {
     });
   };
 
-  const getAvailableYears = () => {
-    const allResources = studyResources[level].pastPapers;
-    const years = [...new Set(allResources
-      .filter(resource => resource.year)
-      .map(resource => resource.year)
-    )];
-    return years.sort((a, b) => b - a);
-  };
-
   const filterResources = (resources) => {
-    return resources.filter(({ title, category: resourceCategory, class: resourceClass, year }) => {
+    return resources.filter(({ title, category: resourceCategory, class: resourceClass }) => {
       const matchesCategory = category === "all" || resourceCategory === category;
       const matchesClass = classFilter === "all" || resourceClass === classFilter;
-      const matchesYear = yearFilter === "all" || year == yearFilter;
       
-      return matchesCategory && matchesClass && matchesYear;
+      return matchesCategory && matchesClass;
     });
   };
 
@@ -49,30 +35,24 @@ const StudyNotes = () => {
   useEffect(() => {
     setCategory("all");
     setClassFilter("all");
-    setYearFilter("all");
   }, [level]);
 
   const filteredBooks = filterResources(studyResources[level].books);
-  const filteredPastPapers = filterResources(studyResources[level].pastPapers);
 
   const allCategories = [
-    ...new Set([
-      ...studyResources[level].books.map((b) => b.category),
-      ...studyResources[level].pastPapers.map((p) => p.category),
-    ]),
+    ...new Set(studyResources[level].books.map((b) => b.category)),
   ];
 
   const closeViewer = () => setViewingResource(null);
 
   const availableClasses = getAvailableClasses();
-  const availableYears = getAvailableYears();
 
   return (
     <>
       <div className="study-notes-wrapper">
         <h1>Study Notes & References</h1>
         <p className="description-text">
-          Access a curated collection of books and past exam papers to support your studies.
+          Access a curated collection of books and reference materials to support your studies.
           <br />
           <br />
         </p>
@@ -126,30 +106,11 @@ const StudyNotes = () => {
               ))}
             </select>
           </div>
-
-          <div className="filter-group">
-            <label htmlFor="year">Year</label>
-            <select
-              id="year"
-              value={yearFilter}
-              onChange={(e) => setYearFilter(e.target.value)}
-              className="filter-select"
-              disabled={availableYears.length === 0}
-            >
-              <option value="all">All Years</option>
-              {availableYears.map(year => (
-                <option key={year} value={year}>{year}</option>
-              ))}
-            </select>
-            {availableYears.length === 0 && (
-              <small className="filter-hint">Only available for past papers</small>
-            )}
-          </div>
         </div>
 
         {/* Books Section */}
         <section>
-          <h2>Books</h2>
+          <h2>Books and Reference Material</h2>
           <div className="grid-container">
             {filteredBooks.length > 0 ? (
               filteredBooks.map((resource) => (
@@ -160,25 +121,7 @@ const StudyNotes = () => {
                 />
               ))
             ) : (
-              <p className="no-results">No books found matching your filters. Try adjusting your search criteria.</p>
-            )}
-          </div>
-        </section>
-
-        {/* Past Papers Section */}
-        <section>
-          <h2>Past Papers</h2>
-          <div className="grid-container">
-            {filteredPastPapers.length > 0 ? (
-              filteredPastPapers.map((resource) => (
-                <ResourceCard
-                  key={resource.id}
-                  {...resource}
-                  onView={() => setViewingResource(resource)}
-                />
-              ))
-            ) : (
-              <p className="no-results">No past papers found matching your filters. Try adjusting your search criteria.</p>
+              <p className="no-results">No study materials found matching your filters. Try adjusting your search criteria.</p>
             )}
           </div>
         </section>
