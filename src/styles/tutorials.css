@@ -1,6 +1,3 @@
-
-
-
 .tutorials-wrapper {
   padding: 100px 2rem 3rem;
   max-width: 1400px;
@@ -24,7 +21,7 @@
   margin-bottom: 2rem;
 }
 
-.level-tabs button{
+.level-tabs button {
   padding: 0.6rem 1.8rem;
   border-radius: 10px;
   border: none;
@@ -47,34 +44,67 @@
   color: #ffffff;
 }
 
-.tutorials-filter {
+/* Filters Container - Matching Study Notes */
+.filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin: 2rem 0 3rem;
+  padding: 0;
+  animation: slideDown 0.3s ease-out;
+  justify-content: center;
+}
+
+.filter-group {
+  flex: 1;
+  min-width: 200px;
   max-width: 300px;
-  margin: 0 auto 2rem;
-  text-align: center;
 }
 
-.subject-select {
-  padding: 0.6rem 1.2rem;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
+.filter-group label {
+  display: block;
+  margin-bottom: 0.5rem;
   font-weight: 600;
-  font-size: 1rem;
-  background-color: rgba(185, 197, 223, 0.774);
-  color: #0d0d0e;
-  border: 2px solid transparent;
-  background-clip: padding-box, border-box;
-  background-origin: border-box;
-  transition: all 0.3s ease;
-  outline: none;
-  max-width: 250px;
+  color: #1a237e;
+  font-size: 0.95rem;
 }
 
-.subject-select:hover,
-.subject-select:focus {
-  background-color: rgba(185, 197, 223, 0.774);
-  color: #0e0c0c;
-  box-shadow: 0 6px 14px rgba(59, 142, 252, 0.4);
+.filter-select {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  font-size: 1rem;
+  background: #f8fafc;
+  color: #1a237e;
+  cursor: pointer;
+  appearance: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #3b8efc;
+  background: white;
+  box-shadow: 0 4px 16px rgba(59, 142, 252, 0.15);
+}
+
+.filter-select:disabled {
+  background: #f1f5f9;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .tutorials-grid {
@@ -99,10 +129,37 @@
   font-size: 1.4rem;
 }
 
-.tutorial-card p {
-  margin: 0 0 1rem 0;
+.tutorial-meta {
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.tutorial-subject {
+  background: rgba(59, 142, 252, 0.2);
+  color: #3b8efc;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
   font-weight: 600;
+}
+
+.tutorial-class {
+  background: rgba(26, 35, 126, 0.2);
+  color: #1a237e;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.tutorial-description {
+  margin: 0.6rem 0 1rem;
+  font-size: 1rem;
   color: #404546e0;
+  line-height: 1.4;
+  font-weight: 500;
 }
 
 .video-wrapper {
@@ -162,12 +219,60 @@
   font-size: 1.2rem;
   font-weight: 600;
   color: #888;
+  grid-column: 1 / -1;
+  padding: 3rem;
 }
 
+.video-error {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 14px;
+}
 
-.tutorial-description {
-  margin: 0.6rem 0 1rem;
-  font-size: 1rem;
-  color: #d0d0d0;
-  line-height: 1.4;
+.external-link {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: #3b8efc;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.external-link:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+}
+
+/* Remove old filter styles */
+.tutorials-filter,
+.subject-select {
+  display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .filters-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .filter-group {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .tutorials-grid {
+    grid-template-columns: 1fr;
+  }
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { tutorials } from "../Data/tutorials";
 import "../styles/tutorials.css";
 import Footer from "../components/Footer.jsx";
@@ -6,16 +6,40 @@ import Footer from "../components/Footer.jsx";
 const Tutorials = () => {
   const [level, setLevel] = useState("secondary"); 
   const [subjectFilter, setSubjectFilter] = useState("all");
+  const [classFilter, setClassFilter] = useState("all");
   const [videoErrors, setVideoErrors] = useState({});
 
   const filteredByLevel = tutorials.filter((tut) => tut.level === level);
 
   const allSubjects = ["all", ...new Set(filteredByLevel.map((tut) => tut.subject))];
+  
+  // Get available classes for current level
+  const getAvailableClasses = () => {
+    const classes = [...new Set(filteredByLevel.map(tut => tut.class))];
+    return classes.sort((a, b) => {
+      const aNum = parseInt(a.replace(/\D/g, ''));
+      const bNum = parseInt(b.replace(/\D/g, ''));
+      return aNum - bNum;
+    });
+  };
 
   const filtered =
     subjectFilter === "all"
       ? filteredByLevel
       : filteredByLevel.filter((tut) => tut.subject === subjectFilter);
+
+  const finalFiltered = 
+    classFilter === "all"
+      ? filtered
+      : filtered.filter((tut) => tut.class === classFilter);
+
+  // Reset filters when level changes
+  useEffect(() => {
+    setSubjectFilter("all");
+    setClassFilter("all");
+  }, [level]);
+
+  const availableClasses = getAvailableClasses();
 
   // Function to handle YouTube embed errors
   const handleVideoError = (tutorialId) => {
@@ -49,7 +73,6 @@ const Tutorials = () => {
           className={level === "primary" ? "active" : ""}
           onClick={() => {
             setLevel("primary");
-            setSubjectFilter("all");
           }}
         >
           Primary
@@ -58,33 +81,54 @@ const Tutorials = () => {
           className={level === "secondary" ? "active" : ""}
           onClick={() => {
             setLevel("secondary");
-            setSubjectFilter("all");
           }}
         >
           Secondary
         </button>
       </div>
 
-      <div className="tutorials-filter">
-        <select
-          value={subjectFilter}
-          onChange={(e) => setSubjectFilter(e.target.value)}
-          className="subject-select"
-        >
-          {allSubjects.map((subject) => (
-            <option key={subject} value={subject}>
-              {subject === "all" ? "All Subjects" : subject}
-            </option>
-          ))}
-        </select>
+      <div className="filters-container">
+        <div className="filter-group">
+          <label htmlFor="subject">Subject</label>
+          <select
+            id="subject"
+            value={subjectFilter}
+            onChange={(e) => setSubjectFilter(e.target.value)}
+            className="filter-select"
+          >
+            {allSubjects.map((subject) => (
+              <option key={subject} value={subject}>
+                {subject === "all" ? "All Subjects" : subject}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="filter-group">
+          <label htmlFor="class">Class / Form</label>
+          <select
+            id="class"
+            value={classFilter}
+            onChange={(e) => setClassFilter(e.target.value)}
+            className="filter-select"
+          >
+            <option value="all">All Classes</option>
+            {availableClasses.map(cls => (
+              <option key={cls} value={cls}>{cls}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <div className="tutorials-grid">
-        {filtered.length > 0 ? (
-          filtered.map((tut) => (
+        {finalFiltered.length > 0 ? (
+          finalFiltered.map((tut) => (
             <div className="tutorial-card" key={tut.id}>
               <h3>{tut.title}</h3>
-              <p className="tutorial-subject">{tut.subject} • {tut.level}</p>
+              <div className="tutorial-meta">
+                <span className="tutorial-subject">{tut.subject}</span>
+                <span className="tutorial-class">{tut.class}</span>
+              </div>
               <p className="tutorial-description">{tut.description}</p>
 
               <div className="video-wrapper">

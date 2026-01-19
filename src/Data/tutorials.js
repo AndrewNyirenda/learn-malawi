@@ -4,6 +4,7 @@ export const tutorials = [
     title: "Chemical Bonding",
     subject: "Chemistry",
     level: "secondary",
+    class: "Form 4",
     description: "Learn about different types of chemical bonds and how atoms combine to form molecules.",
     videoUrl: "https://www.youtube.com/embed/5gEWOh630b8",
     attachments: [
@@ -18,6 +19,7 @@ export const tutorials = [
     title: "Parts of Speech",
     subject: "English",
     level: "primary",
+    class: "Standard 5",
     description: "Understand the basic building blocks of English language including nouns, verbs, adjectives and more.",
     videoUrl: "https://www.youtube.com/embed/Bl5kY4G5k6A",
     attachments: [
@@ -32,6 +34,7 @@ export const tutorials = [
     title: "Photosynthesis",
     subject: "Biology",
     level: "secondary",
+    class: "Form 3",
     description: "Learn how plants convert sunlight into energy through the process of photosynthesis.",
     videoUrl: "https://www.youtube.com/embed/CL9A8YhwUps",
     attachments: [
@@ -46,6 +49,7 @@ export const tutorials = [
     title: "World War 1",
     subject: "History",
     level: "secondary",
+    class: "Form 4",
     description: "Comprehensive overview of World War 1, its causes, major events, and consequences.",
     videoUrl: "https://www.youtube.com/embed/IIK9Lkf02TE",
     attachments: [
@@ -60,6 +64,7 @@ export const tutorials = [
     title: "Periodic Table",
     subject: "Chemistry",
     level: "secondary",
+    class: "Form 2",
     description: "Introduction to the periodic table of elements and their properties.",
     videoUrl: "https://www.youtube.com/embed/wXRHz5ZEIK0",
     attachments: [
