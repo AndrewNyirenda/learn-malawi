@@ -67,6 +67,12 @@ const Tutorials = () => {
     <>
     <div className="tutorials-wrapper">
       <h1 className="tutorials-title">Educational Tutorials</h1>
+      
+      {/* Added description below the title */}
+      <p className="tutorials-description">
+        Access comprehensive video tutorials covering various subjects for both Primary and Secondary levels. 
+        Filter by subject and class to find the most relevant educational content for your studies.
+      </p>
 
       <div className="level-tabs">
         <button

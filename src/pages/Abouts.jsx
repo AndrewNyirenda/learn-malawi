@@ -16,7 +16,8 @@ const About = () => {
   */
   
   const teamMembers = [
-    { name: "Willard Zimba", role: "Founder", bio: "Passionate about education in Malawi.", image: willard }
+    { name: "Willard Zimba", role: "Founder", bio: "Passionate about education in Malawi.", image: willard },
+        { name: "Innocent Frank Gomwa", role: "Developer", bio: "Builds the Learn Malawi platform.", image: inno },
   ];
 
   const missionVision = [
