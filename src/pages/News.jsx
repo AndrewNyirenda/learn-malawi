@@ -1,32 +1,53 @@
-import React, { useState } from "react";
-import newsData from "../Data/news";
+import React, { useState, useEffect } from "react";
 import "../styles/news.css";
 import Footer from "../components/Footer.jsx";
 import { useNavigate } from "react-router-dom";
-
-
-
-
+import { useNews } from "../contexts/NewsContext";
 
 const News = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [selectedArticle, setSelectedArticle] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
   
   const navigate = useNavigate();
-  
+  const {
+    news,
+    categories,
+    loading,
+    error,
+    fetchNews,
+    fetchCategories,
+    clearError,
+  } = useNews();
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    const filters = {
+      ...(categoryFilter !== "all" && { category: categoryFilter }),
+    };
+    fetchNews(currentPage, 12, filters);
+  }, [currentPage, categoryFilter]);
+
   const handleCardClick = (article) => {
     navigate(`/news/${article.id}`);
   };
-  
 
-  const allCategories = ["all", ...new Set(newsData.map(article => article.category))];
+  const allCategories = ["all", ...new Set([
+    ...categories.map(cat => cat.category),
+    ...news.map(article => article.category)
+  ])].filter(Boolean);
 
-  const filteredNews = newsData.filter(article => {
+  const filteredNews = news.filter(article => {
+    if (!article) return false;
+    
     const matchesSearch = 
-      article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      article.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      article.content.toLowerCase().includes(searchTerm.toLowerCase());
+      article.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      article.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      article.content?.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesCategory = categoryFilter === "all" || article.category === categoryFilter;
     
@@ -34,13 +55,59 @@ const News = () => {
   });
 
   const formatDate = (dateString) => {
-    return dateString; // Already formatted in data
+    if (!dateString) return "Unknown date";
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+    } catch {
+      return dateString;
+    }
   };
 
   const truncateText = (text, maxLength = 150) => {
+    if (!text) return "";
     if (text.length <= maxLength) return text;
     return text.substr(0, maxLength) + "...";
   };
+
+  const getAuthorName = (author) => {
+    if (!author) return "Unknown Author";
+    if (typeof author === 'object') {
+      return `${author.firstName || ''} ${author.lastName || ''}`.trim() || author.email || "Unknown Author";
+    }
+    return author;
+  };
+
+  if (loading && news.length === 0) {
+    return (
+      <div className="news-wrapper">
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Loading news articles...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error && news.length === 0) {
+    return (
+      <div className="news-wrapper">
+        <div className="error-container">
+          <h3>Error Loading News</h3>
+          <p>{error}</p>
+          <button onClick={() => { clearError(); fetchNews(); }} className="retry-btn">
+            Retry
+          </button>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -70,9 +137,14 @@ const News = () => {
               className="news-category-select"
             >
               <option value="all">All Categories</option>
-              {allCategories.filter(cat => cat !== "all").map(category => (
-                <option key={category} value={category}>{category}</option>
-              ))}
+              {allCategories
+                .filter(cat => cat !== "all")
+                .map(category => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))
+              }
             </select>
           </div>
         </div>
@@ -87,18 +159,26 @@ const News = () => {
                 onClick={() => handleCardClick(article)}
               >
                 <div className="news-card-image">
-                  <img src={article.imageUrl} alt={article.title} />
-                  <div className="news-card-category">{article.category}</div>
+                  <img 
+                    src={article.imageUrl || "/default-news-image.jpg"} 
+                    alt={article.title} 
+                    onError={(e) => {
+                      e.target.src = "/default-news-image.jpg";
+                    }}
+                  />
+                  {article.category && (
+                    <div className="news-card-category">{article.category}</div>
+                  )}
                 </div>
                 <div className="news-card-content">
                   <div className="news-card-meta">
-                    <span className="news-date">{formatDate(article.datePublished)}</span>
-                    <span className="news-read-time">{article.readTime}</span>
+                    <span className="news-date">{formatDate(article.publishedAt || article.createdAt)}</span>
+                    <span className="news-read-time">{article.readTime || '5'} min read</span>
                   </div>
                   <h3 className="news-card-title">{article.title}</h3>
-                  <p className="news-card-description">{article.description}</p>
+                  <p className="news-card-description">{truncateText(article.description)}</p>
                   <div className="news-card-footer">
-                    <span className="news-author">By {article.author}</span>
+                    <span className="news-author">By {getAuthorName(article.author)}</span>
                     <button className="read-more-btn">Read Full Story →</button>
                   </div>
                 </div>
@@ -106,41 +186,16 @@ const News = () => {
             ))
           ) : (
             <div className="no-news-found">
-              <p>No news articles found matching your search criteria.</p>
+              {searchTerm || categoryFilter !== "all" ? (
+                <p>No news articles found matching your search criteria.</p>
+              ) : (
+                <p>No news articles available at the moment.</p>
+              )}
             </div>
           )}
         </div>
 
-        {/* Featured Article Banner */}
-        {filteredNews.length > 0 && (
-          <div className="featured-article">
-            <div className="featured-content">
-              <div className="featured-badge">Featured</div>
-              <h2>{filteredNews[0].title}</h2>
-              <p className="featured-description">
-                {truncateText(filteredNews[0].content, 200)}
-              </p>
-              <div className="featured-meta">
-                <span>{filteredNews[0].datePublished}</span>
-                <span>•</span>
-                <span>{filteredNews[0].readTime}</span>
-                <span>•</span>
-                <span>By {filteredNews[0].author}</span>
-              </div>
-              <button 
-                className="featured-read-btn"
-                onClick={() => setSelectedArticle(filteredNews[0])}
-              >
-                Read Featured Article
-              </button>
-            </div>
-            <div className="featured-image">
-              <img src={filteredNews[0].imageUrl} alt={filteredNews[0].title} />
-            </div>
-          </div>
-        )}
-
-        {/* Article Modal */}
+        {/* Article Modal - Remains if you still want modal functionality */}
         {selectedArticle && (
           <div className="article-modal-overlay" onClick={() => setSelectedArticle(null)}>
             <div className="article-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -149,25 +204,35 @@ const News = () => {
               </button>
               
               <div className="article-modal-header">
-                <div className="article-category">{selectedArticle.category}</div>
+                {selectedArticle.category && (
+                  <div className="article-category">{selectedArticle.category}</div>
+                )}
                 <h2>{selectedArticle.title}</h2>
                 <div className="article-meta">
-                  <span className="article-date">{selectedArticle.datePublished}</span>
+                  <span className="article-date">
+                    {formatDate(selectedArticle.publishedAt || selectedArticle.createdAt)}
+                  </span>
                   <span>•</span>
-                  <span className="article-read-time">{selectedArticle.readTime}</span>
+                  <span className="article-read-time">{selectedArticle.readTime || '5'} min read</span>
                   <span>•</span>
-                  <span className="article-author">By {selectedArticle.author}</span>
+                  <span className="article-author">By {getAuthorName(selectedArticle.author)}</span>
                 </div>
               </div>
 
               <div className="article-modal-body">
                 <div className="article-image">
-                  <img src={selectedArticle.imageUrl} alt={selectedArticle.title} />
+                  <img 
+                    src={selectedArticle.imageUrl || "/default-news-image.jpg"} 
+                    alt={selectedArticle.title}
+                    onError={(e) => {
+                      e.target.src = "/default-news-image.jpg";
+                    }}
+                  />
                 </div>
                 <div className="article-content">
                   <p className="article-description">{selectedArticle.description}</p>
                   <div className="article-full-content">
-                    {selectedArticle.content.split('\n').map((paragraph, index) => (
+                    {selectedArticle.content?.split('\n').map((paragraph, index) => (
                       <p key={index}>{paragraph}</p>
                     ))}
                   </div>
@@ -181,6 +246,26 @@ const News = () => {
                 </button>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Pagination - if needed */}
+        {news.length > 0 && (
+          <div className="news-pagination">
+            <button 
+              className="pagination-btn"
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage(prev => prev - 1)}
+            >
+              Previous
+            </button>
+            <span className="pagination-info">Page {currentPage}</span>
+            <button 
+              className="pagination-btn"
+              onClick={() => setCurrentPage(prev => prev + 1)}
+            >
+              Next
+            </button>
           </div>
         )}
       </div>
