@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   FaTachometerAlt,
@@ -22,9 +22,26 @@ import '../../styles/Admin-Styles/AdminDashboardSidebar.css';
 const AdminDashboardSidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [activeSubmenu, setActiveSubmenu] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if mobile on mount and resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const toggleSubmenu = (menu) => {
     setActiveSubmenu(activeSubmenu === menu ? null : menu);
+  };
+
+  const toggleCollapse = () => {
+    setCollapsed(!collapsed);
   };
 
   const menuItems = [
@@ -72,106 +89,156 @@ const AdminDashboardSidebar = () => {
     }
   ];
 
-  return (
-    <aside className={`admin-sidebar ${collapsed ? 'collapsed' : ''}`}>
-      <div className="sidebar-header">
-        {!collapsed && (
-          <div className="logo-section">
-            <div className="logo">LM</div>
-            <div className="logo-text">
-              <h3>Learn Malawi</h3>
-              <p>Admin Portal</p>
-            </div>
-          </div>
-        )}
-        <button 
-          className="collapse-btn" 
-          onClick={() => setCollapsed(!collapsed)}
-          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-        >
-          {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
-        </button>
-      </div>
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) {
+      // Close sidebar when clicking on backdrop
+      const sidebar = document.querySelector('.admin-sidebar');
+      sidebar?.classList.remove('show');
+    }
+  };
 
-      <nav className="sidebar-nav">
-        <NavLink 
-          to="/" 
-          className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-          title="Back to Home"
-        >
-          <FaHome className="nav-icon" />
-          {!collapsed && <span className="nav-text">Back to Home</span>}
-        </NavLink>
-        
-        {menuItems.map((item, index) => (
-          <div key={index} className="nav-section">
-            {item.path ? (
-              <NavLink 
-                to={item.path} 
-                className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-                title={item.title}
-              >
-                <span className="nav-icon">{item.icon}</span>
-                {!collapsed && <span className="nav-text">{item.title}</span>}
-              </NavLink>
-            ) : (
-              <div className="nav-item-with-submenu">
-                <button 
-                  className={`nav-item ${activeSubmenu === item.title ? 'active' : ''}`}
-                  onClick={() => toggleSubmenu(item.title)}
+  return (
+    <>
+      {/* Mobile backdrop */}
+      <div 
+        className={`sidebar-backdrop ${isMobile ? 'show' : ''}`}
+        onClick={handleBackdropClick}
+        style={{
+          display: isMobile ? 'block' : 'none',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          zIndex: 999,
+          opacity: 0,
+          pointerEvents: 'none',
+          transition: 'opacity 0.3s ease'
+        }}
+      />
+      
+      <aside className={`admin-sidebar ${collapsed ? 'collapsed' : ''}`}>
+        <div className="sidebar-header">
+          {!collapsed && (
+            <div className="logo-section">
+              <div className="logo">LM</div>
+              <div className="logo-text">
+                <h3>Learn Malawi</h3>
+                <p>Admin Portal</p>
+              </div>
+            </div>
+          )}
+          <button 
+            className="collapse-btn" 
+            onClick={toggleCollapse}
+            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
+          </button>
+        </div>
+
+        <nav className="sidebar-nav">
+          <NavLink 
+            to="/" 
+            className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+            title="Back to Home"
+            onClick={() => {
+              if (isMobile) {
+                document.querySelector('.admin-sidebar')?.classList.remove('show');
+              }
+            }}
+          >
+            <FaHome className="nav-icon" />
+            {!collapsed && <span className="nav-text">Back to Home</span>}
+          </NavLink>
+          
+          {menuItems.map((item, index) => (
+            <div key={index} className="nav-section">
+              {item.path ? (
+                <NavLink 
+                  to={item.path} 
+                  className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
                   title={item.title}
+                  onClick={() => {
+                    if (isMobile) {
+                      document.querySelector('.admin-sidebar')?.classList.remove('show');
+                    }
+                  }}
                 >
                   <span className="nav-icon">{item.icon}</span>
-                  {!collapsed && (
-                    <>
-                      <span className="nav-text">{item.title}</span>
-                      <span className="submenu-arrow">
-                        {activeSubmenu === item.title ? '▼' : '►'}
-                      </span>
-                    </>
+                  {!collapsed && <span className="nav-text">{item.title}</span>}
+                </NavLink>
+              ) : (
+                <div className="nav-item-with-submenu">
+                  <button 
+                    className={`nav-item ${activeSubmenu === item.title ? 'active' : ''}`}
+                    onClick={() => toggleSubmenu(item.title)}
+                    title={item.title}
+                  >
+                    <span className="nav-icon">{item.icon}</span>
+                    {!collapsed && (
+                      <>
+                        <span className="nav-text">{item.title}</span>
+                        <span className="submenu-arrow">
+                          {activeSubmenu === item.title ? '▼' : '►'}
+                        </span>
+                      </>
+                    )}
+                  </button>
+                  
+                  {!collapsed && activeSubmenu === item.title && (
+                    <div className="submenu">
+                      {item.submenu.map((subItem, subIndex) => (
+                        <NavLink 
+                          key={subIndex}
+                          to={subItem.path}
+                          className={({ isActive }) => `submenu-item ${isActive ? 'active' : ''}`}
+                          onClick={() => {
+                            if (isMobile) {
+                              document.querySelector('.admin-sidebar')?.classList.remove('show');
+                            }
+                          }}
+                        >
+                          {subItem.title}
+                        </NavLink>
+                      ))}
+                    </div>
                   )}
-                </button>
-                
-                {!collapsed && activeSubmenu === item.title && (
-                  <div className="submenu">
-                    {item.submenu.map((subItem, subIndex) => (
-                      <NavLink 
-                        key={subIndex}
-                        to={subItem.path}
-                        className={({ isActive }) => `submenu-item ${isActive ? 'active' : ''}`}
-                      >
-                        {subItem.title}
-                      </NavLink>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        ))}
-      </nav>
+                </div>
+              )}
+            </div>
+          ))}
+        </nav>
 
-      <div className="sidebar-footer">
-        <div className="quick-stats">
-          {!collapsed && <h4>Quick Stats</h4>}
-          <div className="stats-grid">
-            <div className="stat-item">
-              <div className="stat-value">1,234</div>
-              {!collapsed && <div className="stat-label">Users</div>}
-            </div>
-            <div className="stat-item">
-              <div className="stat-value">456</div>
-              {!collapsed && <div className="stat-label">Resources</div>}
+        <div className="sidebar-footer">
+          <div className="quick-stats">
+            {!collapsed && <h4>Quick Stats</h4>}
+            <div className="stats-grid">
+              <div className="stat-item">
+                <div className="stat-value">1,234</div>
+                {!collapsed && <div className="stat-label">Users</div>}
+              </div>
+              <div className="stat-item">
+                <div className="stat-value">456</div>
+                {!collapsed && <div className="stat-label">Resources</div>}
+              </div>
             </div>
           </div>
+          
+          <button 
+            className="logout-btn-mobile"
+            onClick={() => {
+              console.log('Mobile logout clicked');
+              // Add logout logic
+            }}
+          >
+            <FaSignOutAlt />
+            {!collapsed && <span>Logout</span>}
+          </button>
         </div>
-        
-        <button className="logout-btn-mobile">
-          <FaSignOutAlt />
-          {!collapsed && <span>Logout</span>}
-        </button>
-      </div>
-    </aside>
+      </aside>
+    </>
   );
 };
 
