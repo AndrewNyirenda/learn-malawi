@@ -1,5 +1,5 @@
 // components/Contact.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useContact } from '../contexts/ContactContext';
 import "../styles/Contact.css";
 import Footer from "../components/Footer.jsx";
@@ -7,9 +7,7 @@ import {
   FaPaperPlane, 
   FaMapMarkerAlt, 
   FaWhatsapp, 
-  FaEnvelope,
-  FaCheckCircle,
-  FaExclamationCircle
+  FaEnvelope
 } from "react-icons/fa";
 
 const Contact = () => {
@@ -43,6 +41,7 @@ const Contact = () => {
     try {
       // Clear previous states
       clearError();
+      clearSuccess();
       
       // Send message to backend
       await sendMessage(formData);
@@ -55,17 +54,6 @@ const Contact = () => {
       console.error('Form submission error:', err);
     }
   };
-
-  // Auto-clear success message after 5 seconds
-  useEffect(() => {
-    if (success) {
-      const timer = setTimeout(() => {
-        clearSuccess();
-      }, 5000);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [success, clearSuccess]);
 
   return (
     <>
@@ -151,49 +139,52 @@ const Contact = () => {
                   <p className="form-subtitle">We'll get back to you within 24 hours</p>
                 </div>
 
+                {/* Simple status messages */}
                 {success && (
-                  <div className="success-message">
-                    <div className="success-content">
-                      <FaCheckCircle className="success-icon" />
-                      <div>
-                        <h3>Message Sent Successfully!</h3>
-                        <p>Thank you for contacting Learn Malawi. We'll respond within 24 hours.</p>
-                      </div>
-                    </div>
+                  <div style={{
+                    textAlign: 'center',
+                    marginBottom: '1.5rem',
+                    padding: '1rem',
+                    backgroundColor: '#e8f5e9',
+                    border: '2px solid #4caf50',
+                    borderRadius: '8px',
+                    color: '#2e7d32',
+                    fontWeight: '600',
+                    fontSize: '1.1rem',
+                    animation: 'fadeIn 0.5s ease'
+                  }}>
+                    ✓ Message Sent
                   </div>
                 )}
 
                 {error && (
-                  <div className="error-message" style={{
-                    background: '#ffebee',
-                    borderLeft: '4px solid #f44336',
-                    padding: '1.5rem',
-                    borderRadius: '8px',
+                  <div style={{
+                    textAlign: 'center',
                     marginBottom: '1.5rem',
-                    animation: 'slideDown 0.5s ease',
-                    textAlign: 'left'
+                    padding: '1rem',
+                    backgroundColor: '#ffebee',
+                    border: '2px solid #f44336',
+                    borderRadius: '8px',
+                    color: '#c62828',
+                    fontWeight: '600',
+                    fontSize: '1.1rem',
+                    animation: 'fadeIn 0.5s ease'
                   }}>
-                    <div className="error-content" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                      <FaExclamationCircle style={{ fontSize: '1.5rem', color: '#f44336', flexShrink: 0 }} />
-                      <div>
-                        <h3 style={{ color: '#c62828', marginBottom: '0.5rem' }}>Error Sending Message</h3>
-                        <p style={{ color: '#546e7a' }}>{error}</p>
-                        <button 
-                          onClick={clearError}
-                          style={{
-                            background: 'none',
-                            border: 'none',
-                            color: '#0288d1',
-                            cursor: 'pointer',
-                            padding: '0.5rem 0',
-                            fontSize: '0.9rem',
-                            fontWeight: '600'
-                          }}
-                        >
-                          Try Again
-                        </button>
-                      </div>
-                    </div>
+                    ✗ Message Failed
+                    <button 
+                      onClick={clearError}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: '#0288d1',
+                        cursor: 'pointer',
+                        marginLeft: '1rem',
+                        fontSize: '0.9rem',
+                        fontWeight: '600'
+                      }}
+                    >
+                      Try Again
+                    </button>
                   </div>
                 )}
 
@@ -293,7 +284,7 @@ const Contact = () => {
                       {loading ? (
                         <>
                           <div className="spinner"></div>
-                          Sending Message...
+                          Sending...
                         </>
                       ) : (
                         <>
