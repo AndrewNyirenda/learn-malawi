@@ -1,14 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import '../styles/login.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login, loading, error: apiError, clearError } = useAuth();
+  const { user, login, loading, error: apiError, clearError } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Get the redirect location from state (if coming from protected route)
+  const from = location.state?.from?.pathname || '/';
+
+  // Debug: Log user data when it changes
+  useEffect(() => {
+    console.log('User state changed:', user);
+    console.log('User role:', user?.role);
+    console.log('User stringified:', JSON.stringify(user, null, 2));
+    
+    if (user) {
+      const userRole = user?.role?.toLowerCase();
+      console.log('User role (lowercase):', userRole);
+      
+      if (userRole === 'admin' || userRole === 'teacher') {
+        console.log('Redirecting to admin dashboard...');
+        // If user came from a protected route, redirect them back
+        if (from !== '/') {
+          navigate(from, { replace: true });
+        } else {
+          navigate('/admin/dashboard', { replace: true });
+        }
+      } else {
+        console.log('User is not admin/teacher, redirecting to homepage...');
+        // Regular users go to homepage
+        navigate('/', { replace: true });
+      }
+    }
+  }, [user, navigate, from]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,11 +47,13 @@ const Login = () => {
       return;
     }
     
+    console.log('Attempting login...');
     const result = await login(email, password);
+    console.log('Login result:', result);
     
     if (result?.success) {
-      // Redirect to admin dashboard
-      navigate('/admin/dashboard');
+      console.log('Login successful, waiting for user state update...');
+      // The useEffect above will handle the redirect based on user role
     }
   };
 

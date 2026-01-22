@@ -12,10 +12,14 @@ import News from "../pages/News";
 import NewsFullStory from "../pages/news-full-story";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import AdminLayout from "./admin-componenents/AdminLayout";
+import AdminDashboard from "./admin-componenents/AdminDashboard";
+import ProtectedRoute from "./ProtectedRoute"; // Import the ProtectedRoute component
 
 const RoutesComponent = () => {
   return (
     <Routes>
+      {/* Public Routes */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/study-notes" element={<StudyNotes />} />
       <Route path="/past-papers" element={<PastPapers />} />
@@ -30,6 +34,49 @@ const RoutesComponent = () => {
       {/* Auth Routes */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      
+      {/* Admin Routes - Protected with authentication and role check */}
+      <Route 
+        path="/admin" 
+        element={
+          <ProtectedRoute requiredRoles={['admin', 'teacher']}>
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="dashboard" element={<AdminDashboard />} />
+        {/* Add other admin routes here */}
+        {/* <Route path="study-notes" element={<AdminStudyNotes />} />
+        <Route path="past-papers" element={<AdminPastPapers />} />
+        <Route path="tutorials" element={<AdminTutorials />} />
+        <Route path="quizzes" element={<AdminQuizzes />} />
+        <Route path="news" element={<AdminNews />} />
+        <Route path="career-resources" element={<AdminCareerResources />} />
+        <Route path="users" element={<AdminUsers />} />
+        <Route path="analytics" element={<AdminAnalytics />} />
+        <Route path="settings" element={<AdminSettings />} /> */}
+      </Route>
+
+      {/* Optional: Admin-specific login route */}
+      <Route path="/admin/login" element={<Login />} />
+      
+      {/* Optional: Redirect for unauthorized access */}
+      <Route path="/unauthorized" element={
+        <div className="unauthorized-page">
+          <h1>Access Denied</h1>
+          <p>You don't have permission to access this page.</p>
+          <a href="/">Return to Home</a>
+        </div>
+      } />
+      
+      {/* 404 Page - Keep at the end */}
+      <Route path="*" element={
+        <div className="not-found-page">
+          <h1>404 - Page Not Found</h1>
+          <p>The page you're looking for doesn't exist.</p>
+          <a href="/">Return to Home</a>
+        </div>
+      } />
     </Routes>
   );
 };

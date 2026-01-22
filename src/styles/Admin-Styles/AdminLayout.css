@@ -1,0 +1,143 @@
+/* src/styles/Admin-Styles/AdminLayout.css */
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f7fa;
+}
+
+.admin-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 280px;
+  transition: margin-left 0.3s ease;
+}
+
+.admin-header {
+  background: white;
+  padding: 20px 30px;
+  border-bottom: 1px solid #e1e5eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.header-left h1 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1e3c72;
+  margin: 0 0 5px 0;
+}
+
+.admin-subtitle {
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.95rem;
+  color: #666;
+  margin: 0;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.admin-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #4a90e2, #2a5298);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.user-role {
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.logout-btn {
+  padding: 10px 20px;
+  background: #ff4757;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: #ff3742;
+  transform: translateY(-1px);
+}
+
+.admin-content {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+.admin-footer {
+  background: white;
+  padding: 20px 30px;
+  border-top: 1px solid #e1e5eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-footer p {
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+}
+
+@media (max-width: 1024px) {
+  .admin-main {
+    margin-left: 0;
+  }
+  
+  .admin-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 20px;
+  }
+  
+  .header-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

@@ -110,35 +110,50 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // Login function
-  const login = async (email, password) => {
-    setLoading(true);
-    setError(null);
+
+const login = async (email, password) => {
+  setLoading(true);
+  setError(null);
+  
+  try {
+    const response = await api.post('/auth/login', { email, password });
+    const { accessToken, refreshToken } = response.data;
     
-    try {
-      const response = await api.post('/auth/login', { email, password });
-      const { accessToken, refreshToken, expiresIn } = response.data;
-      
-      // Store tokens
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
-      
-      // Get user profile
-      const profileResponse = await api.get('/auth/profile');
-      const userData = profileResponse.data;
-      
-      // Store user data
-      localStorage.setItem('user', JSON.stringify(userData));
-      setUser(userData);
-      
-      return { success: true, data: response.data };
-    } catch (err) {
-      const errorMessage = err.response?.data?.message || err.message || 'Login failed';
-      setError(errorMessage);
-      return { success: false, error: errorMessage };
-    } finally {
-      setLoading(false);
+    console.log('Login API response:', response.data);
+    
+    // Store tokens
+    localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('refreshToken', refreshToken);
+    
+    // Get user profile
+    const profileResponse = await api.get('/auth/profile');
+    const userData = profileResponse.data;
+    
+    console.log('User profile API response:', userData);
+    
+    // Make sure user data has role field
+    if (!userData.role) {
+      console.warn('User data missing role field:', userData);
+      // You might need to add default role or get it from another endpoint
     }
-  };
+    
+    // Store user data
+    localStorage.setItem('user', JSON.stringify(userData));
+    setUser(userData);
+    
+    return { 
+      success: true, 
+      data: response.data,
+      user: userData // Return user data for immediate use
+    };
+  } catch (err) {
+    const errorMessage = err.response?.data?.message || err.message || 'Login failed';
+    setError(errorMessage);
+    return { success: false, error: errorMessage };
+  } finally {
+    setLoading(false);
+  }
+};
 
 
 const register = async (userData) => {
