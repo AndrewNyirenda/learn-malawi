@@ -1,9 +1,7 @@
-// pages/Register.jsx
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { FaUserPlus, FaTimes, FaExclamationCircle, FaUserTag } from 'react-icons/fa';
-import Footer from '../components/Footer';
 import '../styles/register.css';
 
 const Register = () => {
@@ -13,47 +11,80 @@ const Register = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'Teacher', // Default role
+    role: 'Teacher'
   });
-  
-  const [passwordError, setPasswordError] = useState('');
-  
-  const { register, loading, error, clearError } = useAuth();
+
+  const [errors, setErrors] = useState({});
+  const { register, loading, error: apiError, clearError } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: value
     });
     
-    // Clear password error when user starts typing
-    if (name === 'password' || name === 'confirmPassword') {
-      setPasswordError('');
+    // Clear errors when user starts typing
+    if (errors[name]) {
+      setErrors({
+        ...errors,
+        [name]: ''
+      });
+    }
+    
+    // Clear API errors on user interaction
+    if (apiError) {
+      clearError();
     }
   };
 
   const validateForm = () => {
-    // Validate password match
-    if (formData.password !== formData.confirmPassword) {
-      setPasswordError('Passwords do not match');
-      return false;
+    let formErrors = {};
+    let isValid = true;
+
+    // First name validation
+    if (!formData.firstName.trim()) {
+      formErrors.firstName = 'First name is required';
+      isValid = false;
     }
-    
-    // Validate password length
-    if (formData.password.length < 6) {
-      setPasswordError('Password must be at least 6 characters');
-      return false;
+
+    // Last name validation
+    if (!formData.lastName.trim()) {
+      formErrors.lastName = 'Last name is required';
+      isValid = false;
     }
-    
-    // Validate role
-    if (!['Admin', 'Teacher'].includes(formData.role)) {
-      setPasswordError('Please select a valid role');
-      return false;
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email) {
+      formErrors.email = 'Email is required';
+      isValid = false;
+    } else if (!emailRegex.test(formData.email)) {
+      formErrors.email = 'Please enter a valid email address';
+      isValid = false;
     }
-    
-    return true;
+
+    // Password validation
+    if (!formData.password) {
+      formErrors.password = 'Password is required';
+      isValid = false;
+    } else if (formData.password.length < 6) {
+      formErrors.password = 'Password must be at least 6 characters';
+      isValid = false;
+    }
+
+    // Confirm password validation
+    if (!formData.confirmPassword) {
+      formErrors.confirmPassword = 'Please confirm your password';
+      isValid = false;
+    } else if (formData.password !== formData.confirmPassword) {
+      formErrors.confirmPassword = 'Passwords do not match';
+      isValid = false;
+    }
+
+    setErrors(formErrors);
+    return isValid;
   };
 
   const handleSubmit = async (e) => {
@@ -63,209 +94,222 @@ const Register = () => {
       return;
     }
     
-    const userData = {
+    // Call register function from useAuth
+    const result = await register({
       firstName: formData.firstName,
       lastName: formData.lastName,
       email: formData.email,
       password: formData.password,
       role: formData.role,
-    };
+    });
     
-    const result = await register(userData);
-    
-    if (result.success) {
-      navigate('/');
+    if (result?.success) {
+      // Redirect to admin dashboard
+      navigate('/admin/dashboard');
     }
+  };
+
+  const handleRoleSelect = (role) => {
+    setFormData({
+      ...formData,
+      role: role
+    });
   };
 
   return (
     <>
-      <div className="register-wrapper">
-        <div className="register-container">
-          <div className="register-card">
-            <div className="register-header">
-              <h1>Create Account</h1>
-              <p className="register-subtitle">Join Learn Malawi today</p>
+      <Helmet>
+        <title>Admin Registration</title>
+        <meta name="description" content="Create an admin account to update and manage educational resources on Learn Malawi platform." />
+      </Helmet>
+      
+      <div className="registration-page">
+        <div className="registration-container">
+          <div className="registration-header">
+            <h1>Register Account</h1>
+            <p className="page-description">
+              This registration is for <strong>administrators and teachers</strong> who will update educational content. 
+              All study resources are <strong>completely free</strong> and accessible to students without login.
+            </p>
+          </div>
+
+          <div className="registration-card">
+            <div className="info-note">
+              <strong>Note:</strong> Students don't need to register. All learning materials are freely available on the homepage.
             </div>
 
-            {(error || passwordError) && (
-              <div className="error-message">
-                <div className="error-content">
-                  <FaExclamationCircle className="error-icon" />
-                  <span className="error-text">{error || passwordError}</span>
-                </div>
-                <button onClick={() => { clearError(); setPasswordError(''); }} className="close-btn">
-                  <FaTimes />
+            {apiError && (
+              <div className="api-error-message">
+                <span className="error-icon">!</span>
+                <span className="error-text">{apiError}</span>
+                <button onClick={clearError} className="error-close">
+                  ×
                 </button>
               </div>
             )}
 
-            <form className="register-form" onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="registration-form">
               <div className="form-row">
                 <div className="form-group">
-                  <label htmlFor="firstName">
-                    First Name *
-                    <span className="required-dot"></span>
-                  </label>
+                  <label htmlFor="firstName">First Name *</label>
                   <input
                     type="text"
                     id="firstName"
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
-                    required
-                    placeholder="John"
+                    className={errors.firstName ? 'error' : ''}
+                    placeholder="Enter your first name"
                     disabled={loading}
                   />
+                  {errors.firstName && (
+                    <span className="error-message">{errors.firstName}</span>
+                  )}
                 </div>
-                
+
                 <div className="form-group">
-                  <label htmlFor="lastName">
-                    Last Name *
-                    <span className="required-dot"></span>
-                  </label>
+                  <label htmlFor="lastName">Last Name *</label>
                   <input
                     type="text"
                     id="lastName"
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleChange}
-                    required
-                    placeholder="Doe"
+                    className={errors.lastName ? 'error' : ''}
+                    placeholder="Enter your last name"
                     disabled={loading}
                   />
+                  {errors.lastName && (
+                    <span className="error-message">{errors.lastName}</span>
+                  )}
                 </div>
               </div>
-              
+
               <div className="form-group">
-                <label htmlFor="email">
-                  Email *
-                  <span className="required-dot"></span>
-                </label>
+                <label htmlFor="email">Email Address *</label>
                 <input
                   type="email"
                   id="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  required
-                  placeholder="you@example.com"
+                  className={errors.email ? 'error' : ''}
+                  placeholder="Enter your email address"
                   disabled={loading}
                 />
+                {errors.email && (
+                  <span className="error-message">{errors.email}</span>
+                )}
               </div>
-              
+
               <div className="form-row">
                 <div className="form-group">
-                  <label htmlFor="password">
-                    Password *
-                    <span className="required-dot"></span>
-                  </label>
+                  <label htmlFor="password">Password *</label>
                   <input
                     type="password"
                     id="password"
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    required
-                    placeholder="Enter password"
+                    className={errors.password ? 'error' : ''}
+                    placeholder="Create a password"
                     disabled={loading}
-                    minLength="6"
                   />
+                  {errors.password && (
+                    <span className="error-message">{errors.password}</span>
+                  )}
                 </div>
-                
+
                 <div className="form-group">
-                  <label htmlFor="confirmPassword">
-                    Confirm Password *
-                    <span className="required-dot"></span>
-                  </label>
+                  <label htmlFor="confirmPassword">Confirm Password *</label>
                   <input
                     type="password"
                     id="confirmPassword"
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    required
-                    placeholder="Confirm password"
+                    className={errors.confirmPassword ? 'error' : ''}
+                    placeholder="Re-enter your password"
                     disabled={loading}
-                    minLength="6"
                   />
-                </div>
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="role">
-                  <FaUserTag /> Role *
-                  <span className="required-dot"></span>
-                </label>
-                <select
-                  id="role"
-                  name="role"
-                  value={formData.role}
-                  onChange={handleChange}
-                  required
-                  disabled={loading}
-                  className="role-select"
-                >
-                  <option value="Teacher">Teacher</option>
-                  <option value="Admin">Administrator</option>
-                </select>
-                <div className="role-description">
-                  {formData.role === 'Teacher' ? (
-                    <p>Teachers can create and manage educational content</p>
-                  ) : (
-                    <p>Administrators have full system access and user management</p>
+                  {errors.confirmPassword && (
+                    <span className="error-message">{errors.confirmPassword}</span>
                   )}
                 </div>
               </div>
-              
-              <div className="password-info">
-                <p className="info-text">
-                  <strong>Password Requirements:</strong>
-                </p>
-                <ul className="requirements-list">
-                  <li className={formData.password.length >= 6 ? 'valid' : 'invalid'}>
-                    ✓ At least 6 characters
-                  </li>
-                  <li>Use a strong, unique password</li>
-                </ul>
+
+              <div className="form-group">
+                <label htmlFor="role">Account Type *</label>
+                <div className="role-selector">
+                  <button
+                    type="button"
+                    className={`role-option ${formData.role === 'Teacher' ? 'selected' : ''}`}
+                    onClick={() => handleRoleSelect('Teacher')}
+                    disabled={loading}
+                  >
+                    <div className="role-icon">👨‍🏫</div>
+                    <div className="role-text">
+                      <h4>Content Manager</h4>
+                      <p>Upload and manage educational resources</p>
+                    </div>
+                  </button>
+                  
+                  <button
+                    type="button"
+                    className={`role-option ${formData.role === 'Admin' ? 'selected' : ''}`}
+                    onClick={() => handleRoleSelect('Admin')}
+                    disabled={loading}
+                  >
+                    <div className="role-icon">👨‍💼</div>
+                    <div className="role-text">
+                      <h4>Administrator</h4>
+                      <p>Full platform access and management</p>
+                    </div>
+                  </button>
+                </div>
               </div>
-              
+
+              <div className="form-group terms">
+                <input 
+                  type="checkbox" 
+                  id="terms" 
+                  required 
+                  disabled={loading}
+                />
+                <label htmlFor="terms">
+                  I agree to use this account only for updating educational content and abide by the platform guidelines.
+                </label>
+              </div>
+
               <button 
                 type="submit" 
-                className={`register-btn ${loading ? 'loading' : ''}`}
+                className="submit-btn"
                 disabled={loading}
               >
                 {loading ? (
                   <>
-                    <div className="spinner"></div>
-                    Creating Account...
+                    <span className="loading-spinner"></span>
+                    Creating Admin Account...
                   </>
                 ) : (
-                  <>
-                    <FaUserPlus />
-                    Create Account
-                  </>
+                  'Create Admin Account'
                 )}
               </button>
-            </form>
 
-            <div className="register-links">
-              <p>
-                Already have an account?{' '}
-                <Link to="/login" className="register-link">
-                  Sign In
-                </Link>
-              </p>
-              <p style={{ marginTop: '0.5rem' }}>
-                <Link to="/" className="register-link">
-                  Back to Home
-                </Link>
-              </p>
-            </div>
+              <div className="auth-links">
+                <div className="login-link">
+                  Already have an admin account? <Link to="/admin/login">Sign in here</Link>
+                </div>
+                <div className="back-link">
+                  <Link to="/">
+                    ← Return to free resources
+                  </Link>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };
