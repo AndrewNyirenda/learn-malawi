@@ -1,66 +1,144 @@
 import React, { useState, useEffect } from "react";
-import studyResources from "../Data/studyResources";
 import ResourceCard from "./ResourceCard";
 import "../styles/pastPapers.css";
 import Footer from "../components/Footer.jsx";
+import { usePastPapers } from "../contexts/PastPapersContext";
 
 const PastPapers = () => {
-  const [level, setLevel] = useState("primary");
+  const [level, setLevel] = useState("secondary");
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("all");
   const [classFilter, setClassFilter] = useState("all");
   const [yearFilter, setYearFilter] = useState("all");
-  const [viewingResource, setViewingResource] = useState(null); 
+  const [viewingResource, setViewingResource] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // Get available classes based on current level
-  const getAvailableClasses = () => {
-    const allResources = studyResources[level].pastPapers;
+  const {
+    pastPapers,
+    categories,
+    classes,
+    years,
+    examinationBodies,
+    loading,
+    error,
+    fetchPastPapers,
+    fetchCategories,
+    fetchClasses,
+    fetchYears,
+    getViewUrl,
+    getDownloadUrl,
+    clearError,
+  } = usePastPapers();
+
+  // Load data when level changes
+  useEffect(() => {
+    const levelEnum = level === 'primary' ? 'primary' : 'secondary';
     
-    const classes = [...new Set(allResources.map(resource => resource.class))];
-    return classes.sort((a, b) => {
-      const aNum = parseInt(a.replace(/\D/g, ''));
-      const bNum = parseInt(b.replace(/\D/g, ''));
-      return aNum - bNum;
-    });
-  };
+    fetchCategories(levelEnum);
+    fetchClasses(levelEnum);
+    fetchYears(levelEnum);
+  }, [level]);
 
-  const getAvailableYears = () => {
-    const allResources = studyResources[level].pastPapers;
-    const years = [...new Set(allResources
-      .filter(resource => resource.year)
-      .map(resource => resource.year)
-    )];
-    return years.sort((a, b) => b - a); // Sort descending (newest first)
-  };
-
-  const filterResources = (resources) => {
-    return resources.filter(({ title, category: resourceCategory, class: resourceClass, year }) => {
-      const matchesSearch = title.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = category === "all" || resourceCategory === category;
-      const matchesClass = classFilter === "all" || resourceClass === classFilter;
-      const matchesYear = yearFilter === "all" || year == yearFilter;
-      
-      return matchesSearch && matchesCategory && matchesClass && matchesYear;
-    });
-  };
+  // Fetch past papers when filters change
+  useEffect(() => {
+    const levelEnum = level === 'primary' ? 'primary' : 'secondary';
+    
+    const filters = {
+      level: levelEnum,
+      ...(category !== 'all' && { category }),
+      ...(classFilter !== 'all' && { class: classFilter }),
+      ...(yearFilter !== 'all' && { year: parseInt(yearFilter) }),
+      ...(searchTerm && { search: searchTerm }),
+    };
+    
+    fetchPastPapers(currentPage, 12, filters);
+  }, [level, category, classFilter, yearFilter, searchTerm, currentPage]);
 
   // Reset filters when level changes
   useEffect(() => {
     setCategory("all");
     setClassFilter("all");
     setYearFilter("all");
+    setSearchTerm("");
+    setCurrentPage(1);
   }, [level]);
 
-  const filteredPastPapers = filterResources(studyResources[level].pastPapers);
+  const getAvailableClasses = () => {
+    return classes.map(cls => cls.class);
+  };
 
-  const allCategories = [
-    ...new Set(studyResources[level].pastPapers.map(p => p.category))
-  ];
+  const getAvailableYears = () => {
+    return years.map(year => year.year);
+  };
 
   const closeViewer = () => setViewingResource(null);
 
-  const availableClasses = getAvailableClasses();
-  const availableYears = getAvailableYears();
+  const handleViewResource = async (resource) => {
+    try {
+      // Open PDF in new tab
+      const { viewUrl } = await getViewUrl(resource.id);
+      window.open(viewUrl, '_blank');
+    } catch (err) {
+      console.error('Error viewing resource:', err);
+      alert('Could not open the PDF. Please try downloading instead.');
+    }
+  };
+
+  const handleDownloadResource = async (resource) => {
+    try {
+      const { downloadUrl, fileName } = await getDownloadUrl(resource.id);
+      
+      // Create a temporary link to trigger download
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = fileName || resource.title;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (err) {
+      console.error('Error downloading resource:', err);
+      alert('Failed to download the file. Please try again.');
+    }
+  };
+
+  const allCategories = ["all", ...categories.map(cat => cat.category)].filter(Boolean);
+  const availableClasses = ["all", ...getAvailableClasses()].filter(Boolean);
+  const availableYears = ["all", ...getAvailableYears()].filter(Boolean);
+
+  const getAuthorName = (uploadedBy) => {
+    if (!uploadedBy) return "Unknown";
+    if (typeof uploadedBy === 'object') {
+      return `${uploadedBy.firstName || ''} ${uploadedBy.lastName || ''}`.trim() || "Unknown";
+    }
+    return uploadedBy;
+  };
+
+  if (loading && pastPapers.length === 0) {
+    return (
+      <div className="pastpapers-wrapper">
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Loading past papers...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error && pastPapers.length === 0) {
+    return (
+      <div className="pastpapers-wrapper">
+        <div className="error-container">
+          <h3>Error Loading Past Papers</h3>
+          <p>{error}</p>
+          <button onClick={() => { clearError(); fetchPastPapers(); }} className="retry-btn">
+            Retry
+          </button>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -71,6 +149,7 @@ const PastPapers = () => {
           Use the filters below to quickly find the resources you need.
         </p>
 
+        {/* Level Tabs */}
         <div className="level-tabs">
           <button
             className={level === "primary" ? "active" : ""}
@@ -86,12 +165,19 @@ const PastPapers = () => {
           </button>
         </div>
 
+        {/* Search Bar */}
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search past papers..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
+        </div>
+
         {/* Filters Container */}
         <div className="filters-container">
-          
-
-
-
           <div className="filter-group">
             <label htmlFor="category">Category</label>
             <select
@@ -100,9 +186,10 @@ const PastPapers = () => {
               onChange={(e) => setCategory(e.target.value)}
               className="filter-select"
             >
-              <option value="all">All Categories</option>
-              {allCategories.map(cat => (
-                <option key={cat} value={cat}>{cat}</option>
+              {allCategories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat === 'all' ? 'All Categories' : cat}
+                </option>
               ))}
             </select>
           </div>
@@ -115,9 +202,10 @@ const PastPapers = () => {
               onChange={(e) => setClassFilter(e.target.value)}
               className="filter-select"
             >
-              <option value="all">All Classes</option>
               {availableClasses.map(cls => (
-                <option key={cls} value={cls}>{cls}</option>
+                <option key={cls} value={cls}>
+                  {cls === 'all' ? 'All Classes' : cls}
+                </option>
               ))}
             </select>
           </div>
@@ -130,9 +218,10 @@ const PastPapers = () => {
               onChange={(e) => setYearFilter(e.target.value)}
               className="filter-select"
             >
-              <option value="all">All Years</option>
               {availableYears.map(year => (
-                <option key={year} value={year}>{year}</option>
+                <option key={year} value={year}>
+                  {year === 'all' ? 'All Years' : year}
+                </option>
               ))}
             </select>
           </div>
@@ -142,20 +231,73 @@ const PastPapers = () => {
         <section>
           <h2>Past Papers & Reviews</h2>
           <div className="grid-container">
-            {filteredPastPapers.length > 0 ? (
-              filteredPastPapers.map(resource => (
+            {pastPapers.length > 0 ? (
+              pastPapers.map((resource) => (
                 <ResourceCard
                   key={resource.id}
-                  {...resource}
-                  onView={() => setViewingResource(resource)}
+                  id={resource.id}
+                  title={resource.title}
+                  thumbnail={resource.thumbnailUrl || "/images/pdf.png"}
+                  downloadLink={resource.fileUrl}
+                  downloadName={resource.fileName || resource.title}
+                  category={resource.category}
+                  class={resource.class}
+                  level={resource.level}
+                  year={resource.year}
+                  subject={resource.subject}
+                  examinationBody={resource.examinationBody}
+                  paperNumber={resource.paperNumber}
+                  paperType={resource.paperType}
+                  author={resource.author}
+                  uploadedBy={getAuthorName(resource.uploadedBy)}
+                  viewCount={resource.viewCount}
+                  downloadCount={resource.downloadCount}
+                  onView={() => handleViewResource(resource)}
+                  onDownload={() => handleDownloadResource(resource)}
                 />
               ))
             ) : (
-              <p className="no-results">No past papers found matching your filters. Try adjusting your search criteria.</p>
+              <div className="no-results-container">
+                <p className="no-results">
+                  No past papers found matching your filters. Try adjusting your search criteria.
+                </p>
+                <p className="no-results-hint">
+                  Note: The backend API might not have any past papers uploaded yet.
+                </p>
+              </div>
             )}
           </div>
         </section>
 
+        {/* Pagination */}
+        {pastPapers.length > 0 && (
+          <div className="pagination">
+            <button 
+              className="pagination-btn"
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage(prev => prev - 1)}
+            >
+              Previous
+            </button>
+            <span className="pagination-info">Page {currentPage}</span>
+            <button 
+              className="pagination-btn"
+              onClick={() => setCurrentPage(prev => prev + 1)}
+            >
+              Next
+            </button>
+          </div>
+        )}
+
+        {/* Connection Status */}
+        <div className="connection-status">
+          <small>
+            Showing {pastPapers.length} past papers from backend API
+            {loading && ' (loading more...)'}
+          </small>
+        </div>
+
+        {/* Modal */}
         {viewingResource && (
           <div className="modal-overlay" onClick={closeViewer}>
             <div className="modal-content" onClick={e => e.stopPropagation()}>

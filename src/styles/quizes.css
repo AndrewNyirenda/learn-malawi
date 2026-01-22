@@ -8,11 +8,13 @@
   font-family: 'Roboto';
 }
 
+
+
 .quizes-wrapper {
   padding: 100px 2rem 3rem;
   max-width: 1400px;
   margin: auto;
-  background-color: #e0f7fa;
+
   min-height: 100vh;
 }
 
@@ -24,7 +26,7 @@
   color: #3b3939e7;
   text-align: center;
   font-size: 1.1rem;
-  background-color: rgba(224, 247, 250, 0.95);
+  
 }
 
 .quiz-description h1 {
