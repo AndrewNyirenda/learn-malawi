@@ -1,5 +1,6 @@
+// src/components/Tutorials.jsx
 import React, { useState, useEffect } from "react";
-import { tutorials } from "../Data/tutorials";
+import { useTutorials } from "../contexts/TutorialsContext";
 import "../styles/tutorials.css";
 import Footer from "../components/Footer.jsx";
 
@@ -9,37 +10,42 @@ const Tutorials = () => {
   const [classFilter, setClassFilter] = useState("all");
   const [videoErrors, setVideoErrors] = useState({});
 
-  const filteredByLevel = tutorials.filter((tut) => tut.level === level);
+  const {
+    tutorials,
+    subjects,
+    classes,
+    loading,
+    error,
+    fetchTutorials,
+    fetchSubjects,
+    fetchClasses,
+    clearError,
+  } = useTutorials();
 
-  const allSubjects = ["all", ...new Set(filteredByLevel.map((tut) => tut.subject))];
-  
-  // Get available classes for current level
-  const getAvailableClasses = () => {
-    const classes = [...new Set(filteredByLevel.map(tut => tut.class))];
-    return classes.sort((a, b) => {
-      const aNum = parseInt(a.replace(/\D/g, ''));
-      const bNum = parseInt(b.replace(/\D/g, ''));
-      return aNum - bNum;
-    });
-  };
+  // Load tutorials and filters when level changes
+  useEffect(() => {
+    const loadData = async () => {
+      const filters = {
+        level,
+        ...(subjectFilter !== 'all' && { subject: subjectFilter }),
+        ...(classFilter !== 'all' && { class: classFilter }),
+      };
+      
+      await Promise.all([
+        fetchTutorials(filters),
+        fetchSubjects(level),
+        fetchClasses(level),
+      ]);
+    };
 
-  const filtered =
-    subjectFilter === "all"
-      ? filteredByLevel
-      : filteredByLevel.filter((tut) => tut.subject === subjectFilter);
-
-  const finalFiltered = 
-    classFilter === "all"
-      ? filtered
-      : filtered.filter((tut) => tut.class === classFilter);
+    loadData();
+  }, [level, subjectFilter, classFilter]);
 
   // Reset filters when level changes
   useEffect(() => {
     setSubjectFilter("all");
     setClassFilter("all");
   }, [level]);
-
-  const availableClasses = getAvailableClasses();
 
   // Function to handle YouTube embed errors
   const handleVideoError = (tutorialId) => {
@@ -54,14 +60,54 @@ const Tutorials = () => {
     return url.includes('youtube.com/embed') || url.includes('youtu.be');
   };
 
-  // Function to get YouTube thumbnail
-  const getYouTubeThumbnail = (url) => {
-    if (url.includes('youtube.com/embed/')) {
-      const videoId = url.split('/embed/')[1];
-      return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-    }
-    return null;
+  // Sort classes numerically
+  const getSortedClasses = () => {
+    return [...classes].sort((a, b) => {
+      const aNum = parseInt(a.replace(/\D/g, ''));
+      const bNum = parseInt(b.replace(/\D/g, ''));
+      return aNum - bNum;
+    });
   };
+
+  const allSubjects = ["all", ...subjects];
+  const availableClasses = getSortedClasses();
+
+  if (loading && tutorials.length === 0) {
+    return (
+      <>
+        <div className="tutorials-wrapper">
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <p>Loading tutorials...</p>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  if (error && tutorials.length === 0) {
+    return (
+      <>
+        <div className="tutorials-wrapper">
+          <div className="error-container">
+            <h3>Error Loading Tutorials</h3>
+            <p>{error}</p>
+            <button 
+              onClick={() => { 
+                clearError(); 
+                fetchTutorials({ level }); 
+              }} 
+              className="retry-btn"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
@@ -127,16 +173,14 @@ const Tutorials = () => {
       </div>
 
       <div className="tutorials-grid">
-        {finalFiltered.length > 0 ? (
-          finalFiltered.map((tut) => (
+        {tutorials.length > 0 ? (
+          tutorials.map((tut) => (
             <div className="tutorial-card" key={tut.id}>
               <h3>{tut.title}</h3>
               <div className="tutorial-meta">
                 <span className="tutorial-subject">{tut.subject}</span>
                 <span className="tutorial-class">{tut.class}</span>
               </div>
-              
-              {/* DESCRIPTION LINE REMOVED HERE */}
               
               <div className="video-wrapper">
                 {videoErrors[tut.id] ? (

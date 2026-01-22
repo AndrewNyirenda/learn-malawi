@@ -48,7 +48,7 @@ export const StudyNotesProvider = ({ children }) => {
   const testConnection = async () => {
     try {
       console.log('Testing connection to books API...');
-      const response = await axios.get(`${API_BASE_URL}/books?limit=1`, { timeout: 5000 });
+      const response = await axios.get(`${API_BASE_URL}/books?limit=1`, { timeout: 15000 });
       console.log('Connection successful:', response.status);
       return true;
     } catch (err) {

@@ -1,6 +1,5 @@
 .about-wrapper {
   padding: 6rem 2rem;
-  background: #e0f7fa;
   color: #3b3939e7;
   font-family: 'Arial', sans-serif;
   text-align: center;
@@ -108,7 +107,7 @@
 .team-card,
 .value-card,
 .philosophy-section {
-  background: #e0f7fa;
+
   border-radius: 16px;
   padding: 2rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -237,7 +236,7 @@ background: white;
   font-size: 1rem;
   line-height: 1.7;
   color: #444;
-  background: #e0f7fa;
+ 
   padding: 1rem;
   border-radius: 8px;
   transition: all 0.3s ease;

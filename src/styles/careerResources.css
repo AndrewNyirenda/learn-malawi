@@ -1,13 +1,8 @@
+/* src/styles/careerResources.css */
 .career-resources-wrapper {
-  
   margin: 3rem auto;
-  
   padding: 2rem 2rem;
-  
-  background-color: #e0f7fa;
   border-radius: 16px;
-  
- 
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -17,7 +12,6 @@
   font-size: 1.9rem;
   font-weight: 700;
   margin-top: 2rem;
-
 }
 
 .career-resources-intro {
@@ -78,12 +72,14 @@
   text-decoration: none;
   transition: background 0.3s ease;
   display: inline-block; 
+  gap: 10px;
 }
 
 .resource-link:hover {
   background: #2563eb;
   color: white;
 }
+
 .resource-icon-wrapper {
   margin-bottom: 1rem;
 }
@@ -141,4 +137,88 @@
 .figure-card p {
   font-size: 1rem;
   color: rgba(0, 0, 0, 0.473);
+}
+
+/* Loading and Error States */
+.loading-container,
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+  padding: 40px;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-container h3 {
+  color: #e74c3c;
+  margin-bottom: 10px;
+}
+
+.error-container p {
+  color: #666;
+  margin-bottom: 20px;
+  max-width: 500px;
+}
+
+.retry-btn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.retry-btn:hover {
+  background-color: #2980b9;
+}
+
+/* Connection Status */
+.connection-status {
+  text-align: center;
+  margin-top: 20px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  color: #666;
+  font-size: 13px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .career-resources-wrapper {
+    padding: 80px 1.5rem 2rem;
+  }
+  
+  .career-resources-title {
+    font-size: 1.9rem;
+    margin-top: 1rem;
+  }
+  
+  .career-resources-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .motivational-figures-list {
+    grid-template-columns: 1fr;
+  }
 }
