@@ -14,7 +14,10 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import AdminLayout from "./admin-componenents/AdminLayout";
 import AdminDashboard from "./admin-componenents/AdminDashboard";
-import ProtectedRoute from "./ProtectedRoute"; // Import the ProtectedRoute component
+import AdminUsers from "./admin-componenents/AdminUsers";
+import ProtectedRoute from "./ProtectedRoute";
+import AdminStudyNotes from "./admin-componenents/AdminStudyNotes";
+import AdminPastPapers from "./admin-componenents/AdminPastPapers";
 
 const RoutesComponent = () => {
   return (
@@ -44,17 +47,32 @@ const RoutesComponent = () => {
           </ProtectedRoute>
         }
       >
+        {/* Dashboard Routes */}
+        <Route index element={<AdminDashboard />} />
         <Route path="dashboard" element={<AdminDashboard />} />
-        {/* Add other admin routes here */}
-        {/* <Route path="study-notes" element={<AdminStudyNotes />} />
+        
+        {/* User Management Routes */}
+        <Route path="users" element={<AdminUsers />} />
+        <Route path="users/new" element={<AdminUsers />} />
+        <Route path="admins" element={<AdminUsers />} />
+        <Route path="teachers" element={<AdminUsers />} />
+        
+        {/* Content Management Routes (to be implemented) */}
+        
+        <Route path="study-notes" element={<AdminStudyNotes />} />
         <Route path="past-papers" element={<AdminPastPapers />} />
+        {/*
         <Route path="tutorials" element={<AdminTutorials />} />
         <Route path="quizzes" element={<AdminQuizzes />} />
         <Route path="news" element={<AdminNews />} />
         <Route path="career-resources" element={<AdminCareerResources />} />
-        <Route path="users" element={<AdminUsers />} />
+        */}
+        
+        {/* Analytics & Settings Routes (to be implemented) */}
+        {/* 
         <Route path="analytics" element={<AdminAnalytics />} />
-        <Route path="settings" element={<AdminSettings />} /> */}
+        <Route path="settings" element={<AdminSettings />} />
+        */}
       </Route>
 
       {/* Optional: Admin-specific login route */}

@@ -26,7 +26,7 @@ api.interceptors.request.use(
   }
 );
 
-// Add response interceptor to handle token refresh
+
 api.interceptors.response.use(
   (response) => response,
   async (error) => {

@@ -31,50 +31,51 @@ const AdminDashboardSidebar = () => {
     setCollapsed(!collapsed);
   };
 
-  const menuItems = [
-    {
-      title: 'Dashboard',
-      icon: <FaTachometerAlt />,
-      path: '/admin/dashboard'
-    },
-    {
-      title: 'Content Management',
-      icon: <FaBook />,
-      submenu: [
-        { title: 'Study Notes', path: '/admin/study-notes' },
-        { title: 'Past Papers', path: '/admin/past-papers' },
-        { title: 'Tutorials', path: '/admin/tutorials' },
-        { title: 'Quizzes', path: '/admin/quizzes' },
-        { title: 'News & Updates', path: '/admin/news' },
-        { title: 'Career Resources', path: '/admin/career-resources' }
-      ]
-    },
-    {
-      title: 'User Management',
-      icon: <FaUsers />,
-      submenu: [
-        { title: 'All Users', path: '/admin/users' },
-        { title: 'Admins', path: '/admin/admins' },
-        { title: 'Teachers', path: '/admin/teachers' },
-        { title: 'Add New User', path: '/admin/users/new' }
-      ]
-    },
-    {
-      title: 'Analytics',
-      icon: <FaChartBar />,
-      path: '/admin/analytics'
-    },
-    {
-      title: 'Notifications',
-      icon: <FaBell />,
-      path: '/admin/notifications'
-    },
-    {
-      title: 'Settings',
-      icon: <FaCog />,
-      path: '/admin/settings'
-    }
-  ];
+
+const menuItems = [
+  {
+    title: 'Dashboard',
+    icon: <FaTachometerAlt />,
+    path: '/admin/dashboard'
+  },
+  {
+    title: 'Content Management',
+    icon: <FaBook />,
+    submenu: [
+      { title: 'Study Notes', path: '/admin/study-notes' },
+      { title: 'Past Papers', path: '/admin/past-papers' },
+      { title: 'Tutorials', path: '/admin/tutorials' },
+      { title: 'Quizzes', path: '/admin/quizzes' },
+      { title: 'News & Updates', path: '/admin/news' },
+      { title: 'Career Resources', path: '/admin/career-resources' }
+    ]
+  },
+  {
+    title: 'User Management',
+    icon: <FaUsers />,
+    submenu: [
+      { title: 'All Users', path: '/admin/users' },
+      { title: 'Admins', path: '/admin/admins' },
+      { title: 'Teachers', path: '/admin/teachers' },
+      { title: 'Add New User', path: '/admin/users/new' }
+    ]
+  },
+  {
+    title: 'Analytics',
+    icon: <FaChartBar />,
+    path: '/admin/analytics'
+  },
+  {
+    title: 'Notifications',
+    icon: <FaBell />,
+    path: '/admin/notifications'
+  },
+  {
+    title: 'Settings',
+    icon: <FaCog />,
+    path: '/admin/settings'
+  }
+];
 
   return (
     <aside className={`admin-sidebar ${collapsed ? 'collapsed' : ''}`}>

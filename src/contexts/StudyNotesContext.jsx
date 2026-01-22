@@ -6,7 +6,7 @@ const API_BASE_URL = 'http://localhost:3000';
 // Create axios instance with default config
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000,
+  timeout: 20000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -48,7 +48,7 @@ export const StudyNotesProvider = ({ children }) => {
   const testConnection = async () => {
     try {
       console.log('Testing connection to books API...');
-      const response = await axios.get(`${API_BASE_URL}/books?limit=1`, { timeout: 15000 });
+      const response = await axios.get(`${API_BASE_URL}/books?limit=1`, { timeout: 20000 });
       console.log('Connection successful:', response.status);
       return true;
     } catch (err) {
@@ -365,6 +365,34 @@ const getDownloadUrl = async (bookId) => {
 
     initializeData();
   }, []);
+  
+
+// Delete book
+const deleteBook = async (bookId, token) => {
+  setLoading(true);
+  setError(null);
+  
+  try {
+    await api.delete(`/books/${bookId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    
+    // Remove from local state
+    setBooks(prevBooks => prevBooks.filter(book => book.id !== bookId));
+    return { success: true };
+  } catch (err) {
+    const errorMessage = err.response?.data?.message || err.message || 'Failed to delete book';
+    setError(errorMessage);
+    console.error('Error deleting book:', err);
+    return { success: false, error: errorMessage };
+  } finally {
+    setLoading(false);
+  }
+};
+
+
 
   const value = {
     books,
@@ -385,6 +413,7 @@ const getDownloadUrl = async (bookId) => {
     getViewUrl,
     getDownloadUrl,
     createBook,
+    deleteBook,
     testConnection,
     clearError: () => setError(null),
   };
