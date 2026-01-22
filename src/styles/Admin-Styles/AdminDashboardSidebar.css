@@ -259,11 +259,11 @@
   display: none;
 }
 
-/* Mobile responsive styles - UPDATED */
+/* Mobile responsive styles */
 @media (max-width: 768px) {
   .admin-sidebar {
     transform: translateX(-100%);
-    width: 280px;
+    width: 280px !important;
   }
   
   .admin-sidebar.show {
@@ -271,29 +271,22 @@
     box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
   }
   
-  /* Mobile backdrop overlay */
-  .admin-sidebar::before {
+  /* Mobile backdrop overlay - FIXED */
+  .admin-sidebar.show::before {
     content: '';
     position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
-    left: 0;
+    left: 280px; /* Start after sidebar */
     background: rgba(0, 0, 0, 0.5);
     z-index: -1;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-  }
-  
-  .admin-sidebar.show::before {
-    opacity: 1;
     pointer-events: auto;
   }
   
   /* Reset collapsed state for mobile */
   .admin-sidebar.collapsed {
-    width: 280px;
+    width: 280px !important;
   }
   
   .admin-sidebar.collapsed .nav-text,
@@ -306,5 +299,10 @@
   
   .admin-sidebar.collapsed .stats-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  
+  /* Hide collapse button on mobile */
+  .collapse-btn {
+    display: none;
   }
 }
