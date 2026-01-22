@@ -1,6 +1,6 @@
 // components/Quizes.jsx
 import React, { useState, useEffect, useRef } from "react";
-import { quizzes } from "../Data/quizzes";
+import { useQuizzes } from '../contexts/QuizzesContext';
 import "../styles/quizes.css";
 import Footer from "../components/Footer.jsx";
 
@@ -22,13 +22,27 @@ const Quizes = () => {
   const [completionTimes, setCompletionTimes] = useState([]);
   const timerRef = useRef(null);
   
-  // Filter quizzes by level
-  const filteredQuizzes = quizzes.filter((quiz) => quiz.level === level);
+  // Get context values
+  const {
+    quizzes: contextQuizzes,
+    subjects,
+    classes,
+    loading,
+    error,
+    fetchQuizzes,
+    fetchSubjects,
+    fetchClasses,
+    startQuiz,
+    clearError,
+  } = useQuizzes();
   
-  // Get all unique values for filters
-  const allSubjects = ["all", ...new Set(filteredQuizzes.map((quiz) => quiz.subject))];
-  const allClasses = ["all", ...new Set(filteredQuizzes.map((quiz) => quiz.class))];
-  const allDifficulties = ["all", ...new Set(filteredQuizzes.map((quiz) => quiz.difficulty))];
+  // Get all unique values for filters from API data
+  const allSubjects = ["all", ...(subjects || [])];
+  const allClasses = ["all", ...(classes || [])];
+  const allDifficulties = ["all", "easy", "medium", "hard"];
+  
+  // Filter quizzes by level from API data
+  const filteredQuizzes = (contextQuizzes || []).filter((quiz) => quiz.level === level);
   
   // Apply filters to displayed quizzes
   const displayedQuizzes = filteredQuizzes.filter((quiz) => {
@@ -39,11 +53,31 @@ const Quizes = () => {
     return matchesSubject && matchesClass && matchesDifficulty;
   });
   
-  const currentQuestion = selectedQuiz?.questions[currentQuestionIndex] || null;
+  const currentQuestion = selectedQuiz?.questions?.[currentQuestionIndex] || null;
+  
+  // Fetch data from API when filters change
+  useEffect(() => {
+    const loadData = async () => {
+      const filters = {
+        level,
+        ...(subjectFilter !== 'all' && { subject: subjectFilter }),
+        ...(difficultyFilter !== 'all' && { difficulty: difficultyFilter }),
+        ...(classFilter !== 'all' && { class: classFilter }),
+      };
+      
+      await Promise.all([
+        fetchQuizzes(filters),
+        fetchSubjects(level),
+        fetchClasses(level),
+      ]);
+    };
+
+    loadData();
+  }, [level, subjectFilter, difficultyFilter, classFilter]);
   
   // Timer effect - handles individual question timing
   useEffect(() => {
-    if (!selectedQuiz || isFinished || timeLeft === null) return;
+    if (!selectedQuiz || isFinished || timeLeft === null || !currentQuestion) return;
     
     // Start timing the question
     if (questionStartTimes[currentQuestionIndex] === undefined) {
@@ -68,6 +102,13 @@ const Quizes = () => {
     return () => clearInterval(timerRef.current);
   }, [timeLeft, isFinished, selectedQuiz, currentQuestionIndex]);
   
+  // Reset all filters when level changes
+  useEffect(() => {
+    setSubjectFilter("all");
+    setClassFilter("all");
+    setDifficultyFilter("all");
+  }, [level]);
+  
   // Format time helper
   const formatTime = (seconds) => {
     if (seconds === null || seconds === undefined) return "0:00";
@@ -77,7 +118,7 @@ const Quizes = () => {
   };
   
   // Calculate passing threshold (70%)
-  const passingThreshold = selectedQuiz 
+  const passingThreshold = selectedQuiz?.questions?.length 
     ? Math.ceil(selectedQuiz.questions.length * 0.7) 
     : 0;
   
@@ -89,6 +130,8 @@ const Quizes = () => {
   };
   
   const handleNext = () => {
+    if (!currentQuestion) return;
+    
     // Calculate completion time for current question
     if (questionStartTimes[currentQuestionIndex] !== undefined) {
       const completionTime = Math.floor((Date.now() - questionStartTimes[currentQuestionIndex]) / 1000);
@@ -97,11 +140,6 @@ const Quizes = () => {
         newTimes[currentQuestionIndex] = completionTime;
         return newTimes;
       });
-      
-      // Update the quiz data with completion time
-      if (selectedQuiz && selectedQuiz.questions[currentQuestionIndex]) {
-        selectedQuiz.questions[currentQuestionIndex].completionTimePerQuestion = completionTime;
-      }
     }
     
     // Store user's answer
@@ -125,7 +163,8 @@ const Quizes = () => {
       setCurrentQuestionIndex(nextIndex);
       setSelectedOption(null);
       // Reset timer for the next question
-      setTimeLeft(selectedQuiz.questions[nextIndex].timeLimit || 60);
+      const nextQuestion = selectedQuiz.questions[nextIndex];
+      setTimeLeft(nextQuestion?.timeLimit || 60);
     } else {
       finishQuiz();
     }
@@ -147,7 +186,7 @@ const Quizes = () => {
     }
     
     // Store the last answer if not already stored
-    if (selectedOption !== null && userAnswers.length <= currentQuestionIndex) {
+    if (selectedOption !== null && userAnswers.length <= currentQuestionIndex && currentQuestion) {
       const newUserAnswers = [...userAnswers];
       newUserAnswers[currentQuestionIndex] = {
         question: currentQuestion.question,
@@ -175,7 +214,7 @@ const Quizes = () => {
     setQuestionStartTimes([]);
     setCompletionTimes([]);
     // Set time to first question's timeLimit
-    if (selectedQuiz && selectedQuiz.questions.length > 0) {
+    if (selectedQuiz?.questions?.[0]) {
       setTimeLeft(selectedQuiz.questions[0].timeLimit || 60);
     }
   };
@@ -194,12 +233,40 @@ const Quizes = () => {
     setShowInstructions(false);
   };
   
-  // Reset all filters when level changes
-  useEffect(() => {
-    setSubjectFilter("all");
-    setClassFilter("all");
-    setDifficultyFilter("all");
-  }, [level]);
+  // Add loading state at the top of your component
+  if (loading && displayedQuizzes.length === 0) {
+    return (
+      <div className="quizes-wrapper">
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Loading quizzes...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+  
+  // Add error state
+  if (error && displayedQuizzes.length === 0) {
+    return (
+      <div className="quizes-wrapper">
+        <div className="error-container">
+          <h3>Error Loading Quizzes</h3>
+          <p>{error}</p>
+          <button 
+            onClick={() => { 
+              clearError(); 
+              fetchQuizzes({ level }); 
+            }} 
+            className="retry-btn"
+          >
+            Retry
+          </button>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
   
   return (
     <>
@@ -238,11 +305,12 @@ const Quizes = () => {
                   value={subjectFilter}
                   onChange={(e) => setSubjectFilter(e.target.value)}
                   className="filter-select"
+                  disabled={loading}
                 >
                   <option value="all">All Subjects</option>
-                  {allSubjects.map(subject => (
+                  {allSubjects.map((subject, index) => (
                     subject !== "all" && (
-                      <option key={subject} value={subject}>{subject}</option>
+                      <option key={`${subject}-${index}`} value={subject}>{subject}</option>
                     )
                   ))}
                 </select>
@@ -255,11 +323,12 @@ const Quizes = () => {
                   value={classFilter}
                   onChange={(e) => setClassFilter(e.target.value)}
                   className="filter-select"
+                  disabled={loading}
                 >
                   <option value="all">All Classes</option>
-                  {allClasses.map(cls => (
+                  {allClasses.map((cls, index) => (
                     cls !== "all" && (
-                      <option key={cls} value={cls}>{cls}</option>
+                      <option key={`${cls}-${index}`} value={cls}>{cls}</option>
                     )
                   ))}
                 </select>
@@ -272,6 +341,7 @@ const Quizes = () => {
                   value={difficultyFilter}
                   onChange={(e) => setDifficultyFilter(e.target.value)}
                   className="filter-select"
+                  disabled={loading}
                 >
                   <option value="all">All Difficulties</option>
                   {allDifficulties.map(diff => (
@@ -286,20 +356,20 @@ const Quizes = () => {
             <div className="quiz-list">
               {displayedQuizzes.length === 0 ? (
                 <div className="no-quizzes">
-                  No quizzes available for the selected filters. Try adjusting your criteria.
+                  {loading ? "Loading..." : "No quizzes available for the selected filters. Try adjusting your criteria."}
                 </div>
               ) : (
                 displayedQuizzes.map((quiz) => (
-                  <div key={quiz.id} className="quiz-card">
+                  <div key={quiz.id || quiz._id} className="quiz-card">
                     <h3>{quiz.title}</h3>
                     <div className="quiz-meta">
                       <span className="quiz-category">{quiz.subject}</span>
                       <span className="quiz-class">{quiz.class}</span>
                       <span className="quiz-difficulty">{quiz.difficulty}</span>
                     </div>
-                    <p><strong>Questions:</strong> {quiz.questions.length}</p>
-                    <p><strong>Total Time:</strong> {formatTime(quiz.totalTime)}</p>
-                    <p><strong>Difficulty:</strong> {quiz.difficulty.charAt(0).toUpperCase() + quiz.difficulty.slice(1)}</p>
+                    <p><strong>Questions:</strong> {quiz.questions?.length || 0}</p>
+                    <p><strong>Total Time:</strong> {formatTime(quiz.totalTime || 0)}</p>
+                    <p><strong>Difficulty:</strong> {quiz.difficulty?.charAt(0).toUpperCase() + quiz.difficulty?.slice(1)}</p>
                     <button onClick={() => handleQuizSelect(quiz)}>
                       Start Quiz
                     </button>
@@ -360,7 +430,7 @@ const Quizes = () => {
                 </p>
                 
                 {/* Show correct answers if failed */}
-                {!passed && (
+                {!passed && selectedQuiz.questions && (
                   <div className="correct-answers-summary">
                     <h4>Correct Answers Review</h4>
                     <ul>
@@ -392,7 +462,7 @@ const Quizes = () => {
                   </button>
                 </div>
               </div>
-            ) : (
+            ) : currentQuestion ? (
               <>
                 <h4 className="question-number">
                   Question {currentQuestionIndex + 1} of {selectedQuiz.questions.length}
@@ -400,7 +470,7 @@ const Quizes = () => {
                 <p className="question-text">{currentQuestion.question}</p>
                 
                 <ul className="option-list">
-                  {currentQuestion.options.map((option, index) => (
+                  {currentQuestion.options?.map((option, index) => (
                     <li key={index}>
                       <button
                         onClick={() => handleOptionClick(option)}
@@ -422,7 +492,8 @@ const Quizes = () => {
                         setCurrentQuestionIndex(currentQuestionIndex - 1);
                         setSelectedOption(null);
                         // Reset timer for previous question
-                        setTimeLeft(selectedQuiz.questions[currentQuestionIndex - 1].timeLimit);
+                        const prevQuestion = selectedQuiz.questions[currentQuestionIndex - 1];
+                        setTimeLeft(prevQuestion?.timeLimit || 60);
                       }}
                     >
                       Back
@@ -440,6 +511,13 @@ const Quizes = () => {
                   </button>
                 </div>
               </>
+            ) : (
+              <div className="no-question">
+                <p>No question available. Please go back and try another quiz.</p>
+                <button className="nav-button next-button" onClick={handleBackToList}>
+                  Back to Quiz List
+                </button>
+              </div>
             )}
           </div>
         )}

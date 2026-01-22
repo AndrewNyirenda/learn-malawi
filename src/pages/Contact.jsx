@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+// components/Contact.jsx
+import React, { useState, useEffect } from "react";
+import { useContact } from '../contexts/ContactContext';
 import "../styles/Contact.css";
 import Footer from "../components/Footer.jsx";
 import { 
@@ -6,8 +8,8 @@ import {
   FaMapMarkerAlt, 
   FaWhatsapp, 
   FaEnvelope,
-  FaClock,
-  FaCheckCircle
+  FaCheckCircle,
+  FaExclamationCircle
 } from "react-icons/fa";
 
 const Contact = () => {
@@ -18,15 +20,14 @@ const Contact = () => {
     subject: "",
     message: ""
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null);
+  
+  const { loading, error, success, sendMessage, clearError, clearSuccess } = useContact();
 
   const contactInfo = {
     email: "learnmalaw@gmail.com",
     whatsapp: "+265 997 674 758",
     phone: "+265 997 674 758",
     office: "Area 8, Biwi, Lilongwe"
-    
   };
 
   const handleChange = (e) => {
@@ -38,18 +39,33 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
     
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitStatus("success");
+    try {
+      // Clear previous states
+      clearError();
+      
+      // Send message to backend
+      await sendMessage(formData);
+      
+      // Reset form on success
       setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
       
-      // Reset status after 5 seconds
-      setTimeout(() => setSubmitStatus(null), 5000);
-    }, 2000);
+    } catch (err) {
+      // Error is already handled in the context
+      console.error('Form submission error:', err);
+    }
   };
+
+  // Auto-clear success message after 5 seconds
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        clearSuccess();
+      }, 5000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [success, clearSuccess]);
 
   return (
     <>
@@ -124,9 +140,6 @@ const Contact = () => {
                     </a>
                   </div>
                 </div>
-
-                {/* Business Hours */}
-
               </div>
             </div>
 
@@ -138,13 +151,47 @@ const Contact = () => {
                   <p className="form-subtitle">We'll get back to you within 24 hours</p>
                 </div>
 
-                {submitStatus === "success" && (
+                {success && (
                   <div className="success-message">
                     <div className="success-content">
                       <FaCheckCircle className="success-icon" />
                       <div>
                         <h3>Message Sent Successfully!</h3>
                         <p>Thank you for contacting Learn Malawi. We'll respond within 24 hours.</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {error && (
+                  <div className="error-message" style={{
+                    background: '#ffebee',
+                    borderLeft: '4px solid #f44336',
+                    padding: '1.5rem',
+                    borderRadius: '8px',
+                    marginBottom: '1.5rem',
+                    animation: 'slideDown 0.5s ease',
+                    textAlign: 'left'
+                  }}>
+                    <div className="error-content" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                      <FaExclamationCircle style={{ fontSize: '1.5rem', color: '#f44336', flexShrink: 0 }} />
+                      <div>
+                        <h3 style={{ color: '#c62828', marginBottom: '0.5rem' }}>Error Sending Message</h3>
+                        <p style={{ color: '#546e7a' }}>{error}</p>
+                        <button 
+                          onClick={clearError}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: '#0288d1',
+                            cursor: 'pointer',
+                            padding: '0.5rem 0',
+                            fontSize: '0.9rem',
+                            fontWeight: '600'
+                          }}
+                        >
+                          Try Again
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -165,6 +212,7 @@ const Contact = () => {
                         onChange={handleChange}
                         required
                         placeholder="John Doe"
+                        disabled={loading}
                       />
                     </div>
                     <div className="form-group">
@@ -180,6 +228,7 @@ const Contact = () => {
                         onChange={handleChange}
                         required
                         placeholder="john@example.com"
+                        disabled={loading}
                       />
                     </div>
                   </div>
@@ -194,6 +243,7 @@ const Contact = () => {
                         value={formData.phone}
                         onChange={handleChange}
                         placeholder="+265 XXX XXX XXX"
+                        disabled={loading}
                       />
                     </div>
                     <div className="form-group">
@@ -209,6 +259,7 @@ const Contact = () => {
                         onChange={handleChange}
                         required
                         placeholder="General Inquiry"
+                        disabled={loading}
                       />
                     </div>
                   </div>
@@ -226,6 +277,7 @@ const Contact = () => {
                       required
                       rows="6"
                       placeholder="Please describe how we can assist you..."
+                      disabled={loading}
                     ></textarea>
                   </div>
 
@@ -235,10 +287,10 @@ const Contact = () => {
                     </p>
                     <button 
                       type="submit" 
-                      className={`submit-btn ${isSubmitting ? 'submitting' : ''}`}
-                      disabled={isSubmitting}
+                      className={`submit-btn ${loading ? 'submitting' : ''}`}
+                      disabled={loading}
                     >
-                      {isSubmitting ? (
+                      {loading ? (
                         <>
                           <div className="spinner"></div>
                           Sending Message...
