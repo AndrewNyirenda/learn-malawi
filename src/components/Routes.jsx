@@ -1,3 +1,4 @@
+// components/Routes.jsx
 import { Routes, Route } from "react-router-dom";
 import LandingPage from "./Landing_page";
 import CareerResources from "../pages/CareerResources";
@@ -9,8 +10,8 @@ import About from "../pages/Abouts";
 import Contact from "../pages/Contact";
 import News from "../pages/News";
 import NewsFullStory from "../pages/news-full-story";
-
-
+import Login from "../pages/Login";
+import Register from "../pages/Register";
 
 const RoutesComponent = () => {
   return (
@@ -20,17 +21,15 @@ const RoutesComponent = () => {
       <Route path="/past-papers" element={<PastPapers />} />
       <Route path="/tutorials" element={<Tutorials />} />
       <Route path="/quizes" element={<Quizes />} />
-      
       <Route path="/news" element={<News />} />
-
-
-<Route path="/news/:id" element={<NewsFullStory />} />
-      
-      
-      
+      <Route path="/news/:id" element={<NewsFullStory />} />
       <Route path="/career-resources" element={<CareerResources />} />
-      <Route path="/abouts" element={<About/>}/>
-      <Route path="/contact" element={<Contact/>}/>
+      <Route path="/abouts" element={<About />} />
+      <Route path="/contact" element={<Contact />} />
+      
+      {/* Auth Routes */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
     </Routes>
   );
 };
