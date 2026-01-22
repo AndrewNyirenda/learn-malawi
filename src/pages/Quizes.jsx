@@ -268,6 +268,19 @@ const Quizes = () => {
     );
   }
   
+  
+  
+
+console.log('=== QUIZES.JSX DEBUG ===');
+console.log('contextQuizzes length:', contextQuizzes?.length);
+console.log('contextQuizzes:', contextQuizzes);
+console.log('filteredQuizzes length:', filteredQuizzes?.length);
+console.log('displayedQuizzes length:', displayedQuizzes?.length);
+console.log('=======================');
+  
+  
+  
+  
   return (
     <>
       <div className="quizes-wrapper">

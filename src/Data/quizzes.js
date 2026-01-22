@@ -1,4 +1,4 @@
-// Data/quizzes.js
+/*
 export const quizzes = [
   {
     id: 1,
@@ -301,3 +301,5 @@ export const quizzes = [
     totalTime: 225
   }
 ];
+
+*/

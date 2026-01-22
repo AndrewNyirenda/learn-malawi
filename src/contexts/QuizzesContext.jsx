@@ -192,118 +192,173 @@ export const QuizzesProvider = ({ children }) => {
     }
   };
 
-  // Fetch subjects
-  const fetchSubjects = async (level = null) => {
-    setLoading(true);
-    setError(null);
-    
-    try {
-      const params = new URLSearchParams();
-      if (level) {
-        params.append('level', level);
-      }
 
-      const response = await api.get(`/quizzes/subjects?${params}`);
-      setSubjects(response.data.subjects || []);
-      return response.data.subjects || [];
-    } catch (err) {
-      console.error('Error fetching subjects:', err);
-      // Return default subjects based on level
-      const defaultSubjects = level === 'primary' 
-        ? ['Mathematics', 'English', 'Science', 'Social Studies']
-        : ['Mathematics', 'Biology', 'Physics', 'Chemistry', 'Geography', 'English'];
-      setSubjects(defaultSubjects);
-      return defaultSubjects;
-    } finally {
-      setLoading(false);
+
+const fetchSubjects = async (level = null) => {
+  setLoading(true);
+  setError(null);
+  
+  try {
+    const params = new URLSearchParams();
+    // Only send level if it's 'primary' or 'secondary'
+    if (level && level !== 'all' && (level === 'primary' || level === 'secondary')) {
+      params.append('level', level);
     }
-  };
 
-  // Fetch classes
-  const fetchClasses = async (level = null) => {
-    setLoading(true);
-    setError(null);
-    
-    try {
-      const params = new URLSearchParams();
-      if (level) {
-        params.append('level', level);
-      }
+    const response = await api.get(`/quizzes/subjects?${params}`);
+    setSubjects(response.data.subjects || []);
+    return response.data.subjects || [];
+  } catch (err) {
+    console.error('Error fetching subjects:', err);
+    // Return default subjects
+    const defaultSubjects = level === 'primary' 
+      ? ['Mathematics', 'English', 'Science', 'Social Studies']
+      : ['Mathematics', 'Biology', 'Physics', 'Chemistry', 'Geography', 'English'];
+    setSubjects(defaultSubjects);
+    return defaultSubjects;
+  } finally {
+    setLoading(false);
+  }
+};
 
-      const response = await api.get(`/quizzes/classes?${params}`);
-      setClasses(response.data.classes || []);
-      return response.data.classes || [];
-    } catch (err) {
-      console.error('Error fetching classes:', err);
-      // Return default classes based on level
-      const defaultClasses = level === 'primary' 
-        ? ['Standard 1', 'Standard 2', 'Standard 3', 'Standard 4', 'Standard 5', 'Standard 6', 'Standard 7', 'Standard 8']
-        : ['Form 1', 'Form 2', 'Form 3', 'Form 4'];
-      setClasses(defaultClasses);
-      return defaultClasses;
-    } finally {
-      setLoading(false);
+const fetchClasses = async (level = null) => {
+  setLoading(true);
+  setError(null);
+  
+  try {
+    const params = new URLSearchParams();
+    if (level && level !== 'all' && (level === 'primary' || level === 'secondary')) {
+      params.append('level', level);
     }
-  };
 
-  // Create quiz (admin/teacher only)
-  const createQuiz = async (quizData, token) => {
-    setLoading(true);
-    setError(null);
-    
-    try {
-      const response = await api.post('/quizzes', quizData, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      
-      // Add to local state
-      setQuizzes(prevQuizzes => [response.data, ...prevQuizzes]);
-      return response.data;
-    } catch (err) {
-      const errorMessage = err.response?.data?.message || err.message || 'Failed to create quiz';
-      setError(errorMessage);
-      console.error('Error creating quiz:', err);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
+    const response = await api.get(`/quizzes/classes?${params}`);
+    setClasses(response.data.classes || []);
+    return response.data.classes || [];
+  } catch (err) {
+    console.error('Error fetching classes:', err);
+    // Return default classes based on level
+    const defaultClasses = level === 'primary' 
+      ? ['Standard 1', 'Standard 2', 'Standard 3', 'Standard 4', 'Standard 5', 'Standard 6', 'Standard 7', 'Standard 8']
+      : ['Form 1', 'Form 2', 'Form 3', 'Form 4'];
+    setClasses(defaultClasses);
+    return defaultClasses;
+  } finally {
+    setLoading(false);
+  }
+};
 
-  // Update quiz (admin/teacher only)
-  const updateQuiz = async (id, quizData, token) => {
-    setLoading(true);
-    setError(null);
+const createQuiz = async (quizData, token) => {
+  setLoading(true);
+  setError(null);
+  
+  try {
+    // Calculate totalTime from all questions' timeLimit
+    const totalTime = quizData.questions?.reduce((sum, q) => {
+      // Convert timeLimit to number and ensure it's at least 1
+      const time = parseInt(q.timeLimit) || 30;
+      return sum + Math.max(1, time); // Ensure each question has at least 1 second
+    }, 0) || 60; // Default to 60 seconds if no questions
     
-    try {
-      const response = await api.patch(`/quizzes/${id}`, quizData, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      
-      // Update in local state
-      setQuizzes(prevQuizzes =>
-        prevQuizzes.map(quiz =>
-          quiz.id === parseInt(id) ? response.data : quiz
-        )
-      );
-      
-      if (quizDetail?.id === parseInt(id)) {
-        setQuizDetail(response.data);
-      }
-      
-      return response.data;
-    } catch (err) {
-      const errorMessage = err.response?.data?.message || err.message || 'Failed to update quiz';
-      setError(errorMessage);
-      console.error('Error updating quiz:', err);
-      throw err;
-    } finally {
-      setLoading(false);
+    // Ensure totalTime is at least 1
+    const finalTotalTime = Math.max(1, totalTime);
+    
+    // Prepare the payload matching your DTO structure
+    const payload = {
+      title: quizData.title,
+      description: quizData.description || '',
+      level: quizData.level,
+      subject: quizData.subject,
+      difficulty: quizData.difficulty,
+      class: quizData.class,
+      questions: quizData.questions.map(q => ({
+        question: q.question,
+        options: q.options,
+        answer: q.answer,
+        timeLimit: Math.max(1, parseInt(q.timeLimit) || 30) // Ensure each question has at least 1 second
+      })),
+      totalTime: finalTotalTime // Send as number
+    };
+    
+    console.log('Sending quiz payload:', payload);
+    
+    const response = await api.post('/quizzes', payload, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    
+    // Add to local state
+    setQuizzes(prevQuizzes => [response.data, ...prevQuizzes]);
+    return response.data;
+  } catch (err) {
+    const errorMessage = err.response?.data?.message || err.message || 'Failed to create quiz';
+    setError(errorMessage);
+    console.error('Error creating quiz:', err.response?.data || err);
+    throw err;
+  } finally {
+    setLoading(false);
+  }
+};
+
+// Also update the updateQuiz function:
+const updateQuiz = async (id, quizData, token) => {
+  setLoading(true);
+  setError(null);
+  
+  try {
+    // Calculate totalTime from all questions' timeLimit
+    const totalTime = quizData.questions?.reduce((sum, q) => {
+      const time = parseInt(q.timeLimit) || 30;
+      return sum + Math.max(1, time);
+    }, 0) || 60;
+    
+    const finalTotalTime = Math.max(1, totalTime);
+    
+    const payload = {
+      title: quizData.title,
+      description: quizData.description || '',
+      level: quizData.level,
+      subject: quizData.subject,
+      difficulty: quizData.difficulty,
+      class: quizData.class,
+      questions: quizData.questions.map(q => ({
+        question: q.question,
+        options: q.options,
+        answer: q.answer,
+        timeLimit: Math.max(1, parseInt(q.timeLimit) || 30)
+      })),
+      totalTime: finalTotalTime
+    };
+    
+    console.log('Updating quiz payload:', payload);
+    
+    const response = await api.patch(`/quizzes/${id}`, payload, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    
+    // Update in local state
+    setQuizzes(prevQuizzes =>
+      prevQuizzes.map(quiz =>
+        quiz.id === parseInt(id) ? response.data : quiz
+      )
+    );
+    
+    if (quizDetail?.id === parseInt(id)) {
+      setQuizDetail(response.data);
     }
-  };
+    
+    return response.data;
+  } catch (err) {
+    const errorMessage = err.response?.data?.message || err.message || 'Failed to update quiz';
+    setError(errorMessage);
+    console.error('Error updating quiz:', err.response?.data || err);
+    throw err;
+  } finally {
+    setLoading(false);
+  }
+};
 
   // Delete quiz (admin/teacher only)
   const deleteQuiz = async (id, token) => {
