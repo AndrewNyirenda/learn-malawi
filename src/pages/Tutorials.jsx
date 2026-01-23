@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useTutorials } from "../contexts/TutorialsContext";
 import "../styles/tutorials.css";
 import Footer from "../components/Footer.jsx";
+  import Header from '../components/Header';
 
 const Tutorials = () => {
   const [level, setLevel] = useState("secondary"); 
@@ -169,6 +170,7 @@ const Tutorials = () => {
 
   return (
     <>
+       <Header />
     <div className="tutorials-wrapper">
       <h1 className="tutorials-title">Educational Tutorials</h1>
       

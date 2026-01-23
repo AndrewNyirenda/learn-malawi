@@ -14,6 +14,7 @@ import {
 import { useCareerResources } from '../contexts/CareerResourcesContext';
 import '../styles/careerResources.css';
 import Footer from '../components/Footer';
+import Header from '../components/Header';
 
 const CareerResources = () => {
   const {
@@ -66,6 +67,7 @@ const CareerResources = () => {
   if (error && careerResources.length === 0) {
     return (
       <>
+       <Header />
         <div className="career-resources-wrapper">
           <div className="error-container">
             <h3>Error Loading Resources</h3>
@@ -85,6 +87,7 @@ const CareerResources = () => {
 
   return (
     <>
+      <Header />
       <div className="career-resources-wrapper">
         <h1 className="career-resources-title">Career Resources</h1>
         <p className="career-resources-intro">

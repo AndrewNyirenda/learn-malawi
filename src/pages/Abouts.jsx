@@ -5,6 +5,7 @@ import inno from "../images/inno.jpg";
 import willard from "../images/willard.JPG";
 import andrew from "../images/andrew.jpg";
 import Footer from "../components/Footer.jsx";
+import Header from "../components/Header.jsx";
 
 const About = () => {
   const teamMembers = [
@@ -44,6 +45,7 @@ const About = () => {
 
   return (
     <>
+      <Header />
       <div className="about-wrapper">
         <section className="story-section">
           <h2>Our Story</h2>

@@ -13,11 +13,13 @@ import { QuizzesProvider } from './contexts/QuizzesContext';
 import { ContactProvider } from './contexts/ContactContext';
 import { AuthProvider } from './contexts/AuthContext';
 import { UserProvider } from './contexts/UserContext';
+import { MessagesProvider } from './contexts/MessagesContext';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <AuthProvider>
+       <MessagesProvider>
         <UserProvider>
           <StudyNotesProvider>
             <ContactProvider>
@@ -35,6 +37,7 @@ createRoot(document.getElementById('root')).render(
             </ContactProvider>
           </StudyNotesProvider>
         </UserProvider>
+        </MessagesProvider>
       </AuthProvider>
     </BrowserRouter>
   </StrictMode>,

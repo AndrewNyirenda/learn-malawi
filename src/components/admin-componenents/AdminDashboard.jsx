@@ -12,7 +12,8 @@ import {
   FaClock,
   FaArrowUp,
   FaArrowDown,
-  FaCog
+  FaCog,
+  FaEnvelope
 } from 'react-icons/fa';
 import '../../styles/Admin-Styles/AdminDashboard.css';
 

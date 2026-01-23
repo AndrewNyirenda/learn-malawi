@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import "../styles/news-full-story.css";
 import Footer from "../components/Footer.jsx";
 import { useNews } from "../contexts/NewsContext";
+import Header from '../components/Header';
 
 const NewsFullStory = () => {
   const { id } = useParams();
@@ -167,7 +168,7 @@ const NewsFullStory = () => {
 
     setLoading(true);
     
-    // Simulate API call
+    
     setTimeout(() => {
       const commentToAdd = {
         id: Date.now(),
@@ -209,6 +210,7 @@ const NewsFullStory = () => {
 
   return (
     <>
+       <Header />
       <div className="full-story-wrapper">
         {/* Back Navigation */}
         <div className="back-navigation">

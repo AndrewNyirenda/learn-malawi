@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useQuizzes } from '../contexts/QuizzesContext';
 import "../styles/quizes.css";
 import Footer from "../components/Footer.jsx";
+import Header from '../components/Header';
 
 const Quizes = () => {
   const [level, setLevel] = useState("primary");
@@ -283,6 +284,7 @@ console.log('=======================');
   
   return (
     <>
+       <Header />
       <div className="quizes-wrapper">
         {!selectedQuiz ? (
           <>

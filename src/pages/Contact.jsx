@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useContact } from '../contexts/ContactContext';
 import "../styles/Contact.css";
 import Footer from "../components/Footer.jsx";
+import Header from '../components/Header';
 import { 
   FaPaperPlane, 
   FaMapMarkerAlt, 
@@ -57,6 +58,7 @@ const Contact = () => {
 
   return (
     <>
+       <Header />
       <div className="contact-wrapper">
         <div className="container">
           {/* Page Title */}

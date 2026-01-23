@@ -3,6 +3,7 @@ import "../styles/news.css";
 import Footer from "../components/Footer.jsx";
 import { useNavigate } from "react-router-dom";
 import { useNews } from "../contexts/NewsContext";
+import Header from '../components/Header';
 
 const News = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -111,6 +112,7 @@ const News = () => {
 
   return (
     <>
+       <Header />
       <div className="news-wrapper">
         <div className="news-header">
           <h1>Education News & Updates</h1>

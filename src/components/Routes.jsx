@@ -25,6 +25,8 @@ import AdminNews from "./admin-componenents/AdminNews";
 
 import AdminCareerResources from "./admin-componenents/AdminCareerResources";
 
+import AdminMessages from "./admin-componenents/AdminMessages";
+
 
 
 
@@ -66,7 +68,7 @@ const RoutesComponent = () => {
         <Route path="admins" element={<AdminUsers />} />
         <Route path="teachers" element={<AdminUsers />} />
         
-        {/* Content Management Routes (to be implemented) */}
+        {/* Content Management Routes */}
         
         <Route path="study-notes" element={<AdminStudyNotes />} />
         <Route path="past-papers" element={<AdminPastPapers />} />
@@ -81,6 +83,8 @@ const RoutesComponent = () => {
               
               
         <Route path="career-resources" element={<AdminCareerResources />} />
+        
+        <Route path="messages" element={<AdminMessages />} />
 
         
         {/* Analytics & Settings Routes (to be implemented) */}

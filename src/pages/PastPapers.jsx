@@ -3,6 +3,7 @@ import ResourceCard from "./ResourceCard";
 import "../styles/pastPapers.css";
 import Footer from "../components/Footer.jsx";
 import { usePastPapers } from "../contexts/PastPapersContext";
+import Header from '../components/Header';
 
 const PastPapers = () => {
   const [level, setLevel] = useState("secondary");
@@ -142,6 +143,7 @@ const PastPapers = () => {
 
   return (
     <>
+       <Header />
       <div className="pastpapers-wrapper">
         <h1>Past Papers & Reviews</h1>
         <p className="description-text">

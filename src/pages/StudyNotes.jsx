@@ -3,6 +3,7 @@ import ResourceCard from "./ResourceCard";
 import "../styles/studyNotes.css";
 import Footer from "../components/Footer.jsx";
 import { useStudyNotes } from "../contexts/StudyNotesContext";
+import Header from '../components/Header';
 
 const StudyNotes = () => {
   const [level, setLevel] = useState("secondary"); // primary or secondary
@@ -119,6 +120,7 @@ const StudyNotes = () => {
 
   return (
     <>
+      <Header />
       <div className="study-notes-wrapper">
         <h1>Study Notes & References</h1>
         <p className="description-text">
