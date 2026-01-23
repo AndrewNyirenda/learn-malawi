@@ -19,6 +19,8 @@ import ProtectedRoute from "./ProtectedRoute";
 import AdminStudyNotes from "./admin-componenents/AdminStudyNotes";
 import AdminPastPapers from "./admin-componenents/AdminPastPapers";
 import AdminQuizzes from "./admin-componenents/AdminQuizzes";
+import AdminTutorials from "./admin-componenents/AdminTutorials";
+
 
 
 
@@ -66,8 +68,10 @@ const RoutesComponent = () => {
         <Route path="past-papers" element={<AdminPastPapers />} />
         
           <Route path="quizzes" element={<AdminQuizzes />} />
+          
+             <Route path="tutorials" element={<AdminTutorials />} />
         {/*
-        <Route path="tutorials" element={<AdminTutorials />} />
+     
       
         <Route path="news" element={<AdminNews />} />
         <Route path="career-resources" element={<AdminCareerResources />} />

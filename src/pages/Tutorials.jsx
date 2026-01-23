@@ -49,15 +49,57 @@ const Tutorials = () => {
 
   // Function to handle YouTube embed errors
   const handleVideoError = (tutorialId) => {
+    console.log(`Video error for tutorial ${tutorialId}`);
     setVideoErrors(prev => ({
       ...prev,
       [tutorialId]: true
     }));
   };
 
-  // Function to check if URL is a YouTube embed
+  // Function to extract YouTube video ID from various URL formats
+  const extractYouTubeId = (url) => {
+    if (!url) return null;
+    
+    const patterns = [
+      // youtu.be/vCJVXYmXkzM?si=...
+      /youtu\.be\/([a-zA-Z0-9_-]{11})(?:\?.*)?/,
+      // youtube.com/watch?v=vCJVXYmXkzM
+      /youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/,
+      // youtube.com/embed/vCJVXYmXkzM
+      /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
+      // youtube.com/v/vCJVXYmXkzM
+      /youtube\.com\/v\/([a-zA-Z0-9_-]{11})/,
+    ];
+    
+    for (const pattern of patterns) {
+      const match = url.match(pattern);
+      if (match && match[1]) {
+        console.log(`Found YouTube ID: ${match[1]} from URL: ${url}`);
+        return match[1];
+      }
+    }
+    
+    console.log(`No YouTube ID found in URL: ${url}`);
+    return null;
+  };
+
+  // Function to convert any YouTube URL to embed URL
+  const getYouTubeEmbedUrl = (url) => {
+    const videoId = extractYouTubeId(url);
+    if (videoId) {
+      const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+      console.log(`Converted ${url} to embed URL: ${embedUrl}`);
+      return embedUrl;
+    }
+    return url;
+  };
+
+  // Function to check if URL is a YouTube URL
   const isYouTubeUrl = (url) => {
-    return url.includes('youtube.com/embed') || url.includes('youtu.be');
+    if (!url) return false;
+    const isYouTube = url.includes('youtube.com') || url.includes('youtu.be');
+    console.log(`Checking if YouTube URL: ${url} -> ${isYouTube}`);
+    return isYouTube;
   };
 
   // Sort classes numerically
@@ -71,6 +113,22 @@ const Tutorials = () => {
 
   const allSubjects = ["all", ...subjects];
   const availableClasses = getSortedClasses();
+
+  // Debug: Log tutorials data
+  useEffect(() => {
+    if (tutorials.length > 0) {
+      console.log('Tutorials loaded:', tutorials);
+      tutorials.forEach((tut) => {
+        console.log(`Tutorial: ${tut.title}`, {
+          id: tut.id,
+          videoUrl: tut.videoUrl,
+          isYouTube: isYouTubeUrl(tut.videoUrl),
+          embedUrl: getYouTubeEmbedUrl(tut.videoUrl),
+          videoId: extractYouTubeId(tut.videoUrl)
+        });
+      });
+    }
+  }, [tutorials]);
 
   if (loading && tutorials.length === 0) {
     return (
@@ -114,7 +172,6 @@ const Tutorials = () => {
     <div className="tutorials-wrapper">
       <h1 className="tutorials-title">Educational Tutorials</h1>
       
-      {/* Added description below the title */}
       <p className="tutorials-description">
         Access comprehensive video tutorials covering various subjects for both Primary and Secondary levels. 
         Filter by subject and class to find the most relevant educational content for your studies.
@@ -123,17 +180,13 @@ const Tutorials = () => {
       <div className="level-tabs">
         <button
           className={level === "primary" ? "active" : ""}
-          onClick={() => {
-            setLevel("primary");
-          }}
+          onClick={() => setLevel("primary")}
         >
           Primary
         </button>
         <button
           className={level === "secondary" ? "active" : ""}
-          onClick={() => {
-            setLevel("secondary");
-          }}
+          onClick={() => setLevel("secondary")}
         >
           Secondary
         </button>
@@ -174,77 +227,105 @@ const Tutorials = () => {
 
       <div className="tutorials-grid">
         {tutorials.length > 0 ? (
-          tutorials.map((tut) => (
-            <div className="tutorial-card" key={tut.id}>
-              <h3>{tut.title}</h3>
-              <div className="tutorial-meta">
-                <span className="tutorial-subject">{tut.subject}</span>
-                <span className="tutorial-class">{tut.class}</span>
-              </div>
-              
-              <div className="video-wrapper">
-                {videoErrors[tut.id] ? (
-                  <div className="video-error">
-                    <p>Video unavailable</p>
-                    <a 
-                      href={tut.videoUrl.replace('embed/', 'watch?v=')} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="external-link"
+          tutorials.map((tut) => {
+            const isYouTube = isYouTubeUrl(tut.videoUrl);
+            const embedUrl = getYouTubeEmbedUrl(tut.videoUrl);
+            
+            console.log(`Rendering ${tut.title}:`, {
+              originalUrl: tut.videoUrl,
+              isYouTube,
+              embedUrl,
+              hasError: videoErrors[tut.id]
+            });
+
+            return (
+              <div className="tutorial-card" key={tut.id}>
+                <h3>{tut.title}</h3>
+                <div className="tutorial-meta">
+                  <span className="tutorial-subject">{tut.subject}</span>
+                  <span className="tutorial-class">{tut.class}</span>
+                  {tut.description && (
+                    <div className="tutorial-description">
+                      <p>{tut.description}</p>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="video-wrapper">
+                  {videoErrors[tut.id] ? (
+                    <div className="video-error">
+                      <p>Video unavailable</p>
+                      <a 
+                        href={tut.videoUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="external-link"
+                      >
+                        Watch on YouTube
+                      </a>
+                    </div>
+                  ) : isYouTube ? (
+                    <iframe
+                      src={embedUrl}
+                      title={tut.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      frameBorder="0"
+                      className="tutorial-iframe"
+                      onError={() => handleVideoError(tut.id)}
+                    ></iframe>
+                  ) : tut.videoUrl.endsWith('.mp4') ? (
+                    <video
+                      controls
+                      className="tutorial-video"
                     >
-                      Watch on YouTube
-                    </a>
-                  </div>
-                ) : isYouTubeUrl(tut.videoUrl) ? (
-                  <iframe
-                    src={tut.videoUrl}
-                    title={tut.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    frameBorder="0"
-                    className="tutorial-iframe"
-                    onError={() => handleVideoError(tut.id)}
-                  ></iframe>
-                ) : tut.videoUrl.endsWith('.mp4') ? (
-                  <video
-                    controls
-                    className="tutorial-video"
-                  >
-                    <source src={tut.videoUrl} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                ) : tut.videoUrl.endsWith('.mp3') ? (
-                  <audio
-                    controls
-                    className="tutorial-audio"
-                  >
-                    <source src={tut.videoUrl} type="audio/mpeg" />
-                    Your browser does not support the audio tag.
-                  </audio>
-                ) : (
-                  <div className="video-error">
-                    <p>Unsupported video format</p>
-                    <a 
-                      href={tut.videoUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="external-link"
+                      <source src={tut.videoUrl} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  ) : tut.videoUrl.endsWith('.mp3') ? (
+                    <audio
+                      controls
+                      className="tutorial-audio"
                     >
-                      Open video
-                    </a>
-                  </div>
-                )}
+                      <source src={tut.videoUrl} type="audio/mpeg" />
+                      Your browser does not support the audio tag.
+                    </audio>
+                  ) : (
+                    <div className="video-error">
+                      <p>Unsupported video format</p>
+                      <a 
+                        href={tut.videoUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="external-link"
+                      >
+                        Open video link
+                      </a>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Direct link fallback */}
+                <div className="tutorial-link">
+                  <a 
+                    href={tut.videoUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="direct-link"
+                  >
+                    Open video in new tab
+                  </a>
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         ) : (
           <p className="no-results">No tutorials available for this selection.</p>
         )}
-      
       </div>
     </div>
     
-      <Footer />
+    <Footer />
     </>
   );
 };
