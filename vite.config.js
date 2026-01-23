@@ -13,7 +13,9 @@ export default defineConfig(({ mode }) => {
       host: true,
       allowedHosts: [
         'learn-malawi.onrender.com',
-        '.onrender.com'
+        '.onrender.com',
+        'https://learn-malawi-plum.vercel.app/'
+        
       ]
     },
     server: {
