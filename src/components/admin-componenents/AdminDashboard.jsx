@@ -31,7 +31,7 @@ import '../../styles/Admin-Styles/AdminDashboard.css';
 import axios from 'axios';
 
 // Use environment variable with fallback for development
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // Cache constants
 const DASHBOARD_CACHE_KEY = 'dashboard_stats_cache';
