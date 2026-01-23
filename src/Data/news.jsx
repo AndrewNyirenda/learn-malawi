@@ -1,3 +1,4 @@
+/*
 const newsData = [
   {
     id: 1,
@@ -68,3 +69,5 @@ const newsData = [
 ];
 
 export default newsData;
+
+*/

@@ -6,7 +6,6 @@ import {
   FaPlay, FaQuestionCircle, FaNewspaper // Added new icons
 } from "react-icons/fa";
 import Footer from "./Footer";
-import studyResources from "../Data/studyResources"; 
 import { useNavigate } from "react-router-dom"; 
 import Heroslideshow from "./Heroslideshow";
 import { useContext, useEffect } from "react";
@@ -16,12 +15,7 @@ const LandingPage = () => {
   const navigate = useNavigate(); 
   const { query, results, setResults, showResults, setShowResults } = useContext(SearchContext);
 
-  const allResources = [
-    ...studyResources.primary.books,
-    ...studyResources.primary.pastPapers,
-    ...studyResources.secondary.books,
-    ...studyResources.secondary.pastPapers,
-  ];
+  
 
   useEffect(() => {
     if (!query.trim()) {

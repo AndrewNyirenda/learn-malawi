@@ -1,3 +1,5 @@
+/*
+
 export const tutorials = [
   {
     id: 1,
@@ -75,3 +77,6 @@ export const tutorials = [
     ]
   }
 ];
+
+
+*/
