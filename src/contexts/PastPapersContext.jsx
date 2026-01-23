@@ -391,6 +391,155 @@ export const PastPapersProvider = ({ children }) => {
 
     initializeData();
   }, []);
+  
+  
+  
+
+// Delete past paper
+const deletePastPaper = async (paperId, token) => {
+  setLoading(true);
+  setError(null);
+  
+  try {
+    await api.delete(`/past-papers/${paperId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    
+    // Remove from local state
+    setPastPapers(prevPapers => prevPapers.filter(paper => paper.id !== paperId));
+    return { success: true };
+  } catch (err) {
+    const errorMessage = err.response?.data?.message || err.message || 'Failed to delete past paper';
+    setError(errorMessage);
+    console.error('Error deleting past paper:', err);
+    return { success: false, error: errorMessage };
+  } finally {
+    setLoading(false);
+  }
+};
+
+// Upload past paper file
+const uploadPastPaperFile = async (paperId, file, token) => {
+  setLoading(true);
+  setError(null);
+  
+  try {
+    console.log('Uploading file for past paper:', paperId, 'File:', file.name);
+    
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const response = await axios.post(
+      `${API_BASE_URL}/past-papers/${paperId}/file`, 
+      formData, 
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+        timeout: 60000,
+      }
+    );
+    
+    console.log('File upload response:', response.data);
+    
+    // Update the past paper in local state
+    setPastPapers(prevPapers => 
+      prevPapers.map(paper => 
+        paper.id === paperId ? response.data : paper
+      )
+    );
+    
+    return response.data;
+  } catch (err) {
+    const errorMessage = err.response?.data?.message || err.message || 'Failed to upload file';
+    setError(errorMessage);
+    console.error('Error uploading past paper file:', err);
+    throw err;
+  } finally {
+    setLoading(false);
+  }
+};
+
+// Upload thumbnail
+const uploadThumbnail = async (paperId, file, token) => {
+  setLoading(true);
+  setError(null);
+  
+  try {
+    console.log('Uploading thumbnail for past paper:', paperId, 'File:', file.name);
+    
+    const formData = new FormData();
+    formData.append('thumbnail', file);
+    
+    const response = await axios.post(
+      `${API_BASE_URL}/past-papers/${paperId}/thumbnail`, 
+      formData, 
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+        timeout: 60000,
+      }
+    );
+    
+    console.log('Thumbnail upload response:', response.data);
+    
+    // Update the past paper in local state
+    setPastPapers(prevPapers => 
+      prevPapers.map(paper => 
+        paper.id === paperId ? response.data : paper
+      )
+    );
+    
+    return response.data;
+  } catch (err) {
+    const errorMessage = err.response?.data?.message || err.message || 'Failed to upload thumbnail';
+    setError(errorMessage);
+    console.error('Error uploading thumbnail:', err);
+    throw err;
+  } finally {
+    setLoading(false);
+  }
+};
+
+// Update past paper
+const updatePastPaper = async (paperId, paperData, token) => {
+  setLoading(true);
+  setError(null);
+  
+  try {
+    const response = await axios.patch(
+      `${API_BASE_URL}/past-papers/${paperId}`, 
+      paperData,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    
+    // Update the past paper in local state
+    setPastPapers(prevPapers => 
+      prevPapers.map(paper => 
+        paper.id === paperId ? response.data : paper
+      )
+    );
+    
+    return response.data;
+  } catch (err) {
+    const errorMessage = err.response?.data?.message || err.message || 'Failed to update past paper';
+    setError(errorMessage);
+    console.error('Error updating past paper:', err);
+    throw err;
+  } finally {
+    setLoading(false);
+  }
+};
 
   const value = {
     pastPapers,
@@ -413,6 +562,10 @@ export const PastPapersProvider = ({ children }) => {
     getViewUrl,
     getDownloadUrl,
     createPastPaper,
+    deletePastPaper,
+    uploadPastPaperFile,
+    uploadThumbnail,
+    updatePastPaper,
     testConnection,
     clearError: () => setError(null),
   };

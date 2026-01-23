@@ -54,7 +54,8 @@ const AdminPastPapers = () => {
     fetchYears,
     fetchExaminationBodies,
     fetchStats,
-    clearError
+    clearError,
+    deletePastPaper
   } = usePastPapers();
 
   const { user: currentAdmin, isAdmin } = useAuth();
@@ -173,12 +174,76 @@ const AdminPastPapers = () => {
     setShowDeleteModal(true);
   };
 
-  const confirmDelete = async () => {
-    // Implement delete logic here
-    console.log('Delete papers:', currentPaper ? [currentPaper.id] : selectedPapers);
+
+const confirmDelete = async () => {
+  try {
+    console.log('Starting delete process...');
+    console.log('Current paper:', currentPaper);
+    console.log('Selected papers:', selectedPapers);
+    
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      throw new Error('Authentication required. Please login again.');
+    }
+
+    if (currentPaper) {
+      // Delete single paper
+      console.log('Deleting single paper:', currentPaper.id);
+      const result = await deletePastPaper(currentPaper.id, token);
+      console.log('Delete result:', result);
+      
+      if (result && result.success) {
+        console.log('✅ Paper deleted successfully:', currentPaper.title);
+      } else {
+        const errorMsg = result?.error || 'Failed to delete paper';
+        console.error('❌ Delete failed:', errorMsg);
+        throw new Error(errorMsg);
+      }
+    } else if (selectedPapers.length > 0) {
+      // Delete multiple papers
+      console.log('Deleting multiple papers:', selectedPapers.length);
+      
+      const deletePromises = selectedPapers.map(paperId => 
+        deletePastPaper(paperId, token)
+      );
+      
+      const results = await Promise.allSettled(deletePromises);
+      console.log('Delete results:', results);
+      
+      // Check for any failures
+      const failures = results.filter(result => 
+        result.status === 'rejected' || 
+        (result.status === 'fulfilled' && !result.value?.success)
+      );
+      
+      if (failures.length > 0) {
+        console.error('❌ Some deletions failed:', failures);
+        throw new Error(`${failures.length} papers failed to delete`);
+      }
+      
+      console.log(`✅ ${selectedPapers.length} papers deleted successfully`);
+      setSelectedPapers([]); // Clear selection after deletion
+    } else {
+      console.warn('⚠️ Nothing to delete');
+    }
+
     setShowDeleteModal(false);
+    setCurrentPaper(null);
+    
+    // Refresh the data
+    console.log('Refreshing data...');
     await loadData();
-  };
+    console.log('✅ Data refreshed');
+    
+  } catch (error) {
+    console.error('❌ Delete failed:', error);
+    // Show error to user
+    if (error.message) {
+      // You could set an error state here to show to the user
+      console.error('Error message:', error.message);
+    }
+  }
+};
 
   // View PDF in new tab
   const handleViewPDF = (paper) => {

@@ -1,5 +1,5 @@
 // src/components/admin-componenents/StudyNotesUploadModal.jsx
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   FaTimes, 
   FaUpload, 
@@ -8,11 +8,22 @@ import {
   FaCheck, 
   FaTimesCircle,
   FaBook,
-  FaEye
+  FaEye,
+  FaExclamationTriangle,
+  FaSpinner
 } from 'react-icons/fa';
+import { useStudyNotes } from '../../contexts/StudyNotesContext';
+import { useAuth } from '../../contexts/AuthContext';
+import axios from 'axios';
 import '../../styles/Admin-Styles/UserModals.css';
 
+const API_BASE_URL = 'http://localhost:3000';
+
 const StudyNotesUploadModal = ({ book, onClose, onSave }) => {
+  // Remove setBooks from destructuring since it's not exposed in context
+  const { uploadBookFile, uploadThumbnail } = useStudyNotes();
+  const { getToken } = useAuth();
+  
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedThumbnail, setSelectedThumbnail] = useState(null);
   const [uploadType, setUploadType] = useState('pdf'); // 'pdf' or 'thumbnail'
@@ -21,9 +32,19 @@ const StudyNotesUploadModal = ({ book, onClose, onSave }) => {
   const [error, setError] = useState('');
   const [previewUrl, setPreviewUrl] = useState('');
   const [thumbnailPreview, setThumbnailPreview] = useState('');
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const fileInputRef = useRef(null);
   const thumbnailInputRef = useRef(null);
+
+  // Clean up preview URLs on unmount
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -36,8 +57,12 @@ const StudyNotesUploadModal = ({ book, onClose, onSave }) => {
                            'application/vnd.ms-powerpoint',
                            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
                            'text/plain'];
-      if (!allowedTypes.includes(file.type)) {
-        setError('Please select a PDF, Word, PowerPoint, or text file.');
+      
+      const allowedExtensions = ['.pdf', '.doc', '.docx', '.ppt', '.pptx', '.txt'];
+      const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+      
+      if (!allowedExtensions.includes(fileExtension) && !allowedTypes.includes(file.type)) {
+        setError('Please select a PDF, Word, PowerPoint, or text file (PDF, DOC, DOCX, PPT, PPTX, TXT).');
         return;
       }
 
@@ -49,9 +74,13 @@ const StudyNotesUploadModal = ({ book, onClose, onSave }) => {
       setSelectedFile(file);
       setError('');
 
-      // Generate preview URL
-      const url = URL.createObjectURL(file);
-      setPreviewUrl(url);
+      // Generate preview URL for PDF only
+      if (file.type === 'application/pdf' || fileExtension === '.pdf') {
+        const url = URL.createObjectURL(file);
+        setPreviewUrl(url);
+      } else {
+        setPreviewUrl('');
+      }
     } else {
       // Validate image file
       const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
@@ -90,18 +119,46 @@ const StudyNotesUploadModal = ({ book, onClose, onSave }) => {
 
     setLoading(true);
     setError('');
+    setUploadProgress(0);
 
     try {
-      // Simulate API upload
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      // Get token directly from localStorage instead of useAuth
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        throw new Error('Authentication required. Please login again.');
+      }
+
+      // Simulate progress for better UX
+      const progressInterval = setInterval(() => {
+        setUploadProgress(prev => {
+          if (prev >= 90) {
+            clearInterval(progressInterval);
+            return prev;
+          }
+          return prev + 10;
+        });
+      }, 300);
+
+      if (uploadType === 'pdf') {
+        // Upload PDF file using the context function
+        await uploadBookFile(book.id, selectedFile, token);
+      } else {
+        // For thumbnail upload, use the new context function
+        await uploadThumbnail(book.id, selectedThumbnail, token);
+      }
+
+      clearInterval(progressInterval);
+      setUploadProgress(100);
       setUploadSuccess(true);
+      
+      // Wait a moment to show success, then close
       setTimeout(() => {
-        onSave();
+        if (onSave) onSave();
         onClose();
       }, 1500);
+      
     } catch (err) {
-      setError('Upload failed. Please try again.');
+      setError(err.message || 'Upload failed. Please try again.');
       console.error('Upload error:', err);
     } finally {
       setLoading(false);
@@ -125,12 +182,35 @@ const StudyNotesUploadModal = ({ book, onClose, onSave }) => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
+  const handleDrop = (e, type) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const droppedFile = e.dataTransfer.files[0];
+    if (!droppedFile) return;
+    
+    if (type === 'pdf') {
+      setUploadType('pdf');
+      const inputEvent = { target: { files: [droppedFile] } };
+      handleFileChange(inputEvent);
+    } else {
+      setUploadType('thumbnail');
+      const inputEvent = { target: { files: [droppedFile] } };
+      handleFileChange(inputEvent);
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h3>
-            <FaUpload /> Upload Files
+            <FaUpload /> Upload Files for "{book?.title}"
           </h3>
           <button className="modal-close" onClick={onClose}>
             <FaTimes />
@@ -141,7 +221,10 @@ const StudyNotesUploadModal = ({ book, onClose, onSave }) => {
           <div className="success-message">
             <div className="success-icon">✓</div>
             <h4>Upload Successful!</h4>
-            <p>Files have been uploaded successfully.</p>
+            <p>File has been uploaded successfully.</p>
+            <div className="progress-bar" style={{ marginTop: '20px' }}>
+              <div className="progress-fill" style={{ width: '100%', background: '#28a745' }}></div>
+            </div>
           </div>
         ) : (
           <div className="user-form">
@@ -158,6 +241,7 @@ const StudyNotesUploadModal = ({ book, onClose, onSave }) => {
                   <strong>Class:</strong> {book?.class}
                   {book?.subject && <span> • <strong>Subject:</strong> {book?.subject}</span>}
                 </p>
+                {book?.author && <p><strong>Author:</strong> {book.author}</p>}
               </div>
             </div>
 
@@ -171,12 +255,33 @@ const StudyNotesUploadModal = ({ book, onClose, onSave }) => {
               </div>
             )}
 
+            {/* Upload Progress */}
+            {loading && (
+              <div className="upload-progress-container">
+                <div className="progress-info">
+                  <span>Uploading... {uploadProgress}%</span>
+                  <span>
+                    {uploadType === 'pdf' 
+                      ? selectedFile?.name 
+                      : selectedThumbnail?.name}
+                  </span>
+                </div>
+                <div className="progress-bar">
+                  <div 
+                    className="progress-fill" 
+                    style={{ width: `${uploadProgress}%` }}
+                  ></div>
+                </div>
+              </div>
+            )}
+
             {/* Upload Type Selector */}
             <div className="upload-type-selector">
               <button
                 type="button"
                 className={`upload-type-btn ${uploadType === 'pdf' ? 'active' : ''}`}
                 onClick={() => setUploadType('pdf')}
+                disabled={loading}
               >
                 <FaFilePdf /> PDF/File
               </button>
@@ -184,6 +289,7 @@ const StudyNotesUploadModal = ({ book, onClose, onSave }) => {
                 type="button"
                 className={`upload-type-btn ${uploadType === 'thumbnail' ? 'active' : ''}`}
                 onClick={() => setUploadType('thumbnail')}
+                disabled={loading}
               >
                 <FaImage /> Thumbnail
               </button>
@@ -208,6 +314,7 @@ const StudyNotesUploadModal = ({ book, onClose, onSave }) => {
                   onChange={handleFileChange}
                   accept=".pdf,.doc,.docx,.ppt,.pptx,.txt"
                   style={{ display: 'none' }}
+                  disabled={loading}
                 />
 
                 {selectedFile ? (
@@ -217,7 +324,9 @@ const StudyNotesUploadModal = ({ book, onClose, onSave }) => {
                       <div className="file-details">
                         <h5>{selectedFile.name}</h5>
                         <p className="file-size">{formatFileSize(selectedFile.size)}</p>
-                        <p className="file-type">{selectedFile.type}</p>
+                        <p className="file-type">
+                          {selectedFile.type || selectedFile.name.split('.').pop().toUpperCase()}
+                        </p>
                       </div>
                       <button
                         className="remove-file"
@@ -226,12 +335,13 @@ const StudyNotesUploadModal = ({ book, onClose, onSave }) => {
                           if (previewUrl) URL.revokeObjectURL(previewUrl);
                           setPreviewUrl('');
                         }}
+                        disabled={loading}
                       >
                         <FaTimes />
                       </button>
                     </div>
                     
-                    {selectedFile.type === 'application/pdf' && previewUrl && (
+                    {previewUrl && (
                       <div className="pdf-preview">
                         <iframe
                           src={previewUrl}
@@ -246,11 +356,15 @@ const StudyNotesUploadModal = ({ book, onClose, onSave }) => {
                 ) : (
                   <div
                     className="upload-area"
-                    onClick={() => triggerFileInput('pdf')}
+                    onClick={() => !loading && triggerFileInput('pdf')}
+                    onDrop={(e) => handleDrop(e, 'pdf')}
+                    onDragOver={handleDragOver}
+                    style={{ cursor: loading ? 'not-allowed' : 'pointer' }}
                   >
                     <FaUpload className="upload-icon" />
                     <p className="upload-text">Click to select file or drag & drop</p>
                     <p className="upload-hint">Max file size: 50MB</p>
+                    <p className="upload-hint">Supported: PDF, DOC, DOCX, PPT, PPTX, TXT</p>
                   </div>
                 )}
               </div>
@@ -276,6 +390,7 @@ const StudyNotesUploadModal = ({ book, onClose, onSave }) => {
                   onChange={handleFileChange}
                   accept="image/*"
                   style={{ display: 'none' }}
+                  disabled={loading}
                 />
 
                 {selectedThumbnail ? (
@@ -293,6 +408,7 @@ const StudyNotesUploadModal = ({ book, onClose, onSave }) => {
                           setSelectedThumbnail(null);
                           setThumbnailPreview('');
                         }}
+                        disabled={loading}
                       >
                         <FaTimes />
                       </button>
@@ -312,11 +428,15 @@ const StudyNotesUploadModal = ({ book, onClose, onSave }) => {
                 ) : (
                   <div
                     className="upload-area image-upload"
-                    onClick={() => triggerFileInput('thumbnail')}
+                    onClick={() => !loading && triggerFileInput('thumbnail')}
+                    onDrop={(e) => handleDrop(e, 'thumbnail')}
+                    onDragOver={handleDragOver}
+                    style={{ cursor: loading ? 'not-allowed' : 'pointer' }}
                   >
                     <FaImage className="upload-icon" />
                     <p className="upload-text">Click to select image or drag & drop</p>
                     <p className="upload-hint">Max file size: 5MB</p>
+                    <p className="upload-hint">Supported: JPG, PNG, GIF, WebP</p>
                   </div>
                 )}
               </div>
@@ -372,12 +492,14 @@ const StudyNotesUploadModal = ({ book, onClose, onSave }) => {
                 type="button"
                 className="btn-submit"
                 onClick={handleUpload}
-                disabled={loading || (uploadType === 'pdf' && !selectedFile) || (uploadType === 'thumbnail' && !selectedThumbnail)}
+                disabled={loading || 
+                  (uploadType === 'pdf' && !selectedFile) || 
+                  (uploadType === 'thumbnail' && !selectedThumbnail)}
               >
                 {loading ? (
                   <>
-                    <div className="loading-spinner-small"></div>
-                    Uploading...
+                    <FaSpinner className="spinner" />
+                    Uploading... {uploadProgress}%
                   </>
                 ) : (
                   <>

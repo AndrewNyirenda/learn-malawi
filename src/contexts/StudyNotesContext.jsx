@@ -394,6 +394,136 @@ const deleteBook = async (bookId, token) => {
 
 
 
+const uploadBookFile = async (bookId, file, token) => {
+  setLoading(true);
+  setError(null);
+  
+  try {
+    console.log('Uploading file for book:', bookId, 'File:', file.name);
+    
+    // Create FormData for file upload
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const response = await axios.post(
+      `${API_BASE_URL}/books/${bookId}/file`, 
+      formData, 
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+        timeout: 60000, // 1 minute timeout for large files
+      }
+    );
+    
+    console.log('File upload response:', response.data);
+    
+    // Update the book in local state with the new file URL
+    setBooks(prevBooks => 
+      prevBooks.map(book => 
+        book.id === bookId ? response.data : book
+      )
+    );
+    
+    return response.data;
+  } catch (err) {
+    const errorMessage = err.response?.data?.message || err.message || 'Failed to upload file';
+    setError(errorMessage);
+    console.error('Error uploading book file:', {
+      message: err.message,
+      response: err.response?.data,
+      status: err.response?.status,
+    });
+    throw err;
+  } finally {
+    setLoading(false);
+  }
+};
+
+// Add updateBook function too
+const updateBook = async (bookId, bookData, token) => {
+  setLoading(true);
+  setError(null);
+  
+  try {
+    const response = await axios.patch(
+      `${API_BASE_URL}/books/${bookId}`, 
+      bookData,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    
+    // Update the book in local state
+    setBooks(prevBooks => 
+      prevBooks.map(book => 
+        book.id === bookId ? response.data : book
+      )
+    );
+    
+    return response.data;
+  } catch (err) {
+    const errorMessage = err.response?.data?.message || err.message || 'Failed to update book';
+    setError(errorMessage);
+    console.error('Error updating book:', err);
+    throw err;
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+const uploadThumbnail = async (bookId, imageFile, token) => {
+  setLoading(true);
+  setError(null);
+  
+  try {
+    console.log('Uploading thumbnail for book:', bookId);
+    
+    const formData = new FormData();
+    formData.append('thumbnail', imageFile);
+    
+    const response = await axios.post(
+      `${API_BASE_URL}/books/${bookId}/thumbnail`,
+      formData,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+        timeout: 60000,
+      }
+    );
+    
+    console.log('Thumbnail upload response:', response.data);
+    
+    // Update the book in local state
+    setBooks(prevBooks => 
+      prevBooks.map(book => 
+        book.id === bookId ? response.data : book
+      )
+    );
+    
+    return response.data;
+  } catch (err) {
+    const errorMessage = err.response?.data?.message || err.message || 'Failed to upload thumbnail';
+    setError(errorMessage);
+    console.error('Error uploading thumbnail:', {
+      message: err.message,
+      response: err.response?.data,
+      status: err.response?.status,
+    });
+    throw err;
+  } finally {
+    setLoading(false);
+  }
+};
+
+
   const value = {
     books,
     latestBooks,
@@ -414,6 +544,9 @@ const deleteBook = async (bookId, token) => {
     getDownloadUrl,
     createBook,
     deleteBook,
+    uploadBookFile,
+    uploadThumbnail,
+    updateBook,
     testConnection,
     clearError: () => setError(null),
   };

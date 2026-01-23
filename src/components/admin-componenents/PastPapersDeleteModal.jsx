@@ -1,15 +1,26 @@
 // src/components/admin-componenents/PastPapersDeleteModal.jsx
 import React, { useState } from 'react';
-import { FaTimes, FaExclamationTriangle, FaTrash, FaFileAlt, FaFilePdf, FaCalendarAlt, FaUniversity } from 'react-icons/fa';
+import { 
+  FaTimes, 
+  FaExclamationTriangle, 
+  FaTrash, 
+  FaFileAlt, 
+  FaFilePdf, 
+  FaCalendarAlt, 
+  FaUniversity,
+  FaEye,
+  FaDownload
+} from 'react-icons/fa';
 import '../../styles/Admin-Styles/PastPapersAdminModal.css';
 
 const PastPapersDeleteModal = ({ paper, selectedCount, onClose, onConfirm }) => {
   const [confirmText, setConfirmText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const isSingleDelete = paper !== null;
-  const paperTitle = isSingleDelete ? paper.title : '';
-  const itemCount = isSingleDelete ? 1 : selectedCount;
+  // ADD SAFETY CHECKS HERE:
+  const isSingleDelete = paper !== null && paper !== undefined;
+  const paperTitle = isSingleDelete ? (paper?.title || 'Unknown Paper') : '';
+  const itemCount = isSingleDelete ? 1 : (selectedCount || 0);
 
   const handleConfirm = async () => {
     if (!isSingleDelete && confirmText !== 'DELETE') {
@@ -30,6 +41,16 @@ const PastPapersDeleteModal = ({ paper, selectedCount, onClose, onConfirm }) => 
     } else {
       return `Are you sure you want to delete ${itemCount} selected past paper(s)? This action cannot be undone.`;
     }
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
   };
 
   return (
@@ -57,30 +78,44 @@ const PastPapersDeleteModal = ({ paper, selectedCount, onClose, onConfirm }) => 
           </div>
 
           {isSingleDelete ? (
-            <div className="user-to-delete">
-              <div className="user-info">
-                <div className="user-avatar">
+            <div className="paper-to-delete">
+              <div className="paper-info">
+                <div className="paper-avatar">
                   <FaFileAlt />
                 </div>
-                <div className="user-details">
-                  <h5>{paper.title}</h5>
-                  <p className="user-email">
-                    <strong>Year:</strong> {paper.year} • <strong>Class:</strong> {paper.class}
+                <div className="paper-details">
+                  <h5>{paper?.title || 'Unknown Paper'}</h5>
+                  <p className="paper-meta">
+                    <strong>Category:</strong> {paper?.category || 'N/A'} • 
+                    <strong> Class:</strong> {paper?.class || 'N/A'}
                   </p>
-                  <p className="user-role">
-                    <strong>Exam Body:</strong> {paper.examinationBody || 'N/A'}
-                    {paper.subject && <span> • <strong>Subject:</strong> {paper.subject}</span>}
+                  <p className="paper-subject">
+                    <strong>Year:</strong> {paper?.year || 'N/A'} • 
+                    {paper?.subject && <span><strong>Subject:</strong> {paper.subject} • </span>}
+                    <strong>Level:</strong> {paper?.level === 'primary' ? 'Primary' : 'Secondary'}
                   </p>
-                  <div className="book-info">
-                    {paper.fileUrl && (
-                      <span className="file-status">
-                        <FaFilePdf /> PDF Attached
-                      </span>
-                    )}
-                    <span className="views-count">
-                      {paper.viewCount || 0} views • {paper.downloadCount || 0} downloads
-                    </span>
+                  {paper?.examinationBody && <p><strong>Exam Body:</strong> {paper.examinationBody}</p>}
+                  <div className="paper-stats">
+                    <div className="stat-item">
+                      <FaEye /> {paper?.viewCount || 0} views
+                    </div>
+                    <div className="stat-item">
+                      <FaDownload /> {paper?.downloadCount || 0} downloads
+                    </div>
+                    <div className="stat-item">
+                      <FaCalendarAlt /> Added: {formatDate(paper?.createdAt)}
+                    </div>
                   </div>
+                  {paper?.fileUrl && (
+                    <div className="file-status">
+                      <FaFilePdf /> PDF Attached: {paper?.fileName || 'Past Paper'}
+                    </div>
+                  )}
+                  {paper?.thumbnailUrl && (
+                    <div className="thumbnail-status">
+                      <FaFileAlt /> Thumbnail Available
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -110,7 +145,7 @@ const PastPapersDeleteModal = ({ paper, selectedCount, onClose, onConfirm }) => 
             <h5>What will be deleted:</h5>
             <ul>
               <li>• Past paper entry from the database</li>
-              <li>• Uploaded PDF file (if exists)</li>
+              <li>• Uploaded PDF/DOC/PPT file (if exists)</li>
               <li>• Thumbnail image (if exists)</li>
               <li>• All view and download statistics</li>
               <li>• Any bookmarks or user references</li>
@@ -137,7 +172,15 @@ const PastPapersDeleteModal = ({ paper, selectedCount, onClose, onConfirm }) => 
               onClick={handleConfirm}
               disabled={isDeleting || (!isSingleDelete && confirmText !== 'DELETE')}
             >
-              {isDeleting ? 'Deleting...' : 'Delete Past Paper(s)'}
+              {isDeleting ? (
+                <>
+                  <FaTrash className="spinner" /> Deleting...
+                </>
+              ) : (
+                <>
+                  <FaTrash /> Delete Past Paper(s)
+                </>
+              )}
             </button>
           </div>
         </div>

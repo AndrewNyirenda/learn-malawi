@@ -57,7 +57,8 @@ const AdminStudyNotes = () => {
     fetchCategories,
     fetchClasses,
     fetchStats,
-    clearError
+    clearError,
+    deleteBook
   } = useStudyNotes();
 
   const { user: currentAdmin, isAdmin } = useAuth();
@@ -169,12 +170,54 @@ const AdminStudyNotes = () => {
   };
 
   const confirmDelete = async () => {
-    // Implement delete logic here
-    // You'll need to add delete functionality to your StudyNotesContext
-    console.log('Delete books:', currentBook ? [currentBook.id] : selectedBooks);
+  try {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      throw new Error('Authentication required. Please login again.');
+    }
+
+    if (currentBook) {
+      // Delete single book
+      const result = await deleteBook(currentBook.id, token);
+      if (result && result.success) {
+        console.log('✅ Book deleted successfully:', currentBook.title);
+      } else {
+        const errorMsg = result?.error || 'Failed to delete book';
+        throw new Error(errorMsg);
+      }
+    } else if (selectedBooks.length > 0) {
+      // Delete multiple books
+      const deletePromises = selectedBooks.map(bookId => 
+        deleteBook(bookId, token)
+      );
+      
+      const results = await Promise.allSettled(deletePromises);
+      
+      // Check for any failures
+      const failures = results.filter(result => 
+        result.status === 'rejected' || 
+        (result.status === 'fulfilled' && !result.value?.success)
+      );
+      
+      if (failures.length > 0) {
+        throw new Error(`${failures.length} books failed to delete`);
+      }
+      
+      console.log(`✅ ${selectedBooks.length} books deleted successfully`);
+      setSelectedBooks([]); // Clear selection after deletion
+    }
+
     setShowDeleteModal(false);
-    await loadData(); // Refresh data
-  };
+    setCurrentBook(null);
+    
+    // Refresh the data
+    await loadData();
+    
+  } catch (error) {
+    console.error('❌ Delete failed:', error);
+    // You could show an error message to the user here
+  }
+};
 
   // View PDF in new tab
   const handleViewPDF = (book) => {
