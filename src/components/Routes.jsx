@@ -23,6 +23,8 @@ import AdminTutorials from "./admin-componenents/AdminTutorials";
 
 import AdminNews from "./admin-componenents/AdminNews";
 
+import AdminCareerResources from "./admin-componenents/AdminCareerResources";
+
 
 
 
@@ -76,12 +78,10 @@ const RoutesComponent = () => {
              
              
               <Route path="news" element={<AdminNews />} />
-             
-        {/*
-     
-
+              
+              
         <Route path="career-resources" element={<AdminCareerResources />} />
-        */}
+
         
         {/* Analytics & Settings Routes (to be implemented) */}
         {/* 
