@@ -21,6 +21,8 @@ import AdminPastPapers from "./admin-componenents/AdminPastPapers";
 import AdminQuizzes from "./admin-componenents/AdminQuizzes";
 import AdminTutorials from "./admin-componenents/AdminTutorials";
 
+import AdminNews from "./admin-componenents/AdminNews";
+
 
 
 
@@ -70,10 +72,14 @@ const RoutesComponent = () => {
           <Route path="quizzes" element={<AdminQuizzes />} />
           
              <Route path="tutorials" element={<AdminTutorials />} />
+             
+             
+             
+              <Route path="news" element={<AdminNews />} />
+             
         {/*
      
-      
-        <Route path="news" element={<AdminNews />} />
+
         <Route path="career-resources" element={<AdminCareerResources />} />
         */}
         

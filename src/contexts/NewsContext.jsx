@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3000'; // Update with your actual API URL
+const API_BASE_URL = 'http://localhost:3000'; 
 
 const NewsContext = createContext();
 
@@ -138,6 +138,37 @@ export const NewsProvider = ({ children }) => {
     }
   };
 
+  // Update news article (requires authentication)
+  const updateNews = async (id, newsData, token) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const response = await axios.patch(`${API_BASE_URL}/news/${id}`, newsData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      // Update local state
+      setNews(prevNews =>
+        prevNews.map(article =>
+          article.id === id ? response.data : article
+        )
+      );
+
+      return response.data;
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || err.message || 'Failed to update news article';
+      setError(errorMessage);
+      console.error('Error updating news:', err);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Upload image (requires authentication)
   const uploadImage = async (newsId, imageFile, token) => {
     setLoading(true);
@@ -176,6 +207,36 @@ export const NewsProvider = ({ children }) => {
     }
   };
 
+  // Delete image (requires authentication)
+  const deleteImage = async (newsId, token) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const response = await axios.delete(`${API_BASE_URL}/news/${newsId}/image`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      // Update local state
+      setNews(prevNews =>
+        prevNews.map(article =>
+          article.id === newsId ? response.data : article
+        )
+      );
+
+      return response.data;
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || err.message || 'Failed to delete image';
+      setError(errorMessage);
+      console.error('Error deleting image:', err);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Initialize with data
   useEffect(() => {
     const initializeData = async () => {
@@ -200,7 +261,9 @@ export const NewsProvider = ({ children }) => {
     fetchCategories,
     fetchLatestNews,
     createNews,
+    updateNews, // Add this
     uploadImage,
+    deleteImage, // Add this
     setNews,
     clearError: () => setError(null),
   };
