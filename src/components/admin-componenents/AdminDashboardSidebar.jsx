@@ -1,25 +1,22 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import {
   FaTachometerAlt,
   FaBook,
   FaUsers,
-  FaChartBar,
-  FaCog,
   FaChevronLeft,
   FaChevronRight,
   FaSignOutAlt,
   FaHome,
-  FaEnvelope,
-  FaNewspaper,
-  FaGraduationCap,
-  FaFileAlt,
-  FaPlay,
-  FaQuestionCircle
+  FaEnvelope
 } from 'react-icons/fa';
+import { useAuth } from '../../contexts/AuthContext';
+import logo from "../../images/Logo.png";
 import '../../styles/Admin-Styles/AdminDashboardSidebar.css';
 
 const AdminDashboardSidebar = () => {
+  const { user, logout } = useAuth(); // ✅ Added logout function
+  const navigate = useNavigate(); // ✅ Added navigate for redirect
   const [collapsed, setCollapsed] = useState(false);
   const [activeSubmenu, setActiveSubmenu] = useState(null);
 
@@ -29,6 +26,16 @@ const AdminDashboardSidebar = () => {
 
   const toggleCollapse = () => {
     setCollapsed(!collapsed);
+  };
+
+  // ✅ Handle logout
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/login'); // Redirect to login page after logout
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
   };
 
   const menuItems = [
@@ -52,27 +59,12 @@ const AdminDashboardSidebar = () => {
     {
       title: 'User Management',
       icon: <FaUsers />,
-      submenu: [
-        { title: 'All Users', path: '/admin/users' },
-        { title: 'Admins', path: '/admin/admins' },
-        { title: 'Teachers', path: '/admin/teachers' },
-        { title: 'Add New User', path: '/admin/users/new' }
-      ]
+      path: '/admin/users'
     },
     {
       title: 'Messages',
       icon: <FaEnvelope />,
       path: '/admin/messages'
-    },
-    {
-      title: 'Analytics',
-      icon: <FaChartBar />,
-      path: '/admin/analytics'
-    },
-    {
-      title: 'Settings',
-      icon: <FaCog />,
-      path: '/admin/settings'
     }
   ];
 
@@ -81,15 +73,21 @@ const AdminDashboardSidebar = () => {
       <div className="sidebar-header">
         {!collapsed && (
           <div className="logo-section">
-            <div className="logo">LM</div>
+            <div className="logo">
+              <img src={logo} alt="Admin Logo" />
+            </div>
+
             <div className="logo-text">
-              <h3>Learn Malawi</h3>
-              <p>Admin Portal</p>
+              <h3>Admin Portal</h3>
+              <p>
+                {user ? `${user.firstName} ${user.lastName}` : 'Loading...'}
+              </p>
             </div>
           </div>
         )}
-        <button 
-          className="collapse-btn" 
+
+        <button
+          className="collapse-btn"
           onClick={toggleCollapse}
           title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
@@ -98,32 +96,29 @@ const AdminDashboardSidebar = () => {
       </div>
 
       <nav className="sidebar-nav">
-        <NavLink 
-          to="/" 
+        <NavLink
+          to="/"
           className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-          title="Back to Home"
         >
           <FaHome className="nav-icon" />
           {!collapsed && <span className="nav-text">Back to Home</span>}
         </NavLink>
-        
+
         {menuItems.map((item, index) => (
           <div key={index} className="nav-section">
             {item.path ? (
-              <NavLink 
-                to={item.path} 
+              <NavLink
+                to={item.path}
                 className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-                title={item.title}
               >
                 <span className="nav-icon">{item.icon}</span>
                 {!collapsed && <span className="nav-text">{item.title}</span>}
               </NavLink>
             ) : (
               <div className="nav-item-with-submenu">
-                <button 
+                <button
                   className={`nav-item ${activeSubmenu === item.title ? 'active' : ''}`}
                   onClick={() => toggleSubmenu(item.title)}
-                  title={item.title}
                 >
                   <span className="nav-icon">{item.icon}</span>
                   {!collapsed && (
@@ -135,14 +130,16 @@ const AdminDashboardSidebar = () => {
                     </>
                   )}
                 </button>
-                
+
                 {!collapsed && activeSubmenu === item.title && (
                   <div className="submenu">
                     {item.submenu.map((subItem, subIndex) => (
-                      <NavLink 
+                      <NavLink
                         key={subIndex}
                         to={subItem.path}
-                        className={({ isActive }) => `submenu-item ${isActive ? 'active' : ''}`}
+                        className={({ isActive }) =>
+                          `submenu-item ${isActive ? 'active' : ''}`
+                        }
                       >
                         {subItem.title}
                       </NavLink>
@@ -156,26 +153,10 @@ const AdminDashboardSidebar = () => {
       </nav>
 
       <div className="sidebar-footer">
-        <div className="quick-stats">
-          {!collapsed && <h4>Quick Stats</h4>}
-          <div className="stats-grid">
-            <div className="stat-item">
-              <div className="stat-value">1,234</div>
-              {!collapsed && <div className="stat-label">Users</div>}
-            </div>
-            <div className="stat-item">
-              <div className="stat-value">456</div>
-              {!collapsed && <div className="stat-label">Resources</div>}
-            </div>
-          </div>
-        </div>
-        
+        {/* ✅ Updated logout button with onClick handler */}
         <button 
           className="logout-btn-mobile"
-          onClick={() => {
-            console.log('Mobile logout clicked');
-            // Add logout logic
-          }}
+          onClick={handleLogout}
         >
           <FaSignOutAlt />
           {!collapsed && <span>Logout</span>}

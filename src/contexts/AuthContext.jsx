@@ -1,5 +1,5 @@
 // src/contexts/AuthContext.jsx
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:3000';
@@ -26,7 +26,7 @@ api.interceptors.request.use(
   }
 );
 
-
+// Enhanced response interceptor with auto-logout
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -60,13 +60,19 @@ api.interceptors.response.use(
         // Retry the original request
         return api(originalRequest);
       } catch (refreshError) {
-        // Refresh failed, clear tokens and redirect to login
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('user');
+        // Refresh failed, trigger auto-logout
+        console.error('Token refresh failed, logging out:', refreshError);
+        clearAuthData();
         window.location.href = '/login';
         return Promise.reject(refreshError);
       }
+    }
+    
+    // Handle other errors that should trigger logout
+    if (error.response?.status === 403 || error.response?.status === 419) {
+      console.error('Authentication error, logging out:', error);
+      clearAuthData();
+      window.location.href = '/login';
     }
     
     return Promise.reject(error);
@@ -88,6 +94,16 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Helper function to clear all auth data
+  const clearAuthData = useCallback(() => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('user');
+    localStorage.removeItem('tokenExpiry');
+    setUser(null);
+    setError(null);
+  }, []);
+
   // Initialize auth state from localStorage
   useEffect(() => {
     const initializeAuth = async () => {
@@ -96,10 +112,24 @@ export const AuthProvider = ({ children }) => {
       
       if (token && storedUser) {
         try {
-          setUser(JSON.parse(storedUser));
+          // Parse user data
+          const parsedUser = JSON.parse(storedUser);
+          setUser(parsedUser);
+          
+          // Check token expiry
+          const expiryTime = localStorage.getItem('tokenExpiry');
+          if (expiryTime) {
+            const expiryDate = new Date(parseInt(expiryTime));
+            if (expiryDate < new Date()) {
+              // Token expired, logout
+              console.log('Token expired, logging out...');
+              clearAuthData();
+              window.location.href = '/login';
+            }
+          }
         } catch (err) {
           console.error('Failed to parse stored user:', err);
-          localStorage.removeItem('user');
+          clearAuthData();
         }
       }
       
@@ -107,123 +137,174 @@ export const AuthProvider = ({ children }) => {
     };
     
     initializeAuth();
+  }, [clearAuthData]);
+
+  // Set up token expiry check interval
+  useEffect(() => {
+    const checkTokenExpiry = () => {
+      const expiryTime = localStorage.getItem('tokenExpiry');
+      if (expiryTime) {
+        const expiryDate = new Date(parseInt(expiryTime));
+        if (expiryDate < new Date()) {
+          console.log('Token expired, auto-logout triggered');
+          handleAutoLogout();
+        }
+      }
+    };
+
+    // Check every minute
+    const intervalId = setInterval(checkTokenExpiry, 60000);
+    
+    return () => clearInterval(intervalId);
   }, []);
 
-  // Login function
-
-const login = async (email, password) => {
-  setLoading(true);
-  setError(null);
-  
-  try {
-    const response = await api.post('/auth/login', { email, password });
-    const { accessToken, refreshToken } = response.data;
+  // Handle auto-logout
+  const handleAutoLogout = useCallback(() => {
+    console.log('Auto-logout triggered due to token expiry');
+    clearAuthData();
     
-    console.log('Login API response:', response.data);
-    
-    // Store tokens
-    localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('refreshToken', refreshToken);
-    
-    // Get user profile
-    const profileResponse = await api.get('/auth/profile');
-    const userData = profileResponse.data;
-    
-    console.log('User profile API response:', userData);
-    
-    // Make sure user data has role field
-    if (!userData.role) {
-      console.warn('User data missing role field:', userData);
-      // You might need to add default role or get it from another endpoint
-    }
-    
-    // Store user data
-    localStorage.setItem('user', JSON.stringify(userData));
-    setUser(userData);
-    
-    return { 
-      success: true, 
-      data: response.data,
-      user: userData // Return user data for immediate use
-    };
-  } catch (err) {
-    const errorMessage = err.response?.data?.message || err.message || 'Login failed';
-    setError(errorMessage);
-    return { success: false, error: errorMessage };
-  } finally {
-    setLoading(false);
-  }
-};
-
-
-const register = async (userData) => {
-  setLoading(true);
-  setError(null);
-  
-  try {
-    const response = await api.post('/auth/register', userData);
-    const { accessToken, refreshToken } = response.data;
-    
-    // Store tokens
-    localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('refreshToken', refreshToken);
-    
-    // Get user profile
-    const profileResponse = await api.get('/auth/profile');
-    const userProfile = profileResponse.data;
-    
-    // Store user data
-    localStorage.setItem('user', JSON.stringify(userProfile));
-    setUser(userProfile);
-    
-    return { success: true, data: response.data };
-  } catch (err) {
-    const errorMessage = err.response?.data?.message || err.message || 'Registration failed';
-    
-    // Handle specific validation errors
-    if (err.response?.data?.error === 'Bad Request' && err.response?.data?.message) {
-      // Handle "role must be one of the following values: Admin, Teacher"
-      if (err.response.data.message.includes('role must be one of')) {
-        setError('Please select either Admin or Teacher as your role');
-      } else {
-        setError(err.response.data.message);
-      }
-    } else {
-      setError(errorMessage);
-    }
-    
-    return { success: false, error: errorMessage };
-  } finally {
-    setLoading(false);
-  }
-};
-
-  // Logout function
-  const logout = async () => {
-    setLoading(true);
-    
-    try {
-      const refreshToken = localStorage.getItem('refreshToken');
-      if (refreshToken) {
-        await api.post('/auth/logout', { refreshToken });
-      }
-    } catch (err) {
-      console.error('Logout error:', err);
-    } finally {
-      // Clear local storage
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('user');
-      
-      // Clear state
-      setUser(null);
-      setError(null);
-      setLoading(false);
-      
-      // Redirect to login
+    // Show notification before redirecting (optional)
+    if (window.location.pathname !== '/login') {
+      alert('Your session has expired. Please log in again.');
       window.location.href = '/login';
     }
+  }, [clearAuthData]);
+
+  // Login function with token expiry tracking
+  const login = async (email, password) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const response = await api.post('/auth/login', { email, password });
+      const { accessToken, refreshToken, expiresIn } = response.data;
+      
+      console.log('Login API response:', response.data);
+      
+      // Store tokens
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      
+      // Calculate and store token expiry time (default to 1 hour if not provided)
+      const expiryMs = expiresIn ? parseInt(expiresIn) * 1000 : 60 * 60 * 1000;
+      const expiryTime = Date.now() + expiryMs;
+      localStorage.setItem('tokenExpiry', expiryTime.toString());
+      
+      // Get user profile
+      const profileResponse = await api.get('/auth/profile');
+      const userData = profileResponse.data;
+      
+      console.log('User profile API response:', userData);
+      
+      // Make sure user data has role field
+      if (!userData.role) {
+        console.warn('User data missing role field:', userData);
+      }
+      
+      // Store user data
+      localStorage.setItem('user', JSON.stringify(userData));
+      setUser(userData);
+      
+      return { 
+        success: true, 
+        data: response.data,
+        user: userData
+      };
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || err.message || 'Login failed';
+      setError(errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const register = async (userData) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const response = await api.post('/auth/register', userData);
+      const { accessToken, refreshToken, expiresIn } = response.data;
+      
+      // Store tokens
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      
+      // Calculate and store token expiry time
+      const expiryMs = expiresIn ? parseInt(expiresIn) * 1000 : 60 * 60 * 1000;
+      const expiryTime = Date.now() + expiryMs;
+      localStorage.setItem('tokenExpiry', expiryTime.toString());
+      
+      // Get user profile
+      const profileResponse = await api.get('/auth/profile');
+      const userProfile = profileResponse.data;
+      
+      // Store user data
+      localStorage.setItem('user', JSON.stringify(userProfile));
+      setUser(userProfile);
+      
+      return { success: true, data: response.data };
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || err.message || 'Registration failed';
+      
+      if (err.response?.data?.error === 'Bad Request' && err.response?.data?.message) {
+        if (err.response.data.message.includes('role must be one of')) {
+          setError('Please select either Admin or Teacher as your role');
+        } else {
+          setError(err.response.data.message);
+        }
+      } else {
+        setError(errorMessage);
+      }
+      
+      return { success: false, error: errorMessage };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+
+// Enhanced logout function
+const logout = async () => {
+
+  
+  try {
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (refreshToken) {
+      try {
+        // Use a fetch with abort controller for timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2000);
+        
+        await fetch(`${API_BASE_URL}/auth/logout`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+          },
+          body: JSON.stringify({ refreshToken }),
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+      } catch (apiError) {
+        console.warn('API logout failed (may be offline), proceeding with local logout:', apiError);
+      }
+    }
+  } catch (err) {
+    console.error('Logout error:', err);
+  } finally {
+    // Clear all auth data
+    clearAuthData();
+    
+    console.log('User logged out successfully');
+    
+    // Use window.location.replace for immediate redirect without history
+    window.location.replace('/login');
+  }
+};
 
   // Get user profile
   const getProfile = async () => {
@@ -240,6 +321,13 @@ const register = async (userData) => {
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.message || 'Failed to get profile';
       setError(errorMessage);
+      
+      // If profile fetch fails due to auth, trigger logout
+      if (err.response?.status === 401 || err.response?.status === 403) {
+        console.log('Authentication failed while fetching profile, logging out...');
+        clearAuthData();
+      }
+      
       return { success: false, error: errorMessage };
     } finally {
       setLoading(false);
@@ -255,11 +343,18 @@ const register = async (userData) => {
       }
       
       const response = await api.post('/auth/refresh', { refreshToken });
-      const { accessToken, refreshToken: newRefreshToken } = response.data;
+      const { accessToken, refreshToken: newRefreshToken, expiresIn } = response.data;
       
       localStorage.setItem('accessToken', accessToken);
       if (newRefreshToken) {
         localStorage.setItem('refreshToken', newRefreshToken);
+      }
+      
+      // Update expiry time
+      if (expiresIn) {
+        const expiryMs = parseInt(expiresIn) * 1000;
+        const expiryTime = Date.now() + expiryMs;
+        localStorage.setItem('tokenExpiry', expiryTime.toString());
       }
       
       return { success: true };
@@ -299,7 +394,22 @@ const register = async (userData) => {
 
   // Check if user is authenticated
   const isAuthenticated = () => {
-    return !!user && !!localStorage.getItem('accessToken');
+    const token = localStorage.getItem('accessToken');
+    const storedUser = localStorage.getItem('user');
+    
+    if (!token || !storedUser) return false;
+    
+    // Check token expiry
+    const expiryTime = localStorage.getItem('tokenExpiry');
+    if (expiryTime) {
+      const expiryDate = new Date(parseInt(expiryTime));
+      if (expiryDate < new Date()) {
+        console.log('Token has expired');
+        return false;
+      }
+    }
+    
+    return true;
   };
 
   // Check if user has specific role
@@ -317,6 +427,15 @@ const register = async (userData) => {
     return user?.role === 'Teacher';
   };
 
+  // Get remaining session time (for display purposes)
+  const getRemainingSessionTime = () => {
+    const expiryTime = localStorage.getItem('tokenExpiry');
+    if (!expiryTime) return 0;
+    
+    const remainingMs = parseInt(expiryTime) - Date.now();
+    return Math.max(0, Math.floor(remainingMs / 1000)); // Return in seconds
+  };
+
   const value = {
     user,
     loading,
@@ -332,6 +451,8 @@ const register = async (userData) => {
     hasRole,
     isAdmin,
     isTeacher,
+    getRemainingSessionTime, // Optional: for showing session timer
+    clearAuthData, // Export for emergency cleanup
   };
 
   return (
