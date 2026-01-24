@@ -1,4 +1,4 @@
-/* About Page - Institutional Theme */
+
 @import './theme.css';
 
 .about-wrapper {
@@ -7,7 +7,7 @@
   padding-top: 80px;
 }
 
-/* ============ INSTITUTIONAL HERO ============ */
+
 .about-hero-section {
   padding: var(--spacing-xl) var(--spacing-xl);
   background: var(--color-sand);
