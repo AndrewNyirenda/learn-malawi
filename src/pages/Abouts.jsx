@@ -9,9 +9,25 @@ import Header from "../components/Header.jsx";
 
 const About = () => {
   const teamMembers = [
-    { name: "Willard Zimba", role: "Founder", bio: "Passionate about education in Malawi.", image: willard },
-    { name: "Innocent Frank Gomwa", role: "Developer", bio: "Builds the Learn Malawi platform.", image: inno },
-    { name: "Andrew Kwanjana Nyirenda", role: "Developer", bio: "Builds the Learn Malawi platform.", image: andrew },
+    { 
+      name: "Willard Zimba", 
+      role: "Founder & Director", 
+      bio: "Leading educational innovation in Malawi with a vision for accessible, quality digital learning for all students.",
+      image: willard 
+    },
+        { 
+      name: "Andrew Kwanjana Nyirenda", 
+      role: "Full Stack Developer", 
+      bio: "Architected and developed the Learn Malawi platform infrastructure, ensuring scalable and reliable performance.",
+      image: andrew 
+    },
+    { 
+      name: "Innocent Frank Gomwa", 
+      role: "Full Stack Developer", 
+      bio: "Architected and developed the Learn Malawi platform infrastructure, ensuring scalable and reliable performance.",
+      image: inno 
+    },
+
   ];
 
   const missionVision = [
@@ -30,41 +46,94 @@ const About = () => {
   ];
 
   const values = [
-    { title: "Equity and Inclusion", description: "We believe every student deserves access to quality education...", icon: FaUsers },
-    { title: "Quality and Relevance", description: "We uphold the highest standards of educational content...", icon: FaChalkboardTeacher },
-    { title: "Innovation and Adaptability", description: "We embrace technology as a powerful tool for change...", icon: FaProjectDiagram },
-    { title: "Collaboration and Partnership", description: "We achieve more together...", icon: FaBookOpen },
+    { 
+      title: "Equity and Inclusion", 
+      description: "We believe every student deserves access to quality education regardless of their location or background. We are committed to bridging the digital divide across Malawi's 28 districts.", 
+      icon: FaUsers 
+    },
+    { 
+      title: "Quality and Relevance", 
+      description: "We uphold the highest standards of educational content, ensuring all materials are curriculum-aligned, accurate, and developed with input from certified Malawian educators.", 
+      icon: FaChalkboardTeacher 
+    },
+    { 
+      title: "Innovation and Adaptability", 
+      description: "We embrace technology as a powerful tool for change, constantly evolving our platform to meet the changing needs of Malawian students and the educational landscape.", 
+      icon: FaProjectDiagram 
+    },
+    { 
+      title: "Collaboration and Partnership", 
+      description: "We achieve more together. We work closely with educators, institutions, and communities to create meaningful educational impact across Malawi.", 
+      icon: FaBookOpen 
+    },
   ];
 
   const philosophyPoints = [
-    { text: "Active Recall and Spaced Repetition: Through interactive quizzes and progressive learning paths, we help students strengthen memory retention and master concepts over time.", icon: FaClock },
-    { text: "Multimodal Learning: We cater to diverse learning styles by offering content in various formats—text, video, audio, and interactive exercises.", icon: FaLightbulb },
-    { text: "Formative Assessment: Our platform provides instant feedback and detailed analytics.", icon: FaChalkboardTeacher },
-    { text: "Contextualized Learning: By using local examples and offering content in both English and Chichewa.", icon: FaUsers },
+    { 
+      text: "Active Recall and Spaced Repetition: Through interactive quizzes and progressive learning paths, we help students strengthen memory retention and master concepts over time.", 
+      icon: FaClock 
+    },
+    { 
+      text: "Multimodal Learning: We cater to diverse learning styles by offering content in various formats—text, video, audio, and interactive exercises.", 
+      icon: FaLightbulb 
+    },
+    { 
+      text: "Formative Assessment: Our platform provides instant feedback and detailed analytics, allowing students to track progress and identify areas for improvement continuously.", 
+      icon: FaChalkboardTeacher 
+    },
+    { 
+      text: "Contextualized Learning: By using local examples and offering content in both English and Chichewa, we ensure education is relevant and accessible to every Malawian student.", 
+      icon: FaUsers 
+    },
   ];
 
   return (
     <>
       <Header />
       <div className="about-wrapper">
-        <section className="story-section">
-          <h2>Our Story</h2>
-          <p>
-            Learn Malawi is a free digital education platform dedicated to one
-            powerful goal: Free, Quality Education for Every Malawian Student.
-            <br /> We provide comprehensive, curriculum-aligned learning resources
-            for JCE and MSCE students across Malawi...
+        {/* Institutional Hero */}
+        <section className="about-hero-section">
+          <h1>Learn Malawi</h1>
+          <p className="about-subtitle">National Digital Education Platform</p>
+          <div className="about-divider"></div>
+          <p className="about-description">
+            A dedicated initiative providing free, quality digital education resources 
+            for JCE and MSCE students across all 28 districts of Malawi.
           </p>
         </section>
 
-        <section className="mission-vision">
-          <h2>Mission & Vision</h2>
+        {/* Our Story */}
+        <section className="story-section">
+          <div className="section-header">
+            <h2>Our Story</h2>
+            <div className="section-divider"></div>
+          </div>
+          <div className="story-content">
+            <p>
+              Learn Malawi is a free digital education platform dedicated to one
+              powerful goal: Free, Quality Education for Every Malawian Student.
+              <br /><br />
+              We provide comprehensive, curriculum-aligned learning resources
+              for JCE and MSCE students across Malawi, bridging educational gaps
+              and ensuring equal opportunities for academic success nationwide.
+            </p>
+          </div>
+        </section>
+
+        {/* Mission & Vision */}
+        <section className="mission-vision-section">
+          <div className="section-header">
+            <h2>Mission & Vision</h2>
+            <div className="section-divider"></div>
+          </div>
           <div className="mv-grid">
             {missionVision.map((mv, index) => {
               const Icon = mv.icon;
               return (
-                <div key={index} className="mv-card card-shadow">
-                  <Icon className="mv-icon" />
+                <div key={index} className="mv-card">
+                  <div className="mv-icon-container">
+                    <Icon className="mv-icon" />
+                  </div>
                   <h3>{mv.title}</h3>
                   <p>{mv.description}</p>
                 </div>
@@ -73,45 +142,74 @@ const About = () => {
           </div>
         </section>
 
+        {/* Our Values */}
         <section className="values-section">
-          <h2>Our Values</h2>
-          <div className="values-grid">
-            {values.map((val, index) => {
-              const Icon = val.icon;
-              return (
-                <div key={index} className="value-card card-shadow">
-                  <Icon className="value-icon" />
-                  <h3>{val.title}</h3>
-                  <p>{val.description}</p>
-                </div>
-              );
-            })}
+          <div className="section-header">
+            <h2>Our Values</h2>
+            <div className="section-divider"></div>
+          </div>
+          <div className="values-container">
+            <div className="values-scroll-wrapper">
+              <div className="values-scroll-content">
+                {values.map((val, index) => {
+                  const Icon = val.icon;
+                  return (
+                    <div key={index} className="value-card">
+                      <div className="value-icon-container">
+                        <Icon className="value-icon" />
+                      </div>
+                      <h3>{val.title}</h3>
+                      <p>{val.description}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </section>
 
-        <section className="philosophy-section card-shadow">
-          <h2>Our Educational Philosophy</h2>
-          <ul className="philosophy-list">
-            {philosophyPoints.map((point, index) => {
-              const Icon = point.icon;
-              return (
-                <li key={index}>
-                  <Icon className="phil-icon" /> {point.text}
-                </li>
-              );
-            })}
-          </ul>
+        {/* Educational Philosophy */}
+        <section className="philosophy-section">
+          <div className="section-header">
+            <h2>Our Educational Philosophy</h2>
+            <div className="section-divider"></div>
+          </div>
+          <div className="philosophy-content">
+            <ul className="philosophy-list">
+              {philosophyPoints.map((point, index) => {
+                const Icon = point.icon;
+                return (
+                  <li key={index} className="philosophy-point">
+                    <div className="phil-icon-container">
+                      <Icon className="phil-icon" />
+                    </div>
+                    <div className="phil-text">
+                      {point.text}
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </section>
 
+        {/* Our Team */}
         <section className="team-section">
-          <h2>Meet Our Team</h2>
+          <div className="section-header">
+            <h2>Meet Our Team</h2>
+            <div className="section-divider"></div>
+          </div>
           <div className="team-grid">
             {teamMembers.map((member, index) => (
-              <div key={index} className="team-card card-shadow">
-                <img src={member.image} alt={member.name} className="team-image" />
-                <h3>{member.name}</h3>
-                <p>{member.role}</p>
-                <p>{member.bio}</p>
+              <div key={index} className="team-card">
+                <div className="team-image-container">
+                  <img src={member.image} alt={member.name} className="team-image" />
+                </div>
+                <div className="team-info">
+                  <h3>{member.name}</h3>
+                  <p className="team-role">{member.role}</p>
+                  <p className="team-bio">{member.bio}</p>
+                </div>
               </div>
             ))}
           </div>

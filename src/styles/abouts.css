@@ -1,328 +1,516 @@
+/* About Page - Institutional Theme */
+@import './theme.css';
+
 .about-wrapper {
-  padding: 6rem 2rem;
-  color: #3b3939e7;
-  font-family: 'Arial', sans-serif;
+  min-height: 100vh;
+  background: var(--color-white);
+  padding-top: 80px;
+}
+
+/* ============ INSTITUTIONAL HERO ============ */
+.about-hero-section {
+  padding: var(--spacing-xl) var(--spacing-xl);
+  background: var(--color-sand);
   text-align: center;
-}
-
-.story-section,
-.team-section,
-.mission-vision,
-.values-section,
-.philosophy-section {
-  margin: 5rem auto;
-  max-width: 1200px;
-  padding: 0 1rem;
-}
-
-/* Make ALL titles black like StudyNotes */
-.story-section h2,
-.team-section h2,
-.mission-vision h2,
-.values-section h2,
-.philosophy-section h2,
-.mv-card h3,
-.value-card h3,
-.team-card h3 {
-  color: #111010d2;
-  text-align: center;
-  font-weight: 600;
-  display: block;
-  width: 100%;
-}
-
-/* Main section titles */
-.story-section h2,
-.team-section h2,
-.mission-vision h2,
-.values-section h2,
-.philosophy-section h2 {
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+  border-bottom: var(--border-thin);
   position: relative;
-  padding-bottom: 0.8rem;
 }
 
-/* Add underline effect to main section titles */
-.story-section h2::after,
-.team-section h2::after,
-.mission-vision h2::after,
-.values-section h2::after,
-.philosophy-section h2::after {
+.about-hero-section::before {
   content: '';
   position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 4px;
-  background: linear-gradient(to right, #3b8efc, #2df87c);
-  border-radius: 2px;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--color-sand-dark);
 }
 
-/* Card subtitles (now also black) */
-.mv-card h3,
-.value-card h3,
-.team-card h3 {
-  margin-bottom: 1rem;
+.about-hero-section h1 {
+  font-family: var(--font-serif);
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--color-navy);
+  margin-bottom: var(--spacing-sm);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.about-subtitle {
+  font-family: var(--font-serif);
   font-size: 1.5rem;
+  color: var(--color-navy-light);
+  margin-bottom: var(--spacing-md);
+  font-weight: 400;
+}
+
+.about-divider {
+  width: 80px;
+  height: 3px;
+  background: var(--color-red);
+  margin: 0 auto var(--spacing-md);
+}
+
+.about-description {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--color-navy-light);
+  max-width: 800px;
+  margin: 0 auto;
+  font-weight: 300;
+}
+
+/* ============ SECTION COMMON STYLES ============ */
+.section-header {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.section-header h2 {
+  font-family: var(--font-serif);
+  font-size: 2.25rem;
+  color: var(--color-navy);
+  margin-bottom: var(--spacing-md);
   font-weight: 600;
 }
 
-.story-section p {
-  font-size: 1.1rem;
-  line-height: 1.8;
+.section-divider {
+  width: 60px;
+  height: 2px;
+  background: var(--color-red);
+  margin: 0 auto;
+}
+
+/* ============ STORY SECTION ============ */
+.story-section {
+  padding: var(--spacing-xl) var(--spacing-xl);
+  border-bottom: var(--border-thin);
+}
+
+.story-content {
   max-width: 900px;
   margin: 0 auto;
-  color: #444;
   text-align: center;
 }
 
-.team-grid,
-.mv-grid,
-.values-grid {
-  display: grid;
-  gap: 2rem;
-  margin-top: 2.5rem;
-  justify-items: center;
+.story-content p {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--color-navy-light);
+  font-weight: 300;
 }
 
-.team-grid {
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+/* ============ MISSION & VISION ============ */
+.mission-vision-section {
+  padding: var(--spacing-xl) var(--spacing-xl);
+  background: var(--color-sand);
+  border-bottom: var(--border-thin);
 }
 
 .mv-grid {
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-}
-
-/* VALUES GRID: Always 2 columns × 2 rows on tablet and desktop */
-.values-grid {
-  grid-template-columns: repeat(2, 1fr); /* Always 2 columns */
-  grid-template-rows: repeat(2, auto); /* Always 2 rows */
-}
-
-/* Card styles */
-.team-card,
-.value-card,
-.philosophy-section {
-
-  border-radius: 16px;
-  padding: 2rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  text-align: center;
-  width: 100%;
-  box-sizing: border-box;
-  height: 100%; /* Ensure cards take full height of grid cell */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-lg);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .mv-card {
-  background-color: rgba(255, 255, 255, 0.05);
-  padding: 1.5rem 1.8rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-  display: flex;
-  flex-direction: column;
-  align-items: center; 
+  padding: var(--spacing-lg);
+  border: var(--border-thin);
+  background: var(--color-white);
+  transition: var(--transition-normal);
   text-align: center;
-  justify-content: space-between;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
 }
 
-.card-shadow {
-  box-shadow: 
-    0 4px 6px rgba(0, 0, 0, 0.1),
-    0 1px 3px rgba(0, 0, 0, 0.08);
-}
-.team-card{
-background: white;
+.mv-card:hover {
+  border-color: var(--color-navy);
 }
 
-.value-card{
-  background: white;
-}
-.team-card:hover,
-.mv-card:hover,
-.value-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 
-    0 12px 20px rgba(2, 136, 209, 0.15),
-    0 4px 8px rgba(2, 136, 209, 0.1);
-}
-
-.philosophy-section:hover {
-  box-shadow: 
-    0 8px 16px rgba(0, 0, 0, 0.12),
-    0 3px 6px rgba(0, 0, 0, 0.08);
-}
-
-.team-card h3 {
-  margin-top: 1.5rem;
-  font-size: 1.4rem;
-}
-
-.team-card p,
-.mv-card p,
-.value-card p {
-  color: #555;
-  font-size: 1rem;
-  line-height: 1.6;
-  text-align: center;
-}
-
-.mv-card h3,
-.value-card h3 {
-  margin-bottom: 1rem;
-}
-
-.team-image {
-  width: 140px;
-  height: 140px;
-  object-fit: cover;
-  border-radius: 50%;
-  margin-bottom: 1.5rem;
-  border: 3px solid #e0f7fa;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-}
-
-.mv-icon,
-.value-icon {
-  font-size: 2.5rem;
-  color: #0288d1;
-  margin-bottom: 1rem;
-  display: block;
-}
-
-.mv-card,
-.value-card {
+.mv-icon-container {
+  width: 60px;
+  height: 60px;
+  background: var(--color-sand);
+  border: var(--border-thin);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  text-align: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-md);
 }
 
-/* Philosophy section */
+.mv-icon {
+  font-size: 1.5rem;
+  color: var(--color-red);
+}
+
+.mv-card h3 {
+  font-family: var(--font-sans);
+  font-size: 1.375rem;
+  color: var(--color-navy);
+  margin-bottom: var(--spacing-md);
+  font-weight: 600;
+}
+
+.mv-card p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--color-navy-light);
+  font-weight: 300;
+}
+
+/* ============ VALUES SECTION ============ */
+.values-section {
+  padding: var(--spacing-xl) var(--spacing-xl);
+  border-bottom: var(--border-thin);
+}
+
+.values-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.values-scroll-wrapper {
+  overflow-x: visible;
+  padding-bottom: var(--spacing-sm);
+}
+
+.values-scroll-content {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-lg);
+  width: 100%;
+}
+
+.value-card {
+  padding: var(--spacing-lg);
+  border: var(--border-thin);
+  transition: var(--transition-normal);
+  text-align: center;
+  height: 100%;
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
+.value-card:hover {
+  border-color: var(--color-navy);
+}
+
+.value-icon-container {
+  width: 56px;
+  height: 56px;
+  background: var(--color-sand);
+  border: var(--border-thin);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-md);
+}
+
+.value-icon {
+  font-size: 1.5rem;
+  color: var(--color-red);
+}
+
+.value-card h3 {
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
+  color: var(--color-navy);
+  margin-bottom: var(--spacing-md);
+  font-weight: 600;
+}
+
+.value-card p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--color-navy-light);
+  font-weight: 300;
+}
+
+/* ============ PHILOSOPHY SECTION ============ */
 .philosophy-section {
-  padding: 3rem 2.5rem !important;
-  border-radius: 16px;
-  text-align: center;
+  padding: var(--spacing-xl) var(--spacing-xl);
+  background: var(--color-sand);
+  border-bottom: var(--border-thin);
 }
 
-.philosophy-section p {
-  font-size: 1.1rem;
-  line-height: 1.8;
-  color: #444;
-  margin-bottom: 1.5rem;
-  text-align: center;
+.philosophy-content {
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 .philosophy-list {
   list-style: none;
   padding: 0;
-  margin-top: 1.5rem;
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: left;
 }
 
-.philosophy-list li {
+.philosophy-point {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 1.5rem;
-  font-size: 1rem;
-  line-height: 1.7;
-  color: #444;
- 
-  padding: 1rem;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  gap: 1rem;
-  text-align: left;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  border: var(--border-thin);
+  background: var(--color-white);
+  margin-bottom: var(--spacing-md);
+  transition: var(--transition-normal);
 }
 
-.philosophy-list li:hover {
-  transform: translateX(5px);
-  background: rgba(2, 136, 209, 0.05);
+.philosophy-point:hover {
+  border-color: var(--color-navy);
 }
 
-.philosophy-list li .phil-icon {
+.phil-icon-container {
   flex-shrink: 0;
-  font-size: 1.5rem;
-  color: #0288d1;
-  margin-top: 0.2rem;
+  width: 48px;
+  height: 48px;
+  background: var(--color-sand);
+  border: var(--border-thin);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.philosophy-list li span {
+.phil-icon {
+  font-size: 1.25rem;
+  color: var(--color-red);
+}
+
+.phil-text {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--color-navy-light);
+  font-weight: 300;
   flex: 1;
-  text-align: left;
 }
 
-/* Tablet styles (768px and up) */
-@media (min-width: 768px) {
-  .values-grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 columns on tablet and desktop */
-    grid-template-rows: repeat(2, auto); /* 2 rows on tablet and desktop */
-    max-width: 1000px;
-    margin-left: auto;
-    margin-right: auto;
+/* ============ TEAM SECTION ============ */
+.team-section {
+  padding: var(--spacing-xl) var(--spacing-xl);
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-lg);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.team-card {
+  padding: var(--spacing-lg);
+  border: var(--border-thin);
+  transition: var(--transition-normal);
+  text-align: center;
+  height: 100%;
+}
+
+.team-card:hover {
+  border-color: var(--color-navy);
+}
+
+.team-image-container {
+  margin-bottom: var(--spacing-md);
+}
+
+.team-image {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: var(--border-thin);
+  background: var(--color-sand);
+}
+
+.team-info h3 {
+  font-family: var(--font-sans);
+  font-size: 1.375rem;
+  color: var(--color-navy);
+  margin-bottom: var(--spacing-xs);
+  font-weight: 600;
+}
+
+.team-role {
+  font-size: 0.875rem;
+  color: var(--color-red);
+  font-weight: 500;
+  margin-bottom: var(--spacing-md);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.team-bio {
+  font-size: 0.938rem;
+  line-height: 1.6;
+  color: var(--color-navy-light);
+  font-weight: 300;
+}
+
+/* ============ RESPONSIVE DESIGN ============ */
+@media (max-width: 1200px) {
+  .about-hero-section h1 {
+    font-size: 3rem;
+  }
+  
+  .mv-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+  
+  .team-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+  
+  /* Adjust padding for all sections */
+  .about-hero-section,
+  .story-section,
+  .mission-vision-section,
+  .values-section,
+  .philosophy-section,
+  .team-section {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+}
+
+@media (max-width: 768px) {
+  .about-wrapper {
+    padding-top: 70px;
+  }
+  
+  .about-hero-section h1 {
+    font-size: 2.5rem;
+  }
+  
+  .about-subtitle {
+    font-size: 1.25rem;
+  }
+  
+  .section-header h2 {
+    font-size: 1.875rem;
+  }
+  
+  /* Reduce padding top/bottom for all sections */
+  .about-hero-section,
+  .story-section,
+  .mission-vision-section,
+  .values-section,
+  .philosophy-section,
+  .team-section {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+  
+  /* VALUES SECTION - HORIZONTAL SCROLL ON MOBILE */
+  .values-scroll-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: var(--spacing-sm);
+    margin: 0 calc(var(--spacing-md) * -1);
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+  }
+  
+  .values-scroll-content {
+    display: flex;
+    gap: var(--spacing-md);
+    width: max-content;
+    padding-right: var(--spacing-md);
   }
   
   .value-card {
-    min-height: 280px; /* Ensure consistent height on desktop */
+    min-width: 280px;
+    max-width: 280px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
+  
+  .team-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+  
+  .philosophy-point {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+  }
+  
+  .phil-icon-container {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .phil-icon {
+    font-size: 1rem;
+  }
+  
+  .mv-icon-container {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .mv-icon {
+    font-size: 1.25rem;
+  }
+  
+  .team-image {
+    width: 120px;
+    height: 120px;
   }
 }
 
-/* Mobile styles (767px and below) */
-@media (max-width: 767px) {
-  .team-grid,
-  .mv-grid,
-  .values-grid {
-    grid-template-columns: 1fr;
-    max-width: 100%;
-  }
-
-  .story-section,
-  .team-section,
-  .mission-vision,
-  .values-section,
-  .philosophy-section {
-    margin: 4rem auto;
-    padding: 0 1rem;
-    text-align: center;
-  }
-
-  .story-section h2,
-  .team-section h2,
-  .mission-vision h2,
-  .values-section h2,
-  .philosophy-section h2 {
+@media (max-width: 480px) {
+  .about-hero-section h1 {
     font-size: 2rem;
   }
   
-  .team-card,
+  .about-subtitle {
+    font-size: 1.125rem;
+  }
+  
+  .section-header h2 {
+    font-size: 1.625rem;
+  }
+  
+  .about-description,
+  .story-content p,
+  .mv-card p,
+  .value-card p,
+  .phil-text,
+  .team-bio {
+    font-size: 0.938rem;
+  }
+  
+  /* Further reduce padding for mobile */
+  .about-hero-section,
+  .story-section,
+  .mission-vision-section,
+  .values-section,
+  .philosophy-section,
+  .team-section {
+    padding: var(--spacing-md) var(--spacing-sm);
+  }
+  
   .mv-card,
   .value-card,
-  .philosophy-section {
-    padding: 1.5rem;
+  .team-card {
+    padding: var(--spacing-md);
   }
   
-  .philosophy-list li {
-    gap: 0.8rem;
-    padding: 0.8rem;
+  .value-card {
+    min-width: 260px;
+    max-width: 260px;
   }
   
-  .philosophy-list li .phil-icon {
-    font-size: 1.3rem;
+  .team-image {
+    width: 110px;
+    height: 110px;
   }
   
-  /* Ensure ALL titles are centered on mobile */
-  .mv-card h3,
-  .value-card h3,
-  .team-card h3 {
-    text-align: center;
+  .team-info h3 {
+    font-size: 1.25rem;
+  }
+  
+  .team-role {
+    font-size: 0.813rem;
   }
 }
