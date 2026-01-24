@@ -168,9 +168,7 @@ const News = () => {
                       e.target.src = "/default-news-image.jpg";
                     }}
                   />
-                  {article.category && (
-                    <div className="news-card-category">{article.category}</div>
-                  )}
+                
                 </div>
                 <div className="news-card-content">
                   <div className="news-card-meta">
