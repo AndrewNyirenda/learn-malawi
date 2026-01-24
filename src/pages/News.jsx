@@ -112,7 +112,7 @@ const News = () => {
 
   return (
     <>
-       <Header />
+      <Header />
       <div className="news-wrapper">
         <div className="news-header">
           <h1>Education News & Updates</h1>
@@ -168,19 +168,14 @@ const News = () => {
                       e.target.src = "/default-news-image.jpg";
                     }}
                   />
-                
                 </div>
+                {/* SIMPLIFIED CONTENT STRUCTURE - Strict column layout */}
                 <div className="news-card-content">
-                  <div className="news-card-meta">
-                    <span className="news-date">{formatDate(article.publishedAt || article.createdAt)}</span>
-                    <span className="news-read-time">{article.readTime || '5'} min read</span>
+                  <div className="news-card-text">
+                    <h3 className="news-card-title">{article.title}</h3>
+                    <p className="news-card-description">{truncateText(article.description, 120)}</p>
                   </div>
-                  <h3 className="news-card-title">{article.title}</h3>
-                  <p className="news-card-description">{truncateText(article.description)}</p>
-                  <div className="news-card-footer">
-                    <span className="news-author">By {getAuthorName(article.author)}</span>
-                    <button className="read-more-btn">Read Full Story →</button>
-                  </div>
+                  <button className="read-more-btn">Read Full Story →</button>
                 </div>
               </div>
             ))
@@ -195,7 +190,7 @@ const News = () => {
           )}
         </div>
 
-        {/* Article Modal - Remains if you still want modal functionality */}
+        {/* Article Modal */}
         {selectedArticle && (
           <div className="article-modal-overlay" onClick={() => setSelectedArticle(null)}>
             <div className="article-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -249,7 +244,7 @@ const News = () => {
           </div>
         )}
 
-        {/* Pagination - if needed */}
+        {/* Pagination */}
         {news.length > 0 && (
           <div className="news-pagination">
             <button 
