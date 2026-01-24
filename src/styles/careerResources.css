@@ -1,145 +1,362 @@
-/* src/styles/careerResources.css */
+
+@import './theme.css';
+
 .career-resources-wrapper {
-  margin: 3rem auto;
-  padding: 2rem 2rem;
-  border-radius: 16px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  background: var(--color-white);
+  padding-top: 100px;
 }
 
-.career-resources-title {
+/* ============ HERO SECTION ============ */
+.career-hero-section {
+  padding: var(--spacing-xl) var(--spacing-xl);
+  background: var(--color-sand);
   text-align: center;
-  margin-bottom: 1rem;
-  font-size: 1.9rem;
+  border-bottom: var(--border-thin);
+  position: relative;
+}
+
+.career-hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--color-sand-dark);
+}
+
+.career-hero-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.career-hero-content h1 {
+  font-family: var(--font-serif);
+  font-size: 3.5rem;
   font-weight: 700;
-  margin-top: 2rem;
+  color: var(--color-navy);
+  margin-bottom: var(--spacing-sm);
+  line-height: 1.1;
 }
 
-.career-resources-intro {
+.career-subtitle {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: var(--color-navy-light);
+  margin-bottom: var(--spacing-lg);
+  font-weight: 400;
+}
+
+.career-divider {
+  width: 80px;
+  height: 3px;
+  background: var(--color-red);
+  margin: 0 auto var(--spacing-lg);
+}
+
+.career-description {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: var(--color-navy-light);
+  max-width: 800px;
+  margin: 0 auto;
+  font-weight: 300;
+}
+
+/* ============ SECTION COMMON STYLES ============ */
+.section-header {
   text-align: center;
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
-  color: #1213139f;
+  margin-bottom: var(--spacing-lg);
 }
 
-.career-resources-list {
+.section-header h2 {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  color: var(--color-navy);
+  margin-bottom: var(--spacing-md);
+  font-weight: 600;
+}
+
+.section-divider {
+  width: 60px;
+  height: 2px;
+  background: var(--color-red);
+  margin: 0 auto;
+}
+
+.section-subtitle {
+  font-size: 1.125rem;
+  color: var(--color-navy-light);
+  font-weight: 300;
+  margin-top: var(--spacing-md);
+}
+
+/* ============ RESOURCES SECTION ============ */
+.career-resources-section {
+  padding: var(--spacing-xl) var(--spacing-xl);
+  border-bottom: var(--border-thin);
+}
+
+.resources-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.career-resource-card {
-  background-color: rgba(255, 255, 255, 0.05);
-  padding: 1.5rem 1.8rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+.resource-card {
+  padding: var(--spacing-lg);
+  border: var(--border-thin);
+  background: var(--color-white);
+  transition: var(--transition-normal);
+  text-align: center;
   display: flex;
   flex-direction: column;
-  align-items: center; 
-  text-align: center;
-  justify-content: space-between;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  align-items: center;
+  height: 100%;
 }
 
-.career-resource-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(96, 177, 180, 0.7);
+.resource-card:hover {
+  border-color: var(--color-navy);
+  transform: translateY(-4px);
 }
 
-.resource-icon {
-  font-size: 3rem;
-  color: #3b8efc;
+.resource-icon-container {
+  width: 64px;
+  height: 64px;
+  background: var(--color-sand);
+  border: var(--border-thin);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-red);
+  font-size: 1.5rem;
 }
 
 .resource-title {
-  font-size: 1.3rem;
-  font-weight: 700;
-  margin-bottom: 0.7rem;
-  color: rgba(0, 0, 0, 0.658);
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
+  color: var(--color-navy);
+  margin-bottom: var(--spacing-sm);
+  font-weight: 600;
+  line-height: 1.3;
 }
 
 .resource-description {
-  font-size: 1rem;
-  margin-bottom: 1.2rem;
-  color: rgba(0, 0, 0, 0.692);
+  font-size: 0.938rem;
+  color: var(--color-navy-light);
+  line-height: 1.6;
+  margin-bottom: var(--spacing-lg);
+  flex: 1;
 }
 
 .resource-link {
-  padding: 0.5rem 1rem;
-  background: #2563eb;
-  border-radius: 8px;
-  color: white;
-  font-weight: 600;
+  background: var(--color-red);
+  color: var(--color-white);
   text-decoration: none;
-  transition: background 0.3s ease;
-  display: inline-block; 
-  gap: 10px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: 2px;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  transition: var(--transition-normal);
+  width: 100%;
+  justify-content: center;
 }
 
 .resource-link:hover {
-  background: #2563eb;
-  color: white;
+  background: var(--color-navy);
 }
 
-.resource-icon-wrapper {
-  margin-bottom: 1rem;
+.link-icon {
+  font-size: 0.75rem;
 }
 
-.motivational-figures-section {
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.motivational-figures-title {
-  font-size: 2rem;
+/* No Resources */
+.no-resources {
+  grid-column: 1 / -1;
   text-align: center;
-  margin-bottom: 0.5rem;
-  background: rgba(0, 0, 0, 0.726);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  padding: var(--spacing-xl);
+  background: var(--color-sand);
+  border: var(--border-thin);
+  border-radius: 2px;
 }
 
-.motivational-figures-intro {
-  text-align: center;
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
-  color: #070707d5;
+.no-resources-icon {
+  font-size: 3rem;
+  color: var(--color-sand-dark);
+  margin-bottom: var(--spacing-md);
 }
 
-.motivational-figures-list {
+.no-resources h3 {
+  font-family: var(--font-sans);
+  font-size: 1.5rem;
+  color: var(--color-navy);
+  margin-bottom: var(--spacing-sm);
+  font-weight: 600;
+}
+
+.no-resources p {
+  font-size: 1rem;
+  color: var(--color-navy-light);
+}
+
+/* ============ MOTIVATION SECTION ============ */
+.motivation-section {
+  padding: var(--spacing-xl) var(--spacing-xl);
+  background: var(--color-sand);
+  border-bottom: var(--border-thin);
+}
+
+.figures-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.8rem;
+  gap: var(--spacing-lg);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .figure-card {
-  background-color: rgba(255, 255, 255, 0.05);
-  padding: 1.5rem 1.8rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  color: #f0f0f0;
+  padding: var(--spacing-lg);
+  border: var(--border-thin);
+  background: var(--color-white);
+  transition: var(--transition-normal);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .figure-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(102, 156, 170, 0.7);
+  border-color: var(--color-navy);
+  transform: translateY(-4px);
+}
+
+.figure-icon {
+  width: 56px;
+  height: 56px;
+  background: var(--color-sand);
+  border: var(--border-thin);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-red);
+  font-size: 1.25rem;
 }
 
 .figure-card h3 {
-  font-size: 1.3rem;
-  font-weight: 700;
-  margin-bottom: 0.7rem;
-  color: rgba(0, 0, 0, 0.726);
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
+  color: var(--color-navy);
+  margin-bottom: var(--spacing-sm);
+  font-weight: 600;
 }
 
 .figure-card p {
-  font-size: 1rem;
-  color: rgba(0, 0, 0, 0.473);
+  font-size: 0.938rem;
+  color: var(--color-navy-light);
+  line-height: 1.6;
+  margin-bottom: var(--spacing-md);
+  flex: 1;
 }
 
-/* Loading and Error States */
+.figure-tag {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--color-sand);
+  border: var(--border-thin);
+  font-size: 0.75rem;
+  color: var(--color-navy);
+  font-weight: 500;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ============ TIPS SECTION ============ */
+.tips-section {
+  padding: var(--spacing-xl) var(--spacing-xl);
+  border-bottom: var(--border-thin);
+}
+
+.tips-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.tip-item {
+  padding: var(--spacing-lg);
+  border: var(--border-thin);
+  background: var(--color-white);
+  transition: var(--transition-normal);
+  text-align: center;
+  position: relative;
+}
+
+.tip-item:hover {
+  border-color: var(--color-navy);
+  transform: translateY(-4px);
+}
+
+.tip-number {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 32px;
+  background: var(--color-red);
+  color: var(--color-white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.tip-item h3 {
+  font-family: var(--font-sans);
+  font-size: 1.125rem;
+  color: var(--color-navy);
+  margin-bottom: var(--spacing-sm);
+  font-weight: 600;
+  margin-top: var(--spacing-sm);
+}
+
+.tip-item p {
+  font-size: 0.875rem;
+  color: var(--color-navy-light);
+  line-height: 1.6;
+}
+
+/* ============ CONNECTION STATUS ============ */
+.connection-status {
+  text-align: center;
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: var(--color-sand);
+  border-top: var(--border-thin);
+}
+
+.connection-status small {
+  font-size: 0.75rem;
+  color: var(--color-navy-light);
+  font-weight: 300;
+}
+
+/* ============ LOADING & ERROR STATES ============ */
 .loading-container,
 .error-container {
   display: flex;
@@ -148,17 +365,19 @@
   justify-content: center;
   min-height: 400px;
   text-align: center;
-  padding: 40px;
+  padding: var(--spacing-xl);
+  background: var(--color-sand);
+  border: var(--border-thin);
 }
 
 .loading-spinner {
-  width: 50px;
-  height: 50px;
-  border: 3px solid #f3f3f3;
-  border-top: 3px solid #3498db;
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--color-sand-dark);
+  border-top: 2px solid var(--color-red);
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin-bottom: 20px;
+  margin-bottom: var(--spacing-md);
 }
 
 @keyframes spin {
@@ -167,58 +386,106 @@
 }
 
 .error-container h3 {
-  color: #e74c3c;
-  margin-bottom: 10px;
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: var(--color-navy);
+  margin-bottom: var(--spacing-sm);
 }
 
 .error-container p {
-  color: #666;
-  margin-bottom: 20px;
+  font-size: 1rem;
+  color: var(--color-navy-light);
+  margin-bottom: var(--spacing-md);
   max-width: 500px;
 }
 
 .retry-btn {
-  background-color: #3498db;
-  color: white;
+  background: var(--color-red);
+  color: var(--color-white);
   border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-family: var(--font-sans);
+  font-weight: 600;
   cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s;
+  transition: var(--transition-normal);
+  border-radius: 2px;
 }
 
 .retry-btn:hover {
-  background-color: #2980b9;
+  background: var(--color-navy);
 }
 
-/* Connection Status */
-.connection-status {
-  text-align: center;
-  margin-top: 20px;
-  padding: 10px;
-  background: #f8f9fa;
-  border-radius: 6px;
-  color: #666;
-  font-size: 13px;
+/* ============ RESPONSIVE DESIGN ============ */
+@media (max-width: 1200px) {
+  .career-hero-content h1 {
+    font-size: 3rem;
+  }
+  
+  .section-header h2 {
+    font-size: 2rem;
+  }
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .career-resources-wrapper {
-    padding: 80px 1.5rem 2rem;
+    padding-top: 80px;
   }
   
-  .career-resources-title {
-    font-size: 1.9rem;
-    margin-top: 1rem;
+  .career-hero-section,
+  .career-resources-section,
+  .motivation-section,
+  .tips-section {
+    padding: var(--spacing-lg) var(--spacing-md);
   }
   
-  .career-resources-list {
+  .career-hero-content h1 {
+    font-size: 2.5rem;
+  }
+  
+  .career-subtitle {
+    font-size: 1.25rem;
+  }
+  
+  .career-description {
+    font-size: 1.125rem;
+  }
+  
+  .resources-grid,
+  .figures-grid,
+  .tips-container {
     grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .career-hero-content h1 {
+    font-size: 2rem;
   }
   
-  .motivational-figures-list {
-    grid-template-columns: 1fr;
+  .career-subtitle {
+    font-size: 1.125rem;
+  }
+  
+  .section-header h2 {
+    font-size: 1.75rem;
+  }
+  
+  .resource-card,
+  .figure-card,
+  .tip-item {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+  
+  .resource-icon-container {
+    width: 56px;
+    height: 56px;
+    font-size: 1.25rem;
+  }
+  
+  .figure-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1rem;
   }
 }
