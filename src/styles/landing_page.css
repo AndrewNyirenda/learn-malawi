@@ -304,7 +304,7 @@ h1, h2, h3, h4, h5 {
   }
   
   .hero-main-title h1 {
-    font-size: 2.5rem; 
+    font-size: 2rem; 
   }
   
   .hero-main-title .mission-statement {
@@ -333,13 +333,14 @@ h1, h2, h3, h4, h5 {
 
 @media (max-width: 480px) {
   .hero-section {
-    padding-top: var(--spacing-md); /* Reduced from md to sm */
-    padding-right: var(--spacing-sm); /* Reduced from md to sm */
+    padding-top: var(--spacing-lg);
+    padding-right: var(--spacing-sm);
     padding-left: var(--spacing-sm); 
   }
   
   .hero-main-title h1 {
-    font-size: 2.1rem;
+    font-size: 2rem;
+    
   }
   
   .hero-main-title .mission-statement {
@@ -403,10 +404,10 @@ h1, h2, h3, h4, h5 {
 
 /* ============ NATIONAL IMPACT STATS ============ */
 .national-impact-section {
-  padding: var(--spacing-sm) var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-xs);
   background: var(--color-white);
-  border-top: var(--border-thin);
-  border-bottom: var(--border-thin);
+  
+  
 }
 
 .national-impact-section h2 {
@@ -432,7 +433,7 @@ h1, h2, h3, h4, h5 {
 .stats-container-elegant {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: var(--spacing-xl);
+  gap: var(--spacing-sm);
   max-width: 1400px;
   margin: 0 auto;
   text-align: center;
@@ -464,17 +465,19 @@ h1, h2, h3, h4, h5 {
 
 /* ============ CORE SERVICES ============ */
 .core-services-section {
-  padding: var(--spacing-xxl) var(--spacing-xl);
+  padding: var(--spacing-sm) var(--spacing-xl);
   background: var(--color-sand);
+  
 }
 
 .core-services-section h2 {
   text-align: center;
   font-size: 2.5rem;
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-sm);
+  padding-top: 2rem;
   color: var(--color-navy);
   position: relative;
-  padding-bottom: var(--spacing-md);
+  padding-bottom: 2rem;
 }
 
 .core-services-section h2::after {
@@ -565,9 +568,9 @@ h1, h2, h3, h4, h5 {
 
 /* ============ INSTITUTIONAL TRUST ============ */
 .institutional-trust-section {
-  padding: var(--spacing-xxl) var(--spacing-xl);
+  padding: var(--spacing-sm) var(--spacing-xl);
   background: var(--color-white);
-  border-top: var(--border-thin);
+  
 }
 
 .institutional-trust-section h2 {
@@ -653,7 +656,7 @@ h1, h2, h3, h4, h5 {
   .national-impact-section,
   .core-services-section,
   .institutional-trust-section {
-    padding: var(--spacing-xl) var(--spacing-md);
+    padding: var(--spacing-lg) var(--spacing-md);
   }
   
   .hero-main-title h1 {
@@ -690,7 +693,7 @@ h1, h2, h3, h4, h5 {
   /* CHANGED: Services grid to column on mobile */
   .services-grid {
     grid-template-columns: 1fr;
-    gap: var(--spacing-md);
+    gap: var(--spacing-sm);
     display: grid;
     width: 100%;
     margin-bottom: var(--spacing-xl);
@@ -715,16 +718,10 @@ h1, h2, h3, h4, h5 {
 }
 
 @media (max-width: 480px) {
-  .hero-main-title h1 {
-    font-size: 2.75rem;
-  }
-  
-  .hero-main-title .mission-statement {
-    font-size: 1.25rem;
-  }
-  
-  .hero-image-fullwidth {
-    height: 300px;
+ 
+  .hero-section h1 {
+    font-size: 3rem;
+    margin-top: 1rem;
   }
   
   .stats-container-elegant {
@@ -746,7 +743,7 @@ h1, h2, h3, h4, h5 {
   }
 }
 
-/* REMOVED: Mobile horizontal slider styles */
+
 
 /* Search Results styling (minimal) */
 .search-results {

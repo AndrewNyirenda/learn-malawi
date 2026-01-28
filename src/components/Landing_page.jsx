@@ -17,11 +17,11 @@ const LandingPage = () => {
   
   // Stats data - national impact metrics
   const statsData = [
-    { id: 1, label: "Primary/Secondary School Books", value: 1450 },
+    { id: 1, label: "Primary/Secondary School Books", value: 140 },
     { id: 2, label: "Exam Pastpapers", value: 863 },
     { id: 3, label: "Video Tutorials", value: 28 },
-    { id: 4, label: "Career Guidance Resources", value: 500 },
-    { id: 5, label: "Interactive Quizzes", value: 200 }
+    { id: 4, label: "Career Guidance Resources", value: 90 },
+    { id: 5, label: "Interactive Quizzes", value: 80 }
   ];
 
   // State for animated numbers
