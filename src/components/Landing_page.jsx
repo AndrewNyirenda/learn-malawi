@@ -208,7 +208,7 @@ const LandingPage = () => {
     <div className="hero-content-section">
       <div className="hero-description">
         <p>
-          A public education initiative providing free, high-quality digital learning resources 
+          Digital learning resources 
           for every Malawian student.
         </p>
       </div>

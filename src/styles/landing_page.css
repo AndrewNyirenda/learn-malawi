@@ -88,7 +88,7 @@ h1, h2, h3, h4, h5 {
 }
 
 .hero-main-title .mission-statement {
-  font-size: 1.7rem;
+  font-size: 2rem;
   color: var(--color-navy-light);
   margin-bottom: var(--spacing-xs);
   font-weight: 400;
@@ -96,7 +96,7 @@ h1, h2, h3, h4, h5 {
   line-height: 1.3;
   padding-top: var(--spacing-xs);
   position: relative;
-  max-width: 95%;
+  max-width: 90%;
 }
 
 .hero-main-title .mission-statement::before {
@@ -116,16 +116,17 @@ h1, h2, h3, h4, h5 {
 }
 
 .hero-description p {
-  font-size: 1.125rem;
+  font-size: 1.7rem;
   color: var(--color-navy-light);
   line-height: 1.6;
   font-weight: 300;
   letter-spacing: 0.01em;
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  margin-top: -2rem;
 }
 
 .hero-cta {
-  margin-top: var(--spacing-lg);
+  margin-top: var(--spacing-sm);
 }
 
 .cta-button {
@@ -194,7 +195,7 @@ h1, h2, h3, h4, h5 {
   }
   
   .hero-main-title .mission-statement {
-    font-size: 1.375rem;
+    font-size: 2rem;
   }
   
   .hero-image-container {
