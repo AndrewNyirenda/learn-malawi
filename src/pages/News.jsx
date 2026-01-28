@@ -4,6 +4,7 @@ import Footer from "../components/Footer.jsx";
 import { useNavigate } from "react-router-dom";
 import { useNews } from "../contexts/NewsContext";
 import Header from '../components/Header';
+import PageHeader from '../components/page-header'; // Add this import
 
 const News = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -114,12 +115,11 @@ const News = () => {
     <>
       <Header />
       <div className="news-wrapper">
-        <div className="news-header">
-          <h1>Education News & Updates</h1>
-          <p className="news-subtitle">
-            Stay informed with the latest education news, examination updates, and policy changes from Malawi.
-          </p>
-        </div>
+        {/* Use PageHeader component */}
+        <PageHeader 
+          title="Education News & Updates"
+          description="Stay informed with the latest education news, examination updates, and policy changes from Malawi."
+        />
 
         {/* Filters Section */}
         <div className="news-filters">

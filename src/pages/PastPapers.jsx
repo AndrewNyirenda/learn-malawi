@@ -4,6 +4,7 @@ import "../styles/pastPapers.css";
 import Footer from "../components/Footer.jsx";
 import { usePastPapers } from "../contexts/PastPapersContext";
 import Header from '../components/Header';
+import PageHeader from '../components/page-header'; // Add this import
 
 const PastPapers = () => {
   const [level, setLevel] = useState("secondary");
@@ -145,11 +146,11 @@ const PastPapers = () => {
     <>
        <Header />
       <div className="pastpapers-wrapper">
-        <h1>Past Papers & Reviews</h1>
-        <p className="description-text">
-          Access a curated collection of past papers and reviews to support your primary and secondary school studies. 
-          Use the filters below to quickly find the resources you need.
-        </p>
+        {/* Replace header with PageHeader component */}
+        <PageHeader 
+          title="Past Papers & Reviews"
+          description="Access a curated collection of past papers and reviews to support your primary and secondary school studies. Use the filters below to quickly find the resources you need."
+        />
 
         {/* Level Tabs */}
         <div className="level-tabs">

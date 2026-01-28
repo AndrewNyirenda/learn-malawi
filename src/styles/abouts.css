@@ -1,64 +1,12 @@
-
 @import './theme.css';
 
 .about-wrapper {
   min-height: 100vh;
   background: var(--color-white);
-  padding-top: 80px;
+  
 }
 
 
-.about-hero-section {
-  padding: var(--spacing-xl) var(--spacing-xl);
-  background: var(--color-sand);
-  text-align: center;
-  border-bottom: var(--border-thin);
-  position: relative;
-}
-
-.about-hero-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--color-sand-dark);
-}
-
-.about-hero-section h1 {
-  font-family: var(--font-serif);
-  font-size: 3.5rem;
-  font-weight: 700;
-  color: var(--color-navy);
-  margin-bottom: var(--spacing-sm);
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-}
-
-.about-subtitle {
-  font-family: var(--font-serif);
-  font-size: 1.5rem;
-  color: var(--color-navy-light);
-  margin-bottom: var(--spacing-md);
-  font-weight: 400;
-}
-
-.about-divider {
-  width: 80px;
-  height: 3px;
-  background: var(--color-red);
-  margin: 0 auto var(--spacing-md);
-}
-
-.about-description {
-  font-size: 1.125rem;
-  line-height: 1.7;
-  color: var(--color-navy-light);
-  max-width: 800px;
-  margin: 0 auto;
-  font-weight: 300;
-}
 
 /* ============ SECTION COMMON STYLES ============ */
 .section-header {
@@ -347,10 +295,6 @@
 
 /* ============ RESPONSIVE DESIGN ============ */
 @media (max-width: 1200px) {
-  .about-hero-section h1 {
-    font-size: 3rem;
-  }
-  
   .mv-grid {
     grid-template-columns: 1fr;
     gap: var(--spacing-lg);
@@ -362,7 +306,6 @@
   }
   
   /* Adjust padding for all sections */
-  .about-hero-section,
   .story-section,
   .mission-vision-section,
   .values-section,
@@ -377,20 +320,11 @@
     padding-top: 70px;
   }
   
-  .about-hero-section h1 {
-    font-size: 2.5rem;
-  }
-  
-  .about-subtitle {
-    font-size: 1.25rem;
-  }
-  
   .section-header h2 {
     font-size: 1.875rem;
   }
   
   /* Reduce padding top/bottom for all sections */
-  .about-hero-section,
   .story-section,
   .mission-vision-section,
   .values-section,
@@ -459,14 +393,6 @@
 }
 
 @media (max-width: 480px) {
-  .about-hero-section h1 {
-    font-size: 2rem;
-  }
-  
-  .about-subtitle {
-    font-size: 1.125rem;
-  }
-  
   .section-header h2 {
     font-size: 1.625rem;
   }
@@ -481,7 +407,6 @@
   }
   
   /* Further reduce padding for mobile */
-  .about-hero-section,
   .story-section,
   .mission-vision-section,
   .values-section,

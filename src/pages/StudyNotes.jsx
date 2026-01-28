@@ -4,6 +4,7 @@ import "../styles/studyNotes.css";
 import Footer from "../components/Footer.jsx";
 import { useStudyNotes } from "../contexts/StudyNotesContext";
 import Header from '../components/Header';
+import PageHeader from '../components/page-header'; // Add this import
 
 const StudyNotes = () => {
   const [level, setLevel] = useState("secondary"); // primary or secondary
@@ -122,12 +123,11 @@ const StudyNotes = () => {
     <>
       <Header />
       <div className="study-notes-wrapper">
-        <h1>Study Notes & References</h1>
-        <p className="description-text">
-          Access a curated collection of books and reference materials to support your studies.
-          <br />
-          <br />
-        </p>
+        {/* Use PageHeader component */}
+        <PageHeader 
+          title="Study Notes & References"
+          description="Access a curated collection of books and reference materials to support your studies."
+        />
 
         {/* Level Tabs */}
         <div className="level-tabs">
@@ -145,7 +145,7 @@ const StudyNotes = () => {
           </button>
         </div>
 
-        {/* Filters Container - Now with only 2 filters like PastPapers but without year */}
+        {/* Filters Container */}
         <div className="filters-container">
           <div className="filter-group">
             <label htmlFor="category">Category</label>

@@ -1,70 +1,15 @@
-
 .news-wrapper {
-  padding: 100px 0 0;
   background: var(--color-white);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-/* Header Section - Matching LandingPage hero */
-.news-header {
-  text-align: center;
-  padding: var(--spacing-xxl) var(--spacing-xl) var(--spacing-xl);
-  background: var(--color-sand);
-  border-bottom: var(--border-thin);
-  position: relative;
-  display: block !important;
-  width: 100%;
-}
-
-.news-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--color-sand-dark);
-}
-
-.news-header h1 {
-  font-family: var(--font-serif);
-  font-size: 3.5rem;
-  color: var(--color-navy);
-  margin-bottom: var(--spacing-md);
-  font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -0.01em;
-}
-
-.news-subtitle {
-  font-size: 1.375rem;
-  color: var(--color-navy-light);
-  max-width: 800px;
-  margin: 0 auto;
-  line-height: 1.7;
-  font-weight: 300;
-  position: relative;
-  padding-top: var(--spacing-md);
-}
-
-.news-subtitle::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 2px;
-  background: var(--color-red);
-}
-
 /* News Filters - Clean minimal design */
 .news-filters {
   display: flex;
   gap: var(--spacing-lg);
-  margin: var(--spacing-xl) auto;
+  margin: var(--spacing-sm) auto;
   padding: 0 var(--spacing-xl);
   max-width: 1400px;
   width: 100%;
@@ -106,12 +51,11 @@
   padding-right: 3rem;
 }
 
-/* Minimal News Grid */
 .news-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: var(--spacing-xl);
-  margin: 0 auto var(--spacing-xxl);
+  margin: 30px auto var(--spacing-xxl);
   padding: 0 var(--spacing-xl);
   max-width: 1400px;
   width: 100%;
@@ -152,7 +96,7 @@
 
 /* Card Content - Strict column layout */
 .news-card-content {
-  padding: var(--spacing-lg);
+  padding: var(--spacing-sm);
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -160,7 +104,6 @@
   box-sizing: border-box;
 }
 
-/* Text wrapper to ensure title and description stay together */
 .news-card-text {
   display: flex;
   flex-direction: column;
@@ -171,7 +114,7 @@
 /* Title */
 .news-card-title {
   font-family: var(--font-sans);
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: var(--color-navy);
   margin-bottom: var(--spacing-sm);
@@ -181,9 +124,9 @@
   box-sizing: border-box;
 }
 
-/* Description - forced below title */
 .news-card-description {
   color: var(--color-navy-light);
+  font-size: 1.125rem;
   line-height: 1.6;
   margin-bottom: var(--spacing-md);
   font-weight: 300;
@@ -333,27 +276,11 @@
   .news-grid {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
-  
-  .news-header h1 {
-    font-size: 3rem;
-  }
 }
 
 @media (max-width: 768px) {
   .news-wrapper {
     padding: 80px 0 0;
-  }
-  
-  .news-header {
-    padding: var(--spacing-xl) var(--spacing-md) var(--spacing-lg);
-  }
-  
-  .news-header h1 {
-    font-size: 2.5rem;
-  }
-  
-  .news-subtitle {
-    font-size: 1.125rem;
   }
   
   .news-filters {
@@ -391,12 +318,8 @@
 }
 
 @media (max-width: 480px) {
-  .news-header h1 {
-    font-size: 2rem;
-  }
-  
   .news-card-title {
-    font-size: 1.125rem;
+    font-size: 1.5rem;
     margin-bottom: 0.5rem;
   }
   
@@ -409,28 +332,28 @@
   }
   
   .news-card-description {
-    font-size: 0.875rem;
+    font-size: 1.125rem;
     line-height: 1.5;
     margin-bottom: var(--spacing-sm);
   }
   
   .read-more-btn {
-    font-size: 0.75rem;
+    font-size: 1.125rem;
   }
   
   /* Pagination extra small screens */
   .news-pagination {
-    gap: 0.5rem;
+    gap: 1rem;
   }
   
   .pagination-btn {
-    padding: 0.375rem 0.5rem;
-    font-size: 0.7rem;
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
     min-width: 70px;
   }
   
   .pagination-info {
-    font-size: 0.7rem;
+    font-size: 1rem;
     min-width: 40px;
   }
 }
@@ -452,20 +375,6 @@
     order: -1;
     margin-bottom: 0.5rem;
   }
-}
-
-/* FORCE STRICT COLUMN LAYOUT - OVERRIDE ANY CONFLICTING STYLES */
-.news-card-content,
-.news-card-text,
-.news-card-title,
-.news-card-description {
-  display: block !important;
-  float: none !important;
-  clear: both !important;
-  position: static !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
 }
 
 .news-card-title + .news-card-description {

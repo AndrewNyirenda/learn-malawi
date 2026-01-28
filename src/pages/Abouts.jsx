@@ -6,6 +6,7 @@ import willard from "../images/willard.JPG";
 import andrew from "../images/andrew.jpg";
 import Footer from "../components/Footer.jsx";
 import Header from "../components/Header.jsx";
+import PageHeader from "../components/page-header"; // Add this import
 
 const About = () => {
   const teamMembers = [
@@ -15,7 +16,7 @@ const About = () => {
       bio: "Leading educational innovation in Malawi with a vision for accessible, quality digital learning for all students.",
       image: willard 
     },
-        { 
+    { 
       name: "Andrew Kwanjana Nyirenda", 
       role: "Full Stack Developer", 
       bio: "Architected and developed the Learn Malawi platform infrastructure, ensuring scalable and reliable performance.",
@@ -27,7 +28,6 @@ const About = () => {
       bio: "Architected and developed the Learn Malawi platform infrastructure, ensuring scalable and reliable performance.",
       image: inno 
     },
-
   ];
 
   const missionVision = [
@@ -91,16 +91,11 @@ const About = () => {
     <>
       <Header />
       <div className="about-wrapper">
-        {/* Institutional Hero */}
-        <section className="about-hero-section">
-          <h1>Learn Malawi</h1>
-          <p className="about-subtitle">National Digital Education Platform</p>
-          <div className="about-divider"></div>
-          <p className="about-description">
-            A dedicated initiative providing free, quality digital education resources 
-            for JCE and MSCE students across all 28 districts of Malawi.
-          </p>
-        </section>
+        {/* Replace Institutional Hero with PageHeader */}
+        <PageHeader 
+          title="Learn Malawi"
+          description="A dedicated initiative providing free, quality digital education resources for JCE and MSCE students across all 28 districts of Malawi."
+        />
 
         {/* Our Story */}
         <section className="story-section">

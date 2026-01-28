@@ -1,9 +1,9 @@
-// src/components/Tutorials.jsx
 import React, { useState, useEffect } from "react";
 import { useTutorials } from "../contexts/TutorialsContext";
 import "../styles/tutorials.css";
 import Footer from "../components/Footer.jsx";
 import Header from '../components/Header';
+import PageHeader from '../components/page-header'; // Add this import
 
 const Tutorials = () => {
   const [level, setLevel] = useState("secondary"); 
@@ -142,16 +142,11 @@ const Tutorials = () => {
     <>
       <Header />
       <div className="tutorials-wrapper">
-        {/* Hero Section */}
-        <section className="tutorials-hero-section">
-          <h1 className="tutorials-title">Educational Tutorials</h1>
-          <p className="tutorials-subtitle">National Digital Learning Platform</p>
-          <div className="tutorials-divider"></div>
-          <p className="tutorials-description">
-            Access comprehensive video tutorials covering various subjects for both Primary and Secondary levels. 
-            Filter by subject and class to find the most relevant educational content for your studies.
-          </p>
-        </section>
+        {/* Replace Hero Section with PageHeader */}
+        <PageHeader 
+          title="Educational Tutorials"
+          description="Access comprehensive video tutorials covering various subjects for both Primary and Secondary levels. Filter by subject and class to find the most relevant educational content for your studies."
+        />
 
         {/* Level Tabs */}
         <section className="tutorials-level-section">

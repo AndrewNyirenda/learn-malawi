@@ -1,0 +1,85 @@
+.page-header {
+  text-align: center;
+  
+  padding-top: var(--spacing-xxl);
+  padding-bottom: var(--spacing-lg);
+  background: var(--color-sand);
+  border-bottom: var(--border-thin);
+  position: relative;
+  display: block !important;
+  width: 100%;
+}
+
+.page-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--color-sand-dark);
+}
+
+.page-header h1 {
+  font-family: var(--font-serif);
+  font-size: 3.5rem;
+  color: var(--color-navy);
+  margin-bottom: var(--spacing-md);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.page-subtitle {
+  font-size: 1.5rem;
+  color: var(--color-navy-light);
+  max-width: 800px;
+  margin: 20px auto;
+  line-height: 1.7;
+  font-weight: 300;
+  position: relative;
+  padding-top: var(--spacing-md);
+}
+
+.page-subtitle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 2px;
+  background: var(--color-red);
+}
+
+/* Responsive Design for PageHeader */
+@media (max-width: 1200px) {
+  .page-header h1 {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    padding: var(--spacing-xl) var(--spacing-md) var(--spacing-lg);
+  }
+  
+  .page-header h1 {
+    font-size: 2.5rem;
+  }
+  
+  .page-subtitle {
+    font-size: 1.125rem;
+    padding: 0 var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header h1 {
+    font-size: 2rem;
+  }
+  
+  .page-subtitle::before {
+    width: 60px;
+  }
+}

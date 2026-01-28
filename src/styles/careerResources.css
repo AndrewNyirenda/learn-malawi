@@ -1,68 +1,12 @@
-
 @import './theme.css';
 
 .career-resources-wrapper {
   min-height: 100vh;
   background: var(--color-white);
-  padding-top: 100px;
+
 }
 
-/* ============ HERO SECTION ============ */
-.career-hero-section {
-  padding: var(--spacing-xl) var(--spacing-xl);
-  background: var(--color-sand);
-  text-align: center;
-  border-bottom: var(--border-thin);
-  position: relative;
-}
 
-.career-hero-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--color-sand-dark);
-}
-
-.career-hero-content {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.career-hero-content h1 {
-  font-family: var(--font-serif);
-  font-size: 3.5rem;
-  font-weight: 700;
-  color: var(--color-navy);
-  margin-bottom: var(--spacing-sm);
-  line-height: 1.1;
-}
-
-.career-subtitle {
-  font-family: var(--font-serif);
-  font-size: 1.5rem;
-  color: var(--color-navy-light);
-  margin-bottom: var(--spacing-lg);
-  font-weight: 400;
-}
-
-.career-divider {
-  width: 80px;
-  height: 3px;
-  background: var(--color-red);
-  margin: 0 auto var(--spacing-lg);
-}
-
-.career-description {
-  font-size: 1.25rem;
-  line-height: 1.7;
-  color: var(--color-navy-light);
-  max-width: 800px;
-  margin: 0 auto;
-  font-weight: 300;
-}
 
 /* ============ SECTION COMMON STYLES ============ */
 .section-header {
@@ -417,10 +361,6 @@
 
 /* ============ RESPONSIVE DESIGN ============ */
 @media (max-width: 1200px) {
-  .career-hero-content h1 {
-    font-size: 3rem;
-  }
-  
   .section-header h2 {
     font-size: 2rem;
   }
@@ -431,23 +371,10 @@
     padding-top: 80px;
   }
   
-  .career-hero-section,
   .career-resources-section,
   .motivation-section,
   .tips-section {
     padding: var(--spacing-lg) var(--spacing-md);
-  }
-  
-  .career-hero-content h1 {
-    font-size: 2.5rem;
-  }
-  
-  .career-subtitle {
-    font-size: 1.25rem;
-  }
-  
-  .career-description {
-    font-size: 1.125rem;
   }
   
   .resources-grid,
@@ -459,14 +386,6 @@
 }
 
 @media (max-width: 480px) {
-  .career-hero-content h1 {
-    font-size: 2rem;
-  }
-  
-  .career-subtitle {
-    font-size: 1.125rem;
-  }
-  
   .section-header h2 {
     font-size: 1.75rem;
   }

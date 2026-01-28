@@ -1,74 +1,22 @@
-
 @import './theme.css';
 
 .tutorials-wrapper {
   min-height: 100vh;
   background: var(--color-white);
-  padding-top: 100px;
+  
 }
 
-/* ============ HERO SECTION ============ */
-.tutorials-hero-section {
-  padding: var(--spacing-xl) var(--spacing-xl);
-  background: var(--color-sand);
-  text-align: center;
-  border-bottom: var(--border-thin);
-  position: relative;
-}
 
-.tutorials-hero-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--color-sand-dark);
-}
-
-.tutorials-title {
-  font-family: var(--font-serif);
-  font-size: 3.5rem;
-  font-weight: 700;
-  color: var(--color-navy);
-  margin-bottom: var(--spacing-sm);
-  line-height: 1.1;
-}
-
-.tutorials-subtitle {
-  font-family: var(--font-serif);
-  font-size: 1.5rem;
-  color: var(--color-navy-light);
-  margin-bottom: var(--spacing-lg);
-  font-weight: 400;
-}
-
-.tutorials-divider {
-  width: 80px;
-  height: 3px;
-  background: var(--color-red);
-  margin: 0 auto var(--spacing-lg);
-}
-
-.tutorials-description {
-  font-size: 1.25rem;
-  line-height: 1.7;
-  color: var(--color-navy-light);
-  max-width: 800px;
-  margin: 0 auto;
-  font-weight: 300;
-}
 
 /* ============ LEVEL TABS ============ */
 .tutorials-level-section {
-  padding: var(--spacing-xl) var(--spacing-xl);
+  padding: var(--spacing-sm) var(--spacing-sm);
   background: var(--color-white);
-  border-bottom: var(--border-thin);
 }
 
 .level-tabs {
   display: flex;
-  gap: var(--spacing-md);
+  gap: var(--spacing-xs);
   justify-content: center;
   max-width: 600px;
   margin: 0 auto;
@@ -77,7 +25,6 @@
 .level-tabs button {
   flex: 1;
   padding: var(--spacing-md) var(--spacing-xl);
-  border: var(--border-thin);
   background: var(--color-white);
   font-family: var(--font-sans);
   font-size: 1rem;
@@ -86,6 +33,7 @@
   cursor: pointer;
   transition: var(--transition-normal);
   max-width: 200px;
+  border: var(--border-thin); /* Added border */
 }
 
 .level-tabs button:hover {
@@ -100,20 +48,18 @@
 
 /* ============ FILTERS SECTION ============ */
 .tutorials-filters-section {
-  padding: var(--spacing-lg) var(--spacing-xl);
-  background: var(--color-sand);
-  border-bottom: var(--border-thin);
+  padding: var(--spacing-sm) var(--spacing-sm);
 }
 
 .filters-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  display: flex; /* Changed from grid to flex */
   gap: var(--spacing-lg);
   max-width: 800px;
   margin: 0 auto;
 }
 
 .filter-group {
+  flex: 1; /* Changed to flex: 1 */
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
@@ -127,15 +73,21 @@
 }
 
 .filter-select {
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-sm);
   border: var(--border-thin);
   border-radius: 2px;
   font-family: var(--font-sans);
   font-size: 0.875rem;
-  background: var(--color-white);
+  background: var(--color-sand) !important;
   color: var(--color-navy);
   cursor: pointer;
   transition: var(--transition-normal);
+  appearance: none; /* Added for consistent styling */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231a3f7a'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); /* Added dropdown arrow */
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.25rem;
+  padding-right: 3rem; /* Make space for arrow */
 }
 
 .filter-select:focus {
@@ -151,7 +103,7 @@
 
 /* ============ TUTORIALS GRID ============ */
 .tutorials-content-section {
-  padding: var(--spacing-xl) var(--spacing-xl);
+  padding: var(--spacing-xs) var(--spacing-xl);
 }
 
 .tutorials-grid {
@@ -236,7 +188,7 @@
 
 /* Tutorial Content */
 .tutorial-content {
-  padding: var(--spacing-lg);
+  padding: var(--spacing-xs);
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -280,13 +232,13 @@
   font-size: 0.875rem;
   color: var(--color-navy-light);
   line-height: 1.6;
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-xs);
   flex: 1;
 }
 
 /* Tutorial Actions */
 .tutorial-actions {
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: var(--spacing-xs) var(--spacing-lg);
   border-top: var(--border-thin);
   display: flex;
   gap: var(--spacing-md);
@@ -295,7 +247,7 @@
 .direct-link,
 .external-link {
   flex: 1;
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-sm);
   text-align: center;
   font-family: var(--font-sans);
   font-size: 0.875rem;
@@ -411,14 +363,6 @@
 
 /* ============ RESPONSIVE DESIGN ============ */
 @media (max-width: 1200px) {
-  .tutorials-title {
-    font-size: 3rem;
-  }
-  
-  .tutorials-subtitle {
-    font-size: 1.25rem;
-  }
-  
   .tutorials-grid {
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   }
@@ -426,26 +370,13 @@
 
 @media (max-width: 768px) {
   .tutorials-wrapper {
-    padding-top: 80px;
+    padding: 100px 0 0; /* Adjusted padding for mobile */
   }
   
-  .tutorials-hero-section,
   .tutorials-level-section,
   .tutorials-filters-section,
   .tutorials-content-section {
     padding: var(--spacing-lg) var(--spacing-md);
-  }
-  
-  .tutorials-title {
-    font-size: 2.5rem;
-  }
-  
-  .tutorials-subtitle {
-    font-size: 1.125rem;
-  }
-  
-  .tutorials-description {
-    font-size: 1.125rem;
   }
   
   .level-tabs {
@@ -459,7 +390,7 @@
   }
   
   .filters-container {
-    grid-template-columns: 1fr;
+    flex-direction: column; /* Stack filters on mobile */
     gap: var(--spacing-md);
   }
   
@@ -479,18 +410,6 @@
 }
 
 @media (max-width: 480px) {
-  .tutorials-title {
-    font-size: 2rem;
-  }
-  
-  .tutorials-subtitle {
-    font-size: 1rem;
-  }
-  
-  .tutorials-description {
-    font-size: 1rem;
-  }
-  
   .tutorial-content {
     padding: var(--spacing-md);
   }

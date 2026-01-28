@@ -1,10 +1,10 @@
-// components/Quizes.jsx
 import React, { useState, useEffect } from "react";
 import { useQuizzes } from '../contexts/QuizzesContext';
 import { useNavigate } from "react-router-dom";
 import "../styles/quizes.css";
 import Footer from "../components/Footer.jsx";
 import Header from '../components/Header';
+import PageHeader from '../components/page-header'; // Add this import
 
 const Quizes = () => {
   const [level, setLevel] = useState("primary");
@@ -94,37 +94,41 @@ const Quizes = () => {
   // Add loading state
   if (loading && displayedQuizzes.length === 0) {
     return (
-      <div className="quizes-wrapper">
+      <>
         <Header />
-        <div className="loading-container">
-          <div className="loading-spinner"></div>
-          <p>Loading quizzes...</p>
+        <div className="quizes-wrapper">
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <p>Loading quizzes...</p>
+          </div>
         </div>
         <Footer />
-      </div>
+      </>
     );
   }
   
   // Add error state
   if (error && displayedQuizzes.length === 0) {
     return (
-      <div className="quizes-wrapper">
+      <>
         <Header />
-        <div className="error-container">
-          <h3>Error Loading Quizzes</h3>
-          <p>{error}</p>
-          <button 
-            onClick={() => { 
-              clearError(); 
-              fetchQuizzes({ level }); 
-            }} 
-            className="retry-btn"
-          >
-            Retry
-          </button>
+        <div className="quizes-wrapper">
+          <div className="error-container">
+            <h3>Error Loading Quizzes</h3>
+            <p>{error}</p>
+            <button 
+              onClick={() => { 
+                clearError(); 
+                fetchQuizzes({ level }); 
+              }} 
+              className="retry-btn"
+            >
+              Retry
+            </button>
+          </div>
         </div>
         <Footer />
-      </div>
+      </>
     );
   }
   
@@ -132,12 +136,11 @@ const Quizes = () => {
     <>
       <Header />
       <div className="quizes-wrapper">
-        <div className="quiz-hero">
-          <h1>Interactive Quizzes</h1>
-          <p>
-            Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz.
-          </p>
-        </div>
+        {/* Replace quiz-hero with PageHeader */}
+        <PageHeader 
+          title="Interactive Quizzes"
+          description="Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz."
+        />
         
         <div className="level-tabs">
           <button

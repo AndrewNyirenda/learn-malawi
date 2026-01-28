@@ -1,4 +1,3 @@
-// src/components/CareerResources.jsx
 import React, { useEffect } from 'react';
 import {
   FaExternalLinkAlt,
@@ -21,6 +20,7 @@ import { useCareerResources } from '../contexts/CareerResourcesContext';
 import '../styles/careerResources.css';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import PageHeader from '../components/page-header'; // Add this import
 
 const CareerResources = () => {
   const {
@@ -102,19 +102,11 @@ const CareerResources = () => {
     <>
       <Header />
       <div className="career-resources-wrapper">
-        {/* Hero Section */}
-        <section className="career-hero-section">
-          <div className="career-hero-content">
-            <h1>Career Guidance Resources</h1>
-            <p className="career-subtitle">Building Futures for Malawian Students</p>
-            <div className="career-divider"></div>
-            <p className="career-description">
-              Comprehensive career development resources designed to help Malawian students 
-              explore opportunities, develop skills, and plan successful career pathways 
-              aligned with national development goals.
-            </p>
-          </div>
-        </section>
+        {/* Replace Hero Section with PageHeader */}
+        <PageHeader 
+          title="Career Guidance Resources"
+          description="Comprehensive career development resources designed to help Malawian students explore opportunities, develop skills, and plan successful career pathways aligned with national development goals."
+        />
 
         {/* Resources Grid */}
         <section className="career-resources-section">

@@ -1,9 +1,9 @@
-// components/Contact.jsx
 import React, { useState } from "react";
 import { useContact } from '../contexts/ContactContext';
 import "../styles/Contact.css";
 import Footer from "../components/Footer.jsx";
 import Header from '../components/Header';
+import PageHeader from '../components/page-header'; // Add this import
 import { 
   FaPaperPlane, 
   FaMapMarkerAlt, 
@@ -99,18 +99,11 @@ const Contact = () => {
     <>
       <Header />
       <div className="contact-wrapper">
-        {/* Hero Section */}
-        <section className="contact-hero-section">
-          <div className="contact-hero-content">
-            <h1>Contact Learn Malawi</h1>
-            <p className="contact-subtitle">National Digital Education Platform</p>
-            <div className="contact-divider"></div>
-            <p className="contact-description">
-              Get in touch with our team. We're here to support your educational journey 
-              and answer any questions about our platform and services.
-            </p>
-          </div>
-        </section>
+        {/* Replace Hero Section with PageHeader */}
+        <PageHeader 
+          title="Contact Learn Malawi"
+          description="Get in touch with our team. We're here to support your educational journey and answer any questions about our platform and services."
+        />
 
         {/* Contact Information Grid */}
         <section className="contact-info-section">

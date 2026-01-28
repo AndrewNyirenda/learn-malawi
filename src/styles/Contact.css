@@ -3,65 +3,10 @@
 .contact-wrapper {
   min-height: 100vh;
   background: var(--color-white);
-  padding-top: 100px;
+ 
 }
 
-/* ============ HERO SECTION ============ */
-.contact-hero-section {
-  padding: var(--spacing-xl) var(--spacing-xl);
-  background: var(--color-sand);
-  text-align: center;
-  border-bottom: var(--border-thin);
-  position: relative;
-}
 
-.contact-hero-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--color-sand-dark);
-}
-
-.contact-hero-content {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.contact-hero-content h1 {
-  font-family: var(--font-serif);
-  font-size: 3.5rem;
-  font-weight: 700;
-  color: var(--color-navy);
-  margin-bottom: var(--spacing-sm);
-  line-height: 1.1;
-}
-
-.contact-subtitle {
-  font-family: var(--font-serif);
-  font-size: 1.5rem;
-  color: var(--color-navy-light);
-  margin-bottom: var(--spacing-lg);
-  font-weight: 400;
-}
-
-.contact-divider {
-  width: 80px;
-  height: 3px;
-  background: var(--color-red);
-  margin: 0 auto var(--spacing-lg);
-}
-
-.contact-description {
-  font-size: 1.25rem;
-  line-height: 1.7;
-  color: var(--color-navy-light);
-  max-width: 800px;
-  margin: 0 auto;
-  font-weight: 300;
-}
 
 /* ============ SECTION COMMON STYLES ============ */
 .section-header {
@@ -442,10 +387,6 @@
 
 /* ============ RESPONSIVE DESIGN ============ */
 @media (max-width: 1200px) {
-  .contact-hero-content h1 {
-    font-size: 3rem;
-  }
-  
   .section-header h2 {
     font-size: 2rem;
   }
@@ -456,22 +397,9 @@
     padding-top: 80px;
   }
   
-  .contact-hero-section,
   .contact-info-section,
   .contact-form-section {
     padding: var(--spacing-lg) var(--spacing-md);
-  }
-  
-  .contact-hero-content h1 {
-    font-size: 2.5rem;
-  }
-  
-  .contact-subtitle {
-    font-size: 1.25rem;
-  }
-  
-  .contact-description {
-    font-size: 1.125rem;
   }
   
   .contact-info-grid {
@@ -490,14 +418,6 @@
 }
 
 @media (max-width: 480px) {
-  .contact-hero-content h1 {
-    font-size: 2rem;
-  }
-  
-  .contact-subtitle {
-    font-size: 1.125rem;
-  }
-  
   .section-header h2 {
     font-size: 1.75rem;
   }

@@ -1,34 +1,12 @@
-
 @import './theme.css';
 
 .quizes-wrapper {
   min-height: 100vh;
   background: var(--color-white);
-  padding-top: 80px;
+  
 }
 
-.quiz-hero {
-  padding: var(--spacing-lg) var(--spacing-xl);
-  text-align: center;
-  background: var(--color-sand);
-  border-bottom: var(--border-thin);
-}
 
-.quiz-hero h1 {
-  font-family: var(--font-serif);
-  font-size: 2.5rem;
-  color: var(--color-navy);
-  margin-bottom: var(--spacing-sm);
-  font-weight: 600;
-}
-
-.quiz-hero p {
-  font-size: 1.125rem;
-  color: var(--color-navy-light);
-  max-width: 800px;
-  margin: 0 auto;
-  line-height: 1.6;
-}
 
 /* Level Tabs */
 .level-tabs {
@@ -64,9 +42,14 @@
 
 /* Filters Container - Reduced padding */
 .filters-container {
+  display: flex; /* Changed to flex layout */
+  gap: var(--spacing-lg);
   padding: var(--spacing-md) var(--spacing-xl);
   background: var(--color-white);
   border-bottom: var(--border-thin);
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .filters-container.compact {
@@ -74,6 +57,7 @@
 }
 
 .filter-group {
+  flex: 1; /* Make filter groups take equal space */
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
@@ -96,6 +80,12 @@
   color: var(--color-navy);
   cursor: pointer;
   transition: var(--transition-normal);
+  appearance: none; /* Added for consistency */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231a3f7a'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); /* Added dropdown arrow */
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.25rem;
+  padding-right: 3rem; /* Make space for arrow */
 }
 
 .filter-select:focus {
@@ -115,6 +105,9 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: var(--spacing-lg);
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 /* Gradient Card */
@@ -318,19 +311,10 @@
     padding-top: 70px;
   }
   
-  .quiz-hero,
   .level-tabs,
   .filters-container,
   .quiz-list {
     padding: var(--spacing-md);
-  }
-  
-  .quiz-hero h1 {
-    font-size: 2rem;
-  }
-  
-  .quiz-hero p {
-    font-size: 1rem;
   }
   
   .level-tabs {
@@ -342,8 +326,17 @@
     padding: var(--spacing-sm) var(--spacing-md);
   }
   
+  .filters-container {
+    flex-direction: column; /* Stack filters on mobile */
+    gap: var(--spacing-md);
+  }
+  
   .filters-container.compact {
     padding: var(--spacing-sm) var(--spacing-md);
+  }
+  
+  .filter-group {
+    min-width: 100%; /* Full width on mobile */
   }
   
   .quiz-list {
@@ -353,18 +346,10 @@
 }
 
 @media (max-width: 480px) {
-  .quiz-hero h1 {
-    font-size: 1.75rem;
-  }
-  
   .level-tabs button {
     min-width: 100px;
     padding: 8px 12px;
     font-size: 0.875rem;
-  }
-  
-  .filter-group {
-    min-width: 100%;
   }
   
   .quiz-card-header h3 {
