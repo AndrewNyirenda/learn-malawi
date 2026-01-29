@@ -114,7 +114,7 @@ section > h2::after {
 .grid-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: var(--spacing-xl);
+  gap: var(--spacing-sm);
 }
 
 /* No Results */
@@ -317,6 +317,7 @@ section > h2::after {
   
   .search-container {
     padding: 0 var(--spacing-md);
+  
   }
   
   .filters-container {

@@ -89,7 +89,7 @@ section > h2::after {
 .grid-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
-  gap: var(--spacing-xl) !important;
+  gap: var(--spacing-sm) !important;
   margin-top: 4rem !important;
 }
 
@@ -188,7 +188,7 @@ section > h2::after {
 @media (max-width: 1200px) {
   .grid-container {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: var(--spacing-lg);
+    gap: var(--spacing-sm);
   }
 }
 
