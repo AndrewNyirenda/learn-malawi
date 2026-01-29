@@ -4,7 +4,8 @@ import Footer from "../components/Footer.jsx";
 import { useNavigate } from "react-router-dom";
 import { useNews } from "../contexts/NewsContext";
 import Header from '../components/Header';
-import PageHeader from '../components/page-header'; // Add this import
+import PageHeader from '../components/page-header';
+import Filter from '../components/Filter'; // Import the reusable Filter component
 
 const News = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -38,10 +39,18 @@ const News = () => {
     navigate(`/news/${article.id}`);
   };
 
-  const allCategories = ["all", ...new Set([
-    ...categories.map(cat => cat.category),
-    ...news.map(article => article.category)
-  ])].filter(Boolean);
+  // Prepare categories for the Filter component
+  const categoryOptions = [
+    ...new Set([
+      ...categories.map(cat => cat.category),
+      ...news.map(article => article.category)
+    ])
+  ]
+  .filter(Boolean)
+  .map(category => ({
+    value: category,
+    label: category.charAt(0).toUpperCase() + category.slice(1)
+  }));
 
   const filteredNews = news.filter(article => {
     if (!article) return false;
@@ -121,7 +130,7 @@ const News = () => {
           description="Stay informed with the latest education news, examination updates, and policy changes from Malawi."
         />
 
-        {/* Filters Section */}
+        {/* Filters Section - Using reusable components */}
         <div className="news-filters">
           <div className="filter-group">
             <input
@@ -132,22 +141,19 @@ const News = () => {
               className="news-search-input"
             />
           </div>
+          
+          {/* Use the reusable Filter component for categories */}
           <div className="filter-group">
-            <select
+            <Filter
               value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-              className="news-category-select"
-            >
-              <option value="all">All Categories</option>
-              {allCategories
-                .filter(cat => cat !== "all")
-                .map(category => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))
-              }
-            </select>
+              onChange={setCategoryFilter}
+              options={categoryOptions}
+              showAllOption={true}
+              allOptionLabel="All Categories"
+              allOptionValue="all"
+              className="news-category-filter"
+              id="news-category-filter"
+            />
           </div>
         </div>
 

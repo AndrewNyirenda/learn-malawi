@@ -76,7 +76,7 @@ const StudyNotes = () => {
     try {
       const { downloadUrl, fileName } = await getDownloadUrl(resource.id);
       
-      // Create a temporary link to trigger download
+      
       const link = document.createElement('a');
       link.href = downloadUrl;
       link.download = fileName || resource.title;
