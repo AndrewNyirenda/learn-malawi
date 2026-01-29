@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import "../styles/quizes.css";
 import Footer from "../components/Footer.jsx";
 import Header from '../components/Header';
-import PageHeader from '../components/page-header'; // Add this import
+import PageHeader from '../components/page-header';
+import Filter from '../components/Filter'; // Import reusable Filter
 
 const Quizes = () => {
   const [level, setLevel] = useState("primary");
@@ -26,10 +27,25 @@ const Quizes = () => {
     clearError,
   } = useQuizzes();
   
-  // Get all unique values for filters from API data
-  const allSubjects = ["all", ...(subjects || [])];
-  const allClasses = ["all", ...(classes || [])];
-  const allDifficulties = ["all", "easy", "medium", "hard"];
+  // Prepare options for Filter components
+  const subjectOptions = ["all", ...(subjects || [])]
+    .map(subject => ({
+      value: subject,
+      label: subject === "all" ? "All Subjects" : subject
+    }));
+
+  const classOptions = ["all", ...(classes || [])]
+    .map(cls => ({
+      value: cls,
+      label: cls === "all" ? "All Classes" : cls
+    }));
+
+  const difficultyOptions = ["all", "easy", "medium", "hard"]
+    .map(difficulty => ({
+      value: difficulty,
+      label: difficulty === "all" ? "All Difficulties" : 
+             difficulty.charAt(0).toUpperCase() + difficulty.slice(1)
+    }));
   
   // Filter quizzes by level from API data
   const filteredQuizzes = (contextQuizzes || []).filter((quiz) => {
@@ -97,6 +113,10 @@ const Quizes = () => {
       <>
         <Header />
         <div className="quizes-wrapper">
+          <PageHeader 
+            title="Interactive Quizzes"
+            description="Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz."
+          />
           <div className="loading-container">
             <div className="loading-spinner"></div>
             <p>Loading quizzes...</p>
@@ -136,7 +156,6 @@ const Quizes = () => {
     <>
       <Header />
       <div className="quizes-wrapper">
-        {/* Replace quiz-hero with PageHeader */}
         <PageHeader 
           title="Interactive Quizzes"
           description="Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz."
@@ -157,60 +176,45 @@ const Quizes = () => {
           </button>
         </div>
         
-        {/* Filters Container - Reduced padding */}
+        {/* Filters Container - Using reusable Filter components */}
         <div className="filters-container compact">
           <div className="filter-group">
-            <label htmlFor="subject">Subject</label>
-            <select
+            <Filter
               id="subject"
               value={subjectFilter}
-              onChange={(e) => setSubjectFilter(e.target.value)}
-              className="filter-select"
+              onChange={setSubjectFilter}
+              options={subjectOptions}
+              showAllOption={false}
+              className="quizes-filter"
+              placeholder="Select subject"
               disabled={loading}
-            >
-              <option value="all">All Subjects</option>
-              {allSubjects.map((subject, index) => (
-                subject !== "all" && (
-                  <option key={`${subject}-${index}`} value={subject}>{subject}</option>
-                )
-              ))}
-            </select>
+            />
           </div>
           
           <div className="filter-group">
-            <label htmlFor="class">Class / Form</label>
-            <select
+            <Filter
               id="class"
               value={classFilter}
-              onChange={(e) => setClassFilter(e.target.value)}
-              className="filter-select"
+              onChange={setClassFilter}
+              options={classOptions}
+              showAllOption={false}
+              className="quizes-filter"
+              placeholder="Select class"
               disabled={loading}
-            >
-              <option value="all">All Classes</option>
-              {allClasses.map((cls, index) => (
-                cls !== "all" && (
-                  <option key={`${cls}-${index}`} value={cls}>{cls}</option>
-                )
-              ))}
-            </select>
+            />
           </div>
           
           <div className="filter-group">
-            <label htmlFor="difficulty">Difficulty</label>
-            <select
+            <Filter
               id="difficulty"
               value={difficultyFilter}
-              onChange={(e) => setDifficultyFilter(e.target.value)}
-              className="filter-select"
+              onChange={setDifficultyFilter}
+              options={difficultyOptions}
+              showAllOption={false}
+              className="quizes-filter"
+              placeholder="Select difficulty"
               disabled={loading}
-            >
-              <option value="all">All Difficulties</option>
-              {allDifficulties.map(diff => (
-                diff !== "all" && (
-                  <option key={diff} value={diff}>{diff.charAt(0).toUpperCase() + diff.slice(1)}</option>
-                )
-              ))}
-            </select>
+            />
           </div>
         </div>
         
