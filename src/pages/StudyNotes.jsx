@@ -206,7 +206,6 @@ const StudyNotes = () => {
 
         {/* Books Section */}
         <section>
-          <h2>Books and Reference Material</h2>
           <div className="grid-container">
             {books.length > 0 ? (
               books.map((resource) => (

@@ -91,10 +91,11 @@ section > h2::after {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: var(--spacing-xl);
-  margin-bottom: var(--spacing-xl);
+
+ 
 }
 
-/* Resource Card - Professional Book Card */
+
 .resource-card {
   background: var(--color-white);
   border: var(--border-thin);
@@ -149,7 +150,7 @@ section > h2::after {
 
 /* Thumbnail Container - Professional Book Cover */
 .thumbnail-container {
-  height: 220px;
+  height: 300px;
   padding: var(--spacing-lg);
   display: flex;
   align-items: center;

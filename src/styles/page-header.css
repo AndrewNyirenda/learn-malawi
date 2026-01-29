@@ -64,6 +64,7 @@
 @media (max-width: 768px) {
   .page-header {
     padding: var(--spacing-xl) var(--spacing-md) var(--spacing-lg);
+    margin-top: -2.5rem;
   }
   
   .page-header h1 {

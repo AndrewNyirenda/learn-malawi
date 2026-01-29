@@ -120,7 +120,7 @@ section > h2::after {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: var(--spacing-xl);
-  margin-bottom: var(--spacing-xl);
+ 
 }
 
 /* Resource Card - Professional Exam Paper Card */
@@ -185,8 +185,8 @@ section > h2::after {
 
 /* Thumbnail Container - Professional */
 .thumbnail-container {
-  height: 160px;
-  padding: var(--spacing-lg);
+  height: 160px !important;
+  padding: var(--spacing-sm) !important;
   display: flex;
   align-items: center;
   justify-content: center;
