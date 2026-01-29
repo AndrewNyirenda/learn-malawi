@@ -261,9 +261,9 @@ export const NewsProvider = ({ children }) => {
     fetchCategories,
     fetchLatestNews,
     createNews,
-    updateNews, // Add this
+    updateNews, 
     uploadImage,
-    deleteImage, // Add this
+    deleteImage, 
     setNews,
     clearError: () => setError(null),
   };

@@ -5,13 +5,16 @@ import { useNavigate } from "react-router-dom";
 import { useNews } from "../contexts/NewsContext";
 import Header from '../components/Header';
 import PageHeader from '../components/page-header';
-import Filter from '../components/Filter'; // Import the reusable Filter component
+import Filter from '../components/Filter';
+import Pagination from '../components/Pagination'; 
 
 const News = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0); // Add state for total items
+  const itemsPerPage = 12;
   
   const navigate = useNavigate();
   const {
@@ -29,10 +32,19 @@ const News = () => {
   }, []);
 
   useEffect(() => {
-    const filters = {
-      ...(categoryFilter !== "all" && { category: categoryFilter }),
+    const loadNews = async () => {
+      const filters = {
+        ...(categoryFilter !== "all" && { category: categoryFilter }),
+      };
+      const result = await fetchNews(currentPage, itemsPerPage, filters);
+      
+      // Store the total items from API response
+      if (result && result.total) {
+        setTotalItems(result.total);
+      }
     };
-    fetchNews(currentPage, 12, filters);
+    
+    loadNews();
   }, [currentPage, categoryFilter]);
 
   const handleCardClick = (article) => {
@@ -94,16 +106,19 @@ const News = () => {
   };
 
   if (loading && news.length === 0) {
-    return (
+  return (
+    <>
+      <Header />
       <div className="news-wrapper">
         <div className="loading-container">
           <div className="loading-spinner"></div>
           <p>Loading news articles...</p>
         </div>
-        <Footer />
-      </div>
-    );
-  }
+      </div> 
+      <Footer /> 
+    </>
+  );
+}
 
   if (error && news.length === 0) {
     return (
@@ -124,7 +139,7 @@ const News = () => {
     <>
       <Header />
       <div className="news-wrapper">
-        {/* Use PageHeader component */}
+      
         <PageHeader 
           title="Education News & Updates"
           description="Stay informed with the latest education news, examination updates, and policy changes from Malawi."
@@ -250,29 +265,27 @@ const News = () => {
           </div>
         )}
 
-        {/* Pagination */}
-        {news.length > 0 && (
-          <div className="news-pagination">
-            <button 
-              className="pagination-btn"
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage(prev => prev - 1)}
-            >
-              Previous
-            </button>
-            <span className="pagination-info">Page {currentPage}</span>
-            <button 
-              className="pagination-btn"
-              onClick={() => setCurrentPage(prev => prev + 1)}
-            >
-              Next
-            </button>
-          </div>
+        {/* Use the reusable Pagination component */}
+        {totalItems > itemsPerPage && (
+          <Pagination
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            showPageNumbers={true}
+            showPrevNext={true}
+            prevLabel="Previous"
+            nextLabel="Next"
+            className="news-pagination"
+            maxVisiblePages={5}
+            disabled={loading}
+          />
         )}
       </div>
+      
       <Footer />
     </>
   );
 };
 
-export default News;
+export default News

@@ -1,5 +1,4 @@
 .study-notes-wrapper {
-  
   background: var(--color-white);
   min-height: 100vh;
   display: flex;
@@ -56,43 +55,6 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-}
-
-.filter-group label {
-  font-family: var(--font-sans);
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--color-navy);
-  margin-bottom: var(--spacing-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.filter-select {
-  width: 100%;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: var(--border-thin);
-  font-family: var(--font-sans);
-  font-size: 1rem;
-  background: var(--color-white);
-  color: var(--color-navy);
-  transition: var(--transition-normal);
-  appearance: none;
-  cursor: pointer;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231a3f7a'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  background-size: 1.25rem;
-  padding-right: 3rem;
-}
-
-.filter-select:focus {
-  outline: none;
-  border-color: var(--color-navy);
-}
-
-.filter-select option {
-  padding: var(--spacing-sm);
 }
 
 /* Section Headers */
@@ -185,12 +147,6 @@ section > h2::after {
   border-color: var(--color-navy);
 }
 
-/* Bookmark removed for professional look */
-.bookmark-btn,
-.bookmark-icon {
-  display: none;
-}
-
 /* Thumbnail Container - Professional Book Cover */
 .thumbnail-container {
   height: 220px;
@@ -275,12 +231,6 @@ section > h2::after {
 .meta-value {
   color: var(--color-navy);
   font-weight: 400;
-}
-
-/* Resource Stats - Removed for professional look */
-.resource-stats,
-.stat-item {
-  display: none;
 }
 
 /* Card Footer - Professional Action Buttons */
@@ -410,50 +360,6 @@ section > h2::after {
   background: var(--color-navy);
 }
 
-/* Pagination - Professional */
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: var(--spacing-lg);
-  margin: var(--spacing-xl) auto;
-  padding: 0 var(--spacing-xl);
-  max-width: 1400px;
-  width: 100%;
-}
-
-.pagination-btn {
-  background: var(--color-white);
-  color: var(--color-navy);
-  border: var(--border-thin);
-  padding: var(--spacing-sm) var(--spacing-lg);
-  font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: var(--transition-normal);
-  min-width: 100px;
-}
-
-.pagination-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  background: var(--color-sand);
-}
-
-.pagination-btn:not(:disabled):hover {
-  background: var(--color-navy);
-  color: var(--color-white);
-}
-
-.pagination-info {
-  color: var(--color-navy);
-  font-size: 0.875rem;
-  font-weight: 600;
-  min-width: 60px;
-  text-align: center;
-}
-
 /* Connection Status */
 .connection-status {
   text-align: center;
@@ -517,16 +423,6 @@ section > h2::after {
   .thumbnail {
     max-height: 160px;
   }
-  
-  .pagination {
-    padding: 0 var(--spacing-md);
-    gap: var(--spacing-md);
-  }
-  
-  .pagination-btn {
-    min-width: 80px;
-    padding: var(--spacing-sm) var(--spacing-md);
-  }
 }
 
 @media (max-width: 480px) {
@@ -555,15 +451,5 @@ section > h2::after {
   
   .resource-title {
     font-size: 1rem;
-  }
-  
-  .pagination {
-    flex-direction: column;
-    gap: var(--spacing-sm);
-  }
-  
-  .pagination-btn {
-    width: 100%;
-    max-width: 200px;
   }
 }

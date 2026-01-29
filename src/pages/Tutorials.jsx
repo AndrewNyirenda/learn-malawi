@@ -3,7 +3,8 @@ import { useTutorials } from "../contexts/TutorialsContext";
 import "../styles/tutorials.css";
 import Footer from "../components/Footer.jsx";
 import Header from '../components/Header';
-import PageHeader from '../components/page-header'; // Add this import
+import PageHeader from '../components/page-header';
+import Filter from '../components/Filter'; // Import reusable Filter
 
 const Tutorials = () => {
   const [level, setLevel] = useState("secondary"); 
@@ -96,14 +97,28 @@ const Tutorials = () => {
     });
   };
 
-  const allSubjects = ["all", ...subjects];
-  const availableClasses = getSortedClasses();
+  // Prepare options for Filter components
+  const subjectOptions = ["all", ...subjects]
+    .map(subject => ({
+      value: subject,
+      label: subject === "all" ? "All Subjects" : subject
+    }));
+
+  const classOptions = ["all", ...getSortedClasses()]
+    .map(cls => ({
+      value: cls,
+      label: cls === "all" ? "All Classes" : cls
+    }));
 
   if (loading && tutorials.length === 0) {
     return (
       <>
         <Header />
         <div className="tutorials-wrapper">
+          <PageHeader 
+            title="Educational Tutorials"
+            description="Access comprehensive video tutorials covering various subjects for both Primary and Secondary levels."
+          />
           <div className="loading-container">
             <div className="loading-spinner"></div>
             <p>Loading tutorials...</p>
@@ -142,10 +157,9 @@ const Tutorials = () => {
     <>
       <Header />
       <div className="tutorials-wrapper">
-        {/* Replace Hero Section with PageHeader */}
         <PageHeader 
           title="Educational Tutorials"
-          description="Access comprehensive video tutorials covering various subjects for both Primary and Secondary levels. Filter by subject and class to find the most relevant educational content for your studies."
+          description="Access comprehensive video tutorials covering various subjects for both Primary and Secondary levels."
         />
 
         {/* Level Tabs */}
@@ -166,38 +180,31 @@ const Tutorials = () => {
           </div>
         </section>
 
-        {/* Filters Section */}
+        {/* Filters Section - Using reusable Filter components */}
         <section className="tutorials-filters-section">
           <div className="filters-container">
             <div className="filter-group">
-              <label htmlFor="subject">Subject</label>
-              <select
+              <Filter
                 id="subject"
                 value={subjectFilter}
-                onChange={(e) => setSubjectFilter(e.target.value)}
-                className="filter-select"
-              >
-                {allSubjects.map((subject) => (
-                  <option key={subject} value={subject}>
-                    {subject === "all" ? "All Subjects" : subject}
-                  </option>
-                ))}
-              </select>
+                onChange={setSubjectFilter}
+                options={subjectOptions}
+                showAllOption={false}
+                className="tutorials-filter"
+                placeholder="Select subject"
+              />
             </div>
 
             <div className="filter-group">
-              <label htmlFor="class">Class / Form</label>
-              <select
+              <Filter
                 id="class"
                 value={classFilter}
-                onChange={(e) => setClassFilter(e.target.value)}
-                className="filter-select"
-              >
-                <option value="all">All Classes</option>
-                {availableClasses.map(cls => (
-                  <option key={cls} value={cls}>{cls}</option>
-                ))}
-              </select>
+                onChange={setClassFilter}
+                options={classOptions}
+                showAllOption={false}
+                className="tutorials-filter"
+                placeholder="Select class"
+              />
             </div>
           </div>
         </section>

@@ -4,14 +4,18 @@ import "../styles/studyNotes.css";
 import Footer from "../components/Footer.jsx";
 import { useStudyNotes } from "../contexts/StudyNotesContext";
 import Header from '../components/Header';
-import PageHeader from '../components/page-header'; // Add this import
+import PageHeader from '../components/page-header';
+import Filter from '../components/Filter';
+import Pagination from '../components/Pagination';
 
 const StudyNotes = () => {
-  const [level, setLevel] = useState("secondary"); // primary or secondary
+  const [level, setLevel] = useState("secondary");
   const [category, setCategory] = useState("all");
   const [classFilter, setClassFilter] = useState("all");
   const [viewingResource, setViewingResource] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const itemsPerPage = 12;
 
   const {
     books,
@@ -37,15 +41,24 @@ const StudyNotes = () => {
 
   // Fetch books when filters change
   useEffect(() => {
-    const levelEnum = level === 'primary' ? 'primary' : 'secondary';
-    
-    const filters = {
-      level: levelEnum,
-      ...(category !== 'all' && { category }),
-      ...(classFilter !== 'all' && { class: classFilter }),
+    const loadBooks = async () => {
+      const levelEnum = level === 'primary' ? 'primary' : 'secondary';
+      
+      const filters = {
+        level: levelEnum,
+        ...(category !== 'all' && { category }),
+        ...(classFilter !== 'all' && { class: classFilter }),
+      };
+      
+      const result = await fetchBooks(currentPage, itemsPerPage, filters);
+      
+      // Store total items from API response
+      if (result && result.total) {
+        setTotalItems(result.total);
+      }
     };
     
-    fetchBooks(currentPage, 12, filters);
+    loadBooks();
   }, [level, category, classFilter, currentPage]);
 
   // Reset filters when level changes
@@ -63,7 +76,6 @@ const StudyNotes = () => {
 
   const handleViewResource = async (resource) => {
     try {
-      // Open PDF in new tab
       const { viewUrl } = await getViewUrl(resource.id);
       window.open(viewUrl, '_blank');
     } catch (err) {
@@ -75,7 +87,6 @@ const StudyNotes = () => {
   const handleDownloadResource = async (resource) => {
     try {
       const { downloadUrl, fileName } = await getDownloadUrl(resource.id);
-      
       
       const link = document.createElement('a');
       link.href = downloadUrl;
@@ -89,33 +100,55 @@ const StudyNotes = () => {
     }
   };
 
-  const allCategories = ["all", ...categories.map(cat => cat.category)].filter(Boolean);
-  const availableClasses = ["all", ...getAvailableClasses()].filter(Boolean);
+  // Prepare options for Filter components
+  const categoryOptions = ["all", ...categories.map(cat => cat.category)]
+    .filter(Boolean)
+    .map(category => ({
+      value: category,
+      label: category === 'all' ? 'All Categories' : category
+    }));
+
+  const classOptions = ["all", ...getAvailableClasses()]
+    .filter(Boolean)
+    .map(cls => ({
+      value: cls,
+      label: cls === 'all' ? 'All Classes' : cls
+    }));
 
   if (loading && books.length === 0) {
     return (
-      <div className="study-notes-wrapper">
-        <div className="loading-container">
-          <div className="loading-spinner"></div>
-          <p>Loading study materials...</p>
+      <>
+        <Header />
+        <div className="study-notes-wrapper">
+          <PageHeader 
+            title="Study Notes & References"
+            description="Access a curated collection of books and reference materials to support your studies."
+          />
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <p>Loading study materials...</p>
+          </div>
         </div>
         <Footer />
-      </div>
+      </>
     );
   }
 
   if (error && books.length === 0) {
     return (
-      <div className="study-notes-wrapper">
-        <div className="error-container">
-          <h3>Error Loading Study Materials</h3>
-          <p>{error}</p>
-          <button onClick={() => { clearError(); fetchBooks(); }} className="retry-btn">
-            Retry
-          </button>
+      <>
+        <Header />
+        <div className="study-notes-wrapper">
+          <div className="error-container">
+            <h3>Error Loading Study Materials</h3>
+            <p>{error}</p>
+            <button onClick={() => { clearError(); fetchBooks(); }} className="retry-btn">
+              Retry
+            </button>
+          </div>
         </div>
         <Footer />
-      </div>
+      </>
     );
   }
 
@@ -123,7 +156,6 @@ const StudyNotes = () => {
     <>
       <Header />
       <div className="study-notes-wrapper">
-        {/* Use PageHeader component */}
         <PageHeader 
           title="Study Notes & References"
           description="Access a curated collection of books and reference materials to support your studies."
@@ -145,38 +177,30 @@ const StudyNotes = () => {
           </button>
         </div>
 
-        {/* Filters Container */}
+        {/* Filters Container - Removed category titles */}
         <div className="filters-container">
           <div className="filter-group">
-            <label htmlFor="category">Category</label>
-            <select
+            <Filter
               id="category"
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="filter-select"
-            >
-              {allCategories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat === 'all' ? 'All Categories' : cat}
-                </option>
-              ))}
-            </select>
+              onChange={setCategory}
+              options={categoryOptions}
+              showAllOption={false}
+              className="study-notes-filter"
+              placeholder="Select category"
+            />
           </div>
 
           <div className="filter-group">
-            <label htmlFor="class">Class / Form</label>
-            <select
+            <Filter
               id="class"
               value={classFilter}
-              onChange={(e) => setClassFilter(e.target.value)}
-              className="filter-select"
-            >
-              {availableClasses.map(cls => (
-                <option key={cls} value={cls}>
-                  {cls === 'all' ? 'All Classes' : cls}
-                </option>
-              ))}
-            </select>
+              onChange={setClassFilter}
+              options={classOptions}
+              showAllOption={false}
+              className="study-notes-filter"
+              placeholder="Select class"
+            />
           </div>
         </div>
 
@@ -213,24 +237,20 @@ const StudyNotes = () => {
           </div>
         </section>
 
-        {/* Pagination */}
-        {books.length > 0 && (
-          <div className="pagination">
-            <button 
-              className="pagination-btn"
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage(prev => prev - 1)}
-            >
-              Previous
-            </button>
-            <span className="pagination-info">Page {currentPage}</span>
-            <button 
-              className="pagination-btn"
-              onClick={() => setCurrentPage(prev => prev + 1)}
-            >
-              Next
-            </button>
-          </div>
+        {/* Use reusable Pagination component */}
+        {totalItems > 0 && (
+          <Pagination
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            showPageNumbers={false}
+            showPrevNext={true}
+            prevLabel="Previous"
+            nextLabel="Next"
+            className="pagination"
+            disabled={loading}
+          />
         )}
 
         {/* Connection Status */}

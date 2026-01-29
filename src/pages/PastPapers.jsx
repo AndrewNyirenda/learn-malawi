@@ -4,7 +4,9 @@ import "../styles/pastPapers.css";
 import Footer from "../components/Footer.jsx";
 import { usePastPapers } from "../contexts/PastPapersContext";
 import Header from '../components/Header';
-import PageHeader from '../components/page-header'; // Add this import
+import PageHeader from '../components/page-header';
+import Filter from '../components/Filter'; // Import reusable Filter
+import Pagination from '../components/Pagination'; // Import reusable Pagination
 
 const PastPapers = () => {
   const [level, setLevel] = useState("secondary");
@@ -14,13 +16,14 @@ const PastPapers = () => {
   const [yearFilter, setYearFilter] = useState("all");
   const [viewingResource, setViewingResource] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const itemsPerPage = 12;
 
   const {
     pastPapers,
     categories,
     classes,
     years,
-    examinationBodies,
     loading,
     error,
     fetchPastPapers,
@@ -43,17 +46,26 @@ const PastPapers = () => {
 
   // Fetch past papers when filters change
   useEffect(() => {
-    const levelEnum = level === 'primary' ? 'primary' : 'secondary';
-    
-    const filters = {
-      level: levelEnum,
-      ...(category !== 'all' && { category }),
-      ...(classFilter !== 'all' && { class: classFilter }),
-      ...(yearFilter !== 'all' && { year: parseInt(yearFilter) }),
-      ...(searchTerm && { search: searchTerm }),
+    const loadPastPapers = async () => {
+      const levelEnum = level === 'primary' ? 'primary' : 'secondary';
+      
+      const filters = {
+        level: levelEnum,
+        ...(category !== 'all' && { category }),
+        ...(classFilter !== 'all' && { class: classFilter }),
+        ...(yearFilter !== 'all' && { year: parseInt(yearFilter) }),
+        ...(searchTerm && { search: searchTerm }),
+      };
+      
+      const result = await fetchPastPapers(currentPage, itemsPerPage, filters);
+      
+      // Store total items from API response
+      if (result && result.total) {
+        setTotalItems(result.total);
+      }
     };
     
-    fetchPastPapers(currentPage, 12, filters);
+    loadPastPapers();
   }, [level, category, classFilter, yearFilter, searchTerm, currentPage]);
 
   // Reset filters when level changes
@@ -77,7 +89,6 @@ const PastPapers = () => {
 
   const handleViewResource = async (resource) => {
     try {
-      // Open PDF in new tab
       const { viewUrl } = await getViewUrl(resource.id);
       window.open(viewUrl, '_blank');
     } catch (err) {
@@ -90,7 +101,6 @@ const PastPapers = () => {
     try {
       const { downloadUrl, fileName } = await getDownloadUrl(resource.id);
       
-      // Create a temporary link to trigger download
       const link = document.createElement('a');
       link.href = downloadUrl;
       link.download = fileName || resource.title;
@@ -103,53 +113,72 @@ const PastPapers = () => {
     }
   };
 
-  const allCategories = ["all", ...categories.map(cat => cat.category)].filter(Boolean);
-  const availableClasses = ["all", ...getAvailableClasses()].filter(Boolean);
-  const availableYears = ["all", ...getAvailableYears()].filter(Boolean);
+  // Prepare options for Filter components
+  const categoryOptions = ["all", ...categories.map(cat => cat.category)]
+    .filter(Boolean)
+    .map(category => ({
+      value: category,
+      label: category === 'all' ? 'All Categories' : category
+    }));
 
-  const getAuthorName = (uploadedBy) => {
-    if (!uploadedBy) return "Unknown";
-    if (typeof uploadedBy === 'object') {
-      return `${uploadedBy.firstName || ''} ${uploadedBy.lastName || ''}`.trim() || "Unknown";
-    }
-    return uploadedBy;
-  };
+  const classOptions = ["all", ...getAvailableClasses()]
+    .filter(Boolean)
+    .map(cls => ({
+      value: cls,
+      label: cls === 'all' ? 'All Classes' : cls
+    }));
+
+  const yearOptions = ["all", ...getAvailableYears()]
+    .filter(Boolean)
+    .map(year => ({
+      value: year,
+      label: year === 'all' ? 'All Years' : year.toString()
+    }));
 
   if (loading && pastPapers.length === 0) {
     return (
-      <div className="pastpapers-wrapper">
-        <div className="loading-container">
-          <div className="loading-spinner"></div>
-          <p>Loading past papers...</p>
+      <>
+        <Header />
+        <div className="pastpapers-wrapper">
+          <PageHeader 
+            title="Past Papers & Reviews"
+            description="Access a curated collection of past papers and reviews to support your primary and secondary school studies."
+          />
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <p>Loading past papers...</p>
+          </div>
         </div>
         <Footer />
-      </div>
+      </>
     );
   }
 
   if (error && pastPapers.length === 0) {
     return (
-      <div className="pastpapers-wrapper">
-        <div className="error-container">
-          <h3>Error Loading Past Papers</h3>
-          <p>{error}</p>
-          <button onClick={() => { clearError(); fetchPastPapers(); }} className="retry-btn">
-            Retry
-          </button>
+      <>
+        <Header />
+        <div className="pastpapers-wrapper">
+          <div className="error-container">
+            <h3>Error Loading Past Papers</h3>
+            <p>{error}</p>
+            <button onClick={() => { clearError(); fetchPastPapers(); }} className="retry-btn">
+              Retry
+            </button>
+          </div>
         </div>
         <Footer />
-      </div>
+      </>
     );
   }
 
   return (
     <>
-       <Header />
+      <Header />
       <div className="pastpapers-wrapper">
-        {/* Replace header with PageHeader component */}
         <PageHeader 
           title="Past Papers & Reviews"
-          description="Access a curated collection of past papers and reviews to support your primary and secondary school studies. Use the filters below to quickly find the resources you need."
+          description="Access a curated collection of past papers and reviews to support your primary and secondary school studies."
         />
 
         {/* Level Tabs */}
@@ -179,54 +208,42 @@ const PastPapers = () => {
           />
         </div>
 
-        {/* Filters Container */}
+        {/* Filters Container - Using reusable Filter components */}
         <div className="filters-container">
           <div className="filter-group">
-            <label htmlFor="category">Category</label>
-            <select
+            <Filter
               id="category"
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="filter-select"
-            >
-              {allCategories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat === 'all' ? 'All Categories' : cat}
-                </option>
-              ))}
-            </select>
+              onChange={setCategory}
+              options={categoryOptions}
+              showAllOption={false}
+              className="pastpapers-filter"
+              placeholder="Select category"
+            />
           </div>
 
           <div className="filter-group">
-            <label htmlFor="class">Class / Form</label>
-            <select
+            <Filter
               id="class"
               value={classFilter}
-              onChange={(e) => setClassFilter(e.target.value)}
-              className="filter-select"
-            >
-              {availableClasses.map(cls => (
-                <option key={cls} value={cls}>
-                  {cls === 'all' ? 'All Classes' : cls}
-                </option>
-              ))}
-            </select>
+              onChange={setClassFilter}
+              options={classOptions}
+              showAllOption={false}
+              className="pastpapers-filter"
+              placeholder="Select class"
+            />
           </div>
 
           <div className="filter-group">
-            <label htmlFor="year">Year</label>
-            <select
+            <Filter
               id="year"
               value={yearFilter}
-              onChange={(e) => setYearFilter(e.target.value)}
-              className="filter-select"
-            >
-              {availableYears.map(year => (
-                <option key={year} value={year}>
-                  {year === 'all' ? 'All Years' : year}
-                </option>
-              ))}
-            </select>
+              onChange={setYearFilter}
+              options={yearOptions}
+              showAllOption={false}
+              className="pastpapers-filter"
+              placeholder="Select year"
+            />
           </div>
         </div>
 
@@ -251,10 +268,6 @@ const PastPapers = () => {
                   examinationBody={resource.examinationBody}
                   paperNumber={resource.paperNumber}
                   paperType={resource.paperType}
-                  author={resource.author}
-                  uploadedBy={getAuthorName(resource.uploadedBy)}
-                  viewCount={resource.viewCount}
-                  downloadCount={resource.downloadCount}
                   onView={() => handleViewResource(resource)}
                   onDownload={() => handleDownloadResource(resource)}
                 />
@@ -272,24 +285,20 @@ const PastPapers = () => {
           </div>
         </section>
 
-        {/* Pagination */}
-        {pastPapers.length > 0 && (
-          <div className="pagination">
-            <button 
-              className="pagination-btn"
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage(prev => prev - 1)}
-            >
-              Previous
-            </button>
-            <span className="pagination-info">Page {currentPage}</span>
-            <button 
-              className="pagination-btn"
-              onClick={() => setCurrentPage(prev => prev + 1)}
-            >
-              Next
-            </button>
-          </div>
+        {/* Use reusable Pagination component */}
+        {totalItems > 0 && (
+          <Pagination
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            showPageNumbers={false}
+            showPrevNext={true}
+            prevLabel="Previous"
+            nextLabel="Next"
+            className="pagination"
+            disabled={loading}
+          />
         )}
 
         {/* Connection Status */}
