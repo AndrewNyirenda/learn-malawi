@@ -5,8 +5,8 @@ import Footer from "../components/Footer.jsx";
 import { usePastPapers } from "../contexts/PastPapersContext";
 import Header from '../components/Header';
 import PageHeader from '../components/page-header';
-import Filter from '../components/Filter'; // Import reusable Filter
-import Pagination from '../components/Pagination'; // Import reusable Pagination
+import Filter from '../components/Filter'; 
+import Pagination from '../components/Pagination'; 
 
 const PastPapers = () => {
   const [level, setLevel] = useState("secondary");
@@ -249,7 +249,7 @@ const PastPapers = () => {
 
         {/* Past Papers Section */}
         <section>
-          <h2>Past Papers & Reviews</h2>
+          
           <div className="grid-container">
             {pastPapers.length > 0 ? (
               pastPapers.map((resource) => (

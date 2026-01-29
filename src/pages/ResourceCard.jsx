@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { FaBookmark, FaRegBookmark } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import { FaBookmark, FaRegBookmark, FaEye, FaDownload } from "react-icons/fa";
+import "../styles/resource-card.css";
 
 const ResourceCard = ({ 
   id,
@@ -14,6 +15,7 @@ const ResourceCard = ({
   year
 }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const toggleBookmark = (e) => {
     e.preventDefault();
@@ -52,10 +54,15 @@ const ResourceCard = ({
 
   const handleImageError = (e) => {
     e.target.src = "/images/pdf.png";
+    setImageLoaded(true);
+  };
+
+  const handleImageLoad = () => {
+    setImageLoaded(true);
   };
 
   // Check if already bookmarked on mount
-  React.useEffect(() => {
+  useEffect(() => {
     const bookmarks = JSON.parse(localStorage.getItem('studyBookmarks') || '[]');
     const isAlreadyBookmarked = bookmarks.some(b => b.id === id);
     setIsBookmarked(isAlreadyBookmarked);
@@ -63,12 +70,15 @@ const ResourceCard = ({
 
   return (
     <div className="resource-card">
-      {/* Card Header with Category, Class, and Bookmark */}
+      {/* Card Header with Category Badges */}
       <div className="card-header">
-        <div className="header-left">
-          {category && <span className="resource-category">{category}</span>}
-          {resourceClass && <span className="resource-class">{resourceClass}</span>}
+        <div className="header-badges">
+          {category && <span className="badge category-badge">{category}</span>}
+          {resourceClass && <span className="badge class-badge">{resourceClass}</span>}
+          {year && <span className="badge year-badge">{year}</span>}
         </div>
+        
+        {/* Bookmark Button - Discreet Corner */}
         <button 
           className="bookmark-btn" 
           onClick={toggleBookmark}
@@ -83,37 +93,46 @@ const ResourceCard = ({
         </button>
       </div>
 
-      {/* Thumbnail */}
+      {/* Enhanced Thumbnail with Book Cover Effect */}
       <div className="thumbnail-container">
-        <img
-          src={thumbnail || "/images/pdf.png"}
-          alt={title}
-          className="thumbnail"
-          onError={handleImageError}
-        />
+        <div className="book-cover">
+          <div className={`cover-inner ${imageLoaded ? 'loaded' : ''}`}>
+            <img
+              src={thumbnail || "/images/pdf.png"}
+              alt={title}
+              className="thumbnail"
+              onError={handleImageError}
+              onLoad={handleImageLoad}
+            />
+            <div className="cover-gloss"></div>
+          </div>
+          <div className="book-spine"></div>
+          <div className="book-shadow"></div>
+        </div>
+        {!imageLoaded && <div className="image-placeholder"></div>}
       </div>
 
       {/* Card Content */}
       <div className="card-content">
         <h3 className="resource-title">{title}</h3>
         
-        {/* Year Information */}
+        {/* Year Badge (Alternative) */}
         {year && (
-          <div className="year-info">
-            <span className="year-label">Year:</span>
-            <span className="year-value">{year}</span>
+          <div className="year-display">
+            <span className="year-text">Published {year}</span>
           </div>
         )}
       </div>
 
-      {/* Action Buttons */}
+      {/* Professional Action Buttons */}
       <div className="card-footer">
         {onView && (
           <button 
             className="action-btn view-btn"
             onClick={handleView}
           >
-            View PDF
+            <FaEye className="btn-icon" />
+            <span>Preview</span>
           </button>
         )}
         
@@ -122,7 +141,8 @@ const ResourceCard = ({
             className="action-btn download-btn"
             onClick={handleDownload}
           >
-            Download
+            <FaDownload className="btn-icon" />
+            <span>Download PDF</span>
           </button>
         )}
         
@@ -132,7 +152,8 @@ const ResourceCard = ({
             download={downloadName}
             className="action-btn download-btn"
           >
-            Download
+            <FaDownload className="btn-icon" />
+            <span>Download PDF</span>
           </a>
         )}
       </div>
