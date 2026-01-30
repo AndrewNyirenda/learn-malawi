@@ -20,6 +20,12 @@ const NewsFullStory = () => {
   const [article, setArticle] = useState(null);
   const [relatedArticles, setRelatedArticles] = useState([]);
 
+ // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+
   // Load article data
   useEffect(() => {
     const loadArticle = async () => {

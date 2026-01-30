@@ -23,6 +23,11 @@ const Tutorials = () => {
     fetchClasses,
     clearError,
   } = useTutorials();
+  
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   // Load tutorials and filters when level changes
   useEffect(() => {

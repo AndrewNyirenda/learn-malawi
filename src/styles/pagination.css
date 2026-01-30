@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: var(--spacing-xl) auto var(--spacing-xxl);
+  margin: var(--spacing-sm) auto var(--spacing-xxl);
   padding: 0 var(--spacing-xl);
   max-width: 1400px;
   width: 100%;

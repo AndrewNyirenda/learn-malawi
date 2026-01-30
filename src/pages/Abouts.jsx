@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from 'react';
 import "../styles/abouts.css";
 import { FaUsers, FaBullseye, FaLightbulb, FaChalkboardTeacher, FaBookOpen, FaClock, FaProjectDiagram } from "react-icons/fa";
 import inno from "../images/inno.jpg";
@@ -9,6 +9,12 @@ import Header from "../components/Header.jsx";
 import PageHeader from "../components/page-header"; // Add this import
 
 const About = () => {
+  
+   // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
   const teamMembers = [
     { 
       name: "Willard Zimba", 
@@ -114,6 +120,8 @@ const About = () => {
             </p>
           </div>
         </section>
+        
+        
 
         {/* Mission & Vision */}
         <section className="mission-vision-section">

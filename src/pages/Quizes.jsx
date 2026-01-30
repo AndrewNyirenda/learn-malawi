@@ -14,6 +14,8 @@ const Quizes = () => {
   const [difficultyFilter, setDifficultyFilter] = useState("all");
   const navigate = useNavigate();
   
+  
+  
   // Get context values
   const {
     quizzes: contextQuizzes,
@@ -26,6 +28,11 @@ const Quizes = () => {
     fetchClasses,
     clearError,
   } = useQuizzes();
+  
+   // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   
   // Prepare options for Filter components
   const subjectOptions = ["all", ...(subjects || [])]

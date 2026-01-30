@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useContact } from '../contexts/ContactContext';
 import "../styles/Contact.css";
 import Footer from "../components/Footer.jsx";
 import Header from '../components/Header';
-import PageHeader from '../components/page-header'; // Add this import
+import PageHeader from '../components/page-header'; 
 import { 
   FaPaperPlane, 
   FaMapMarkerAlt, 
@@ -24,6 +24,12 @@ const Contact = () => {
   });
   
   const { loading, error, success, sendMessage, clearError, clearSuccess } = useContact();
+
+     // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
 
   const contactInfo = [
     {

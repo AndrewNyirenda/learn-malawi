@@ -20,7 +20,7 @@ import { useCareerResources } from '../contexts/CareerResourcesContext';
 import '../styles/careerResources.css';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import PageHeader from '../components/page-header'; // Add this import
+import PageHeader from '../components/page-header';
 
 const CareerResources = () => {
   const {
@@ -31,6 +31,11 @@ const CareerResources = () => {
     clearError,
   } = useCareerResources();
 
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
   // Fetch resources on mount
   useEffect(() => {
     const loadResources = async () => {
@@ -119,22 +124,22 @@ const CareerResources = () => {
           <div className="resources-grid">
             {careerResources.length > 0 ? (
               careerResources.map((resource) => (
-                <div key={resource.id} className="resource-card">
-                  <div className="resource-icon-container">
+                <div key={resource.id} className="resource-card-enhanced">
+                  <div className="resource-icon-enhanced">
                     {getIcon(resource.icon)}
                   </div>
                   
-                  <h3 className="resource-title">{resource.title}</h3>
+                  <h3 className="resource-title-enhanced">{resource.title}</h3>
                   
-                  <p className="resource-description">{resource.description}</p>
+                  <p className="resource-description-enhanced">{resource.description}</p>
                   
                   <a
                     href={resource.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="resource-link"
+                    className="resource-link-enhanced"
                   >
-                    <FaExternalLinkAlt className="link-icon" />
+                    <FaExternalLinkAlt className="link-icon-enhanced" />
                     Access Resource
                   </a>
                 </div>
@@ -160,52 +165,52 @@ const CareerResources = () => {
           </div>
 
           <div className="figures-grid">
-            <div className="figure-card">
-              <div className="figure-icon">
+            <div className="figure-card-enhanced">
+              <div className="figure-icon-enhanced">
                 <FaUserTie />
               </div>
-              <h3>Oprah Winfrey</h3>
-              <p>
+              <h3 className="figure-title-enhanced">Oprah Winfrey</h3>
+              <p className="figure-description-enhanced">
                 From a troubled childhood to becoming a media mogul and philanthropist, 
                 Oprah's journey demonstrates the power of resilience and self-belief.
               </p>
-              <div className="figure-tag">Media & Philanthropy</div>
+              <div className="figure-tag-enhanced">Media & Philanthropy</div>
             </div>
             
-            <div className="figure-card">
-              <div className="figure-icon">
+            <div className="figure-card-enhanced">
+              <div className="figure-icon-enhanced">
                 <FaLightbulb />
               </div>
-              <h3>Elon Musk</h3>
-              <p>
+              <h3 className="figure-title-enhanced">Elon Musk</h3>
+              <p className="figure-description-enhanced">
                 Founder of Tesla and SpaceX, Elon Musk continues to push technological boundaries 
                 through relentless innovation and perseverance.
               </p>
-              <div className="figure-tag">Technology & Innovation</div>
+              <div className="figure-tag-enhanced">Technology & Innovation</div>
             </div>
             
-            <div className="figure-card">
-              <div className="figure-icon">
+            <div className="figure-card-enhanced">
+              <div className="figure-icon-enhanced">
                 <FaGraduationCap />
               </div>
-              <h3>Malala Yousafzai</h3>
-              <p>
+              <h3 className="figure-title-enhanced">Malala Yousafzai</h3>
+              <p className="figure-description-enhanced">
                 Nobel Peace Prize winner and advocate for girls' education, Malala's courage 
                 and determination have inspired millions worldwide.
               </p>
-              <div className="figure-tag">Education & Activism</div>
+              <div className="figure-tag-enhanced">Education & Activism</div>
             </div>
             
-            <div className="figure-card">
-              <div className="figure-icon">
+            <div className="figure-card-enhanced">
+              <div className="figure-icon-enhanced">
                 <FaChartLine />
               </div>
-              <h3>Steve Jobs</h3>
-              <p>
+              <h3 className="figure-title-enhanced">Steve Jobs</h3>
+              <p className="figure-description-enhanced">
                 Co-founder of Apple Inc., Steve Jobs revolutionized personal technology 
                 through his commitment to innovation and excellence.
               </p>
-              <div className="figure-tag">Technology & Design</div>
+              <div className="figure-tag-enhanced">Technology & Design</div>
             </div>
           </div>
         </section>
@@ -219,28 +224,28 @@ const CareerResources = () => {
           </div>
 
           <div className="tips-container">
-            <div className="tip-item">
-              <div className="tip-number">01</div>
-              <h3>Self-Assessment</h3>
-              <p>Identify your strengths, interests, values, and skills to align with suitable career paths.</p>
+            <div className="tip-card-enhanced">
+              <div className="tip-number-enhanced">01</div>
+              <h3 className="tip-title-enhanced">Self-Assessment</h3>
+              <p className="tip-description-enhanced">Identify your strengths, interests, values, and skills to align with suitable career paths.</p>
             </div>
             
-            <div className="tip-item">
-              <div className="tip-number">02</div>
-              <h3>Research Careers</h3>
-              <p>Explore different professions, job requirements, and growth opportunities in various sectors.</p>
+            <div className="tip-card-enhanced">
+              <div className="tip-number-enhanced">02</div>
+              <h3 className="tip-title-enhanced">Research Careers</h3>
+              <p className="tip-description-enhanced">Explore different professions, job requirements, and growth opportunities in various sectors.</p>
             </div>
             
-            <div className="tip-item">
-              <div className="tip-number">03</div>
-              <h3>Skill Development</h3>
-              <p>Acquire relevant skills through education, training, and practical experience.</p>
+            <div className="tip-card-enhanced">
+              <div className="tip-number-enhanced">03</div>
+              <h3 className="tip-title-enhanced">Skill Development</h3>
+              <p className="tip-description-enhanced">Acquire relevant skills through education, training, and practical experience.</p>
             </div>
             
-            <div className="tip-item">
-              <div className="tip-number">04</div>
-              <h3>Networking</h3>
-              <p>Build professional connections through mentors, internships, and industry events.</p>
+            <div className="tip-card-enhanced">
+              <div className="tip-number-enhanced">04</div>
+              <h3 className="tip-title-enhanced">Networking</h3>
+              <p className="tip-description-enhanced">Build professional connections through mentors, internships, and industry events.</p>
             </div>
           </div>
         </section>
