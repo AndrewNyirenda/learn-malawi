@@ -141,7 +141,7 @@ const ResourceCard = ({
             className="action-btn download-btn"
             onClick={handleDownload}
           >
-            <FaDownload className="btn-icon" />
+            
             <span>Download PDF</span>
           </button>
         )}
@@ -152,7 +152,7 @@ const ResourceCard = ({
             download={downloadName}
             className="action-btn download-btn"
           >
-            <FaDownload className="btn-icon" />
+            
             <span>Download PDF</span>
           </a>
         )}
