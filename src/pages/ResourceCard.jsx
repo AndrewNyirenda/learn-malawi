@@ -70,27 +70,13 @@ const ResourceCard = ({
 
   return (
     <div className="resource-card">
-      {/* Card Header with Category Badges */}
+      {/* Card Header with only Bookmark Button */}
       <div className="card-header">
         <div className="header-badges">
-          {category && <span className="badge category-badge">{category}</span>}
-          {resourceClass && <span className="badge class-badge">{resourceClass}</span>}
-          {year && <span className="badge year-badge">{year}</span>}
+          {/* Tags moved to content area below */}
         </div>
         
-        {/* Bookmark Button - Discreet Corner */}
-        <button 
-          className="bookmark-btn" 
-          onClick={toggleBookmark}
-          aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
-          title={isBookmarked ? "Remove bookmark" : "Add bookmark"}
-        >
-          {isBookmarked ? (
-            <FaBookmark className="bookmark-icon filled" />
-          ) : (
-            <FaRegBookmark className="bookmark-icon" />
-          )}
-        </button>
+     
       </div>
 
       {/* Enhanced Thumbnail with Book Cover Effect */}
@@ -116,15 +102,15 @@ const ResourceCard = ({
       <div className="card-content">
         <h3 className="resource-title">{title}</h3>
         
-        {/* Year Badge (Alternative) */}
-        {year && (
-          <div className="year-display">
-            <span className="year-text">Published {year}</span>
-          </div>
-        )}
+        
+        <div className="resource-tags">
+          {category && <span className="badge category-badge">{category}</span>}
+          {resourceClass && <span className="badge class-badge">{resourceClass}</span>}
+          {year && <span className="badge year-badge">{year}</span>}
+        </div>
       </div>
 
-      {/* Professional Action Buttons */}
+     
       <div className="card-footer">
         {onView && (
           <button 
@@ -142,6 +128,8 @@ const ResourceCard = ({
             onClick={handleDownload}
           >
             
+            
+            
             <span>Download PDF</span>
           </button>
         )}
@@ -152,7 +140,7 @@ const ResourceCard = ({
             download={downloadName}
             className="action-btn download-btn"
           >
-            
+
             <span>Download PDF</span>
           </a>
         )}
