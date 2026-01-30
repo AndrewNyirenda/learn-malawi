@@ -22,6 +22,12 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 import PageHeader from '../components/page-header';
 
+// Import images from figures folder
+import OprahImage from '../images/figures/oprah.webp';
+import ElonImage from '../images/figures/elon.jpg';
+import MalalaImage from '../images/figures/Malala.webp';
+import SteveImage from '../images/figures/steve.jpg';
+
 const CareerResources = () => {
   const {
     careerResources,
@@ -166,8 +172,16 @@ const CareerResources = () => {
 
           <div className="figures-grid">
             <div className="figure-card-enhanced">
-              <div className="figure-icon-enhanced">
-                <FaUserTie />
+              <div className="figure-image-container">
+                <img 
+                  src={OprahImage} 
+                  alt="Oprah Winfrey" 
+                  className="figure-image"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.parentElement.innerHTML = '<div className="figure-icon-enhanced"><FaUserTie /></div>';
+                  }}
+                />
               </div>
               <h3 className="figure-title-enhanced">Oprah Winfrey</h3>
               <p className="figure-description-enhanced">
@@ -178,8 +192,16 @@ const CareerResources = () => {
             </div>
             
             <div className="figure-card-enhanced">
-              <div className="figure-icon-enhanced">
-                <FaLightbulb />
+              <div className="figure-image-container">
+                <img 
+                  src={ElonImage} 
+                  alt="Elon Musk" 
+                  className="figure-image"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.parentElement.innerHTML = '<div className="figure-icon-enhanced"><FaLightbulb /></div>';
+                  }}
+                />
               </div>
               <h3 className="figure-title-enhanced">Elon Musk</h3>
               <p className="figure-description-enhanced">
@@ -190,8 +212,16 @@ const CareerResources = () => {
             </div>
             
             <div className="figure-card-enhanced">
-              <div className="figure-icon-enhanced">
-                <FaGraduationCap />
+              <div className="figure-image-container">
+                <img 
+                  src={MalalaImage} 
+                  alt="Malala Yousafzai" 
+                  className="figure-image"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.parentElement.innerHTML = '<div className="figure-icon-enhanced"><FaGraduationCap /></div>';
+                  }}
+                />
               </div>
               <h3 className="figure-title-enhanced">Malala Yousafzai</h3>
               <p className="figure-description-enhanced">
@@ -202,8 +232,16 @@ const CareerResources = () => {
             </div>
             
             <div className="figure-card-enhanced">
-              <div className="figure-icon-enhanced">
-                <FaChartLine />
+              <div className="figure-image-container">
+                <img 
+                  src={SteveImage} 
+                  alt="Steve Jobs" 
+                  className="figure-image"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.parentElement.innerHTML = '<div className="figure-icon-enhanced"><FaChartLine /></div>';
+                  }}
+                />
               </div>
               <h3 className="figure-title-enhanced">Steve Jobs</h3>
               <p className="figure-description-enhanced">
