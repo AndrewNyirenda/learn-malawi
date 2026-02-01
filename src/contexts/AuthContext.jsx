@@ -1,4 +1,4 @@
-// src/contexts/AuthContext.jsx
+
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
@@ -12,7 +12,7 @@ const api = axios.create({
   },
 });
 
-// Add request interceptor to add auth token
+
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('accessToken');
@@ -236,11 +236,11 @@ export const AuthProvider = ({ children }) => {
       const expiryTime = Date.now() + expiryMs;
       localStorage.setItem('tokenExpiry', expiryTime.toString());
       
-      // Get user profile
+      
       const profileResponse = await api.get('/auth/profile');
       const userProfile = profileResponse.data;
       
-      // Store user data
+      
       localStorage.setItem('user', JSON.stringify(userProfile));
       setUser(userProfile);
       
@@ -266,7 +266,7 @@ export const AuthProvider = ({ children }) => {
 
 
 
-// Enhanced logout function
+
 const logout = async () => {
 
   
@@ -274,7 +274,7 @@ const logout = async () => {
     const refreshToken = localStorage.getItem('refreshToken');
     if (refreshToken) {
       try {
-        // Use a fetch with abort controller for timeout
+
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 2000);
         
@@ -296,12 +296,13 @@ const logout = async () => {
   } catch (err) {
     console.error('Logout error:', err);
   } finally {
-    // Clear all auth data
+    
     clearAuthData();
     
     console.log('User logged out successfully');
     
-    // Use window.location.replace for immediate redirect without history
+
+
     window.location.replace('/login');
   }
 };
@@ -350,7 +351,7 @@ const logout = async () => {
         localStorage.setItem('refreshToken', newRefreshToken);
       }
       
-      // Update expiry time
+      
       if (expiresIn) {
         const expiryMs = parseInt(expiresIn) * 1000;
         const expiryTime = Date.now() + expiryMs;
@@ -364,7 +365,7 @@ const logout = async () => {
     }
   };
 
-  // Update user profile
+  
   const updateProfile = async (userData) => {
     setLoading(true);
     setError(null);
@@ -373,7 +374,8 @@ const logout = async () => {
       const response = await api.patch(`/users/${user?.id}`, userData);
       const updatedUser = response.data;
       
-      // Update stored user data
+     
+     
       localStorage.setItem('user', JSON.stringify(updatedUser));
       setUser(updatedUser);
       
@@ -387,19 +389,19 @@ const logout = async () => {
     }
   };
 
-  // Clear error
+  
   const clearError = () => {
     setError(null);
   };
 
-  // Check if user is authenticated
+  
   const isAuthenticated = () => {
     const token = localStorage.getItem('accessToken');
     const storedUser = localStorage.getItem('user');
     
     if (!token || !storedUser) return false;
     
-    // Check token expiry
+    
     const expiryTime = localStorage.getItem('tokenExpiry');
     if (expiryTime) {
       const expiryDate = new Date(parseInt(expiryTime));
@@ -412,28 +414,28 @@ const logout = async () => {
     return true;
   };
 
-  // Check if user has specific role
+
   const hasRole = (role) => {
     return user?.role === role;
   };
 
-  // Check if user is admin
+  
   const isAdmin = () => {
     return user?.role === 'Admin';
   };
 
-  // Check if user is teacher
+  
   const isTeacher = () => {
     return user?.role === 'Teacher';
   };
 
-  // Get remaining session time (for display purposes)
+  
   const getRemainingSessionTime = () => {
     const expiryTime = localStorage.getItem('tokenExpiry');
     if (!expiryTime) return 0;
     
     const remainingMs = parseInt(expiryTime) - Date.now();
-    return Math.max(0, Math.floor(remainingMs / 1000)); // Return in seconds
+    return Math.max(0, Math.floor(remainingMs / 1000)); 
   };
 
   const value = {

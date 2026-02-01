@@ -1,0 +1,93 @@
+.national-impact-section {
+  padding: var(--spacing-sm) var(--spacing-xs);
+  background: var(--color-white);
+}
+
+.national-impact-section h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: var(--spacing-xl);
+  color: var(--color-navy);
+  position: relative;
+  padding-bottom: var(--spacing-md);
+}
+
+.national-impact-section h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 3px;
+  background: var(--color-red);
+}
+
+.stats-container-elegant {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--spacing-sm);
+  max-width: 1400px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.stat-elegant {
+  padding: var(--spacing-md);
+}
+
+.stat-number {
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--color-navy-light);
+  font-family: var(--font-serif);
+  margin-bottom: var(--spacing-xs);
+  line-height: 1;
+  height: auto;
+  display: block;
+}
+
+.stat-label {
+  font-size: 1.125rem;
+  color: var(--color-navy-light);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+@media (max-width: 1200px) {
+  .stats-container-elegant {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+  }
+}
+
+@media (max-width: 768px) {
+  .national-impact-section {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+  
+  .stats-container-elegant {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+  }
+  
+  .stat-number {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-container-elegant {
+    grid-template-columns: 1fr;
+  }
+  
+  .stat-number {
+    font-size: 2.5rem;
+  }
+  
+  .national-impact-section h2 {
+    font-size: 2rem;
+  }
+}

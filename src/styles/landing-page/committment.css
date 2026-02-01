@@ -1,0 +1,81 @@
+.institutional-trust-section {
+  padding: var(--spacing-sm) var(--spacing-xl);
+  background: var(--color-white);
+}
+
+.institutional-trust-section h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: var(--spacing-xl);
+  color: var(--color-navy);
+  position: relative;
+  padding-bottom: var(--spacing-md);
+}
+
+.institutional-trust-section h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 3px;
+  background: var(--color-red);
+}
+
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-lg);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.trust-principle {
+  padding: var(--spacing-lg);
+  border: var(--border-thin);
+  transition: var(--transition-normal);
+}
+
+.trust-principle:hover {
+  border-color: var(--color-navy);
+}
+
+.trust-principle h3 {
+  font-size: 1.375rem;
+  color: var(--color-navy);
+  margin-bottom: var(--spacing-sm);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.trust-principle h3 svg {
+  color: var(--color-red);
+  font-size: 1.25rem;
+}
+
+.trust-principle p {
+  color: var(--color-navy-light);
+  line-height: 1.7;
+  font-size: 1.125rem;
+  font-weight: 300;
+  margin-left: calc(1.25rem + var(--spacing-sm));
+}
+
+@media (max-width: 768px) {
+  .institutional-trust-section {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+  
+  .trust-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+  
+  .institutional-trust-section h2 {
+    font-size: 2rem;
+  }
+}
