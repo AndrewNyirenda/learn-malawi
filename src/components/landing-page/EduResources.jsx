@@ -1,91 +1,81 @@
-import React, { useState, useEffect, useRef } from 'react';
-import '../../styles/landing-page/edu-resources.css';
+import React, { useEffect, useRef, useState } from "react";
+import "../../styles/landing-page/edu-resources.css";
+
+const statsData = [
+  { id: 1, label: "Primary & Secondary School Books", value: 140 },
+  { id: 2, label: "Exam Past Papers", value: 863 },
+  { id: 3, label: "Video Tutorials", value: 28 },
+  { id: 4, label: "Career Guidance Resources", value: 90 },
+  { id: 5, label: "Interactive Quizzes", value: 80 }
+];
 
 const EduResources = () => {
-  const statsData = [
-    { id: 1, label: "Primary/Secondary School Books", value: 140 },
-    { id: 2, label: "Exam Pastpapers", value: 863 },
-    { id: 3, label: "Video Tutorials", value: 28 },
-    { id: 4, label: "Career Guidance Resources", value: 90 },
-    { id: 5, label: "Interactive Quizzes", value: 80 }
-  ];
+  const [animatedStats, setAnimatedStats] = useState(
+    statsData.map(() => 0)
+  );
+  const sectionRef = useRef(null);
+  const hasAnimated = useRef(false);
 
-  const [animatedStats, setAnimatedStats] = useState(statsData.map(stat => 
-    typeof stat.value === 'number' ? 0 : stat.value
-  ));
-  
-  const [statsInView, setStatsInView] = useState(false);
-  const statsSectionRef = useRef(null);
-  
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setStatsInView(true);
-            observer.unobserve(entry.target);
-          }
-        });
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimated.current) {
+          hasAnimated.current = true;
+          animateStats();
+        }
       },
-      {
-        threshold: 0.3,
-        rootMargin: '0px 0px -100px 0px'
-      }
+      { threshold: 0.35 }
     );
 
-    if (statsSectionRef.current) {
-      observer.observe(statsSectionRef.current);
-    }
-
-    return () => {
-      if (statsSectionRef.current) {
-        observer.unobserve(statsSectionRef.current);
-      }
-    };
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (!statsInView) return;
+  const animateStats = () => {
+    const duration = 2200;
+    const start = performance.now();
 
-    const duration = 2500;
-    const intervals = statsData.map((stat, index) => {
-      if (typeof stat.value !== 'number') return null;
-      
-      const increment = stat.value / 60;
-      let currentValue = 0;
-      
-      const interval = setInterval(() => {
-        currentValue += increment;
-        if (currentValue >= stat.value) {
-          currentValue = stat.value;
-          clearInterval(interval);
-        }
-        
-        setAnimatedStats(prev => {
-          const newStats = [...prev];
-          newStats[index] = Math.floor(currentValue);
-          return newStats;
-        });
-      }, duration / 60);
-      
-      return interval;
-    });
-    
-    return () => intervals.forEach(interval => interval && clearInterval(interval));
-  }, [statsInView]);
+    const step = (now) => {
+      const progress = Math.min((now - start) / duration, 1);
+
+      setAnimatedStats(
+        statsData.map(stat =>
+          Math.floor(stat.value * progress)
+        )
+      );
+
+      if (progress < 1) requestAnimationFrame(step);
+    };
+
+    requestAnimationFrame(step);
+  };
 
   return (
-    <section className="national-impact-section" ref={statsSectionRef}>
-      <h2>Educational Resources</h2>
-      <div className="stats-container-elegant">
+    <section
+      ref={sectionRef}
+      className="edu-resources"
+      aria-labelledby="edu-resources-title"
+    >
+      <header className="edu-header">
+        <h2 id="edu-resources-title">Educational Resources</h2>
+        <p>
+          A growing national library of learning materials designed to support
+          students, teachers, and lifelong learners.
+        </p>
+      </header>
+
+      <div className="edu-stats-grid">
         {statsData.map((stat, index) => (
-          <div key={stat.id} className="stat-elegant">
-            <div className="stat-number">
-              {animatedStats[index]}
-              {typeof stat.value === 'number' ? '+' : ''}
-            </div>
-            <div className="stat-label">{stat.label}</div>
-          </div>
+          <article
+            key={stat.id}
+            className="edu-stat-card"
+            aria-label={`${stat.value}+ ${stat.label}`}
+          >
+            <span className="edu-stat-number">
+              {animatedStats[index]}+
+            </span>
+            <span className="edu-stat-label">{stat.label}</span>
+          </article>
         ))}
       </div>
     </section>
