@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import Heroslideshow from "../Heroslideshow";
 import "../../styles/landing-page/hero-section.css";
@@ -9,36 +9,31 @@ const HeroSection = () => {
   return (
     <section className="hero-section">
       <div className="hero-container">
-        <div className="hero-title-section">
-          <div className="hero-main-title">
-            <h1>Learn Malawi</h1>
-            <p className="mission-statement">
-              Free Educational Resources
-            </p>
-          </div>
+
+        <div className="hero-text">
+          <h1 className="hero-title">Learn Malawi</h1>
+          <p className="hero-subtitle">
+            Free Educational Resources
+          </p>
+
+          <p className="hero-description">
+            Digital learning resources designed to support
+            every Malawian student, from secondary school
+            to tertiary education.
+          </p>
+
+          <button
+            className="hero-button"
+            onClick={() => navigate("/study-notes")}
+          >
+            Explore Resources
+          </button>
         </div>
-        
-        <div className="hero-image-container">
+
+        <div className="hero-media">
           <Heroslideshow />
         </div>
-        
-        <div className="hero-content-section">
-          <div className="hero-description">
-            <p>
-              Digital learning resources 
-              for every Malawian student.
-            </p>
-          </div>
-          
-          <div className="hero-cta">
-            <button 
-              className="cta-button"
-              onClick={() => navigate("/study-notes")}
-            >
-              Explore Resources
-            </button>
-          </div>
-        </div>
+
       </div>
     </section>
   );
