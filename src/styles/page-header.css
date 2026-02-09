@@ -12,18 +12,10 @@
   
 }
 
-.page-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--color-sand-dark);
-}
+
 
 .page-header h1 {
-  font-family: var(--font-serif);
+  font-family: "Oswald";
   font-size: 3.5rem;
   color: var(--color-navy);
   margin-bottom: var(--spacing-md);
@@ -38,21 +30,12 @@
   max-width: 800px;
   margin: 20px auto;
   line-height: 1.7;
-  font-weight: 300;
+  font-weight: 400;
   position: relative;
   padding-top: var(--spacing-md);
 }
 
-.page-subtitle::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 2px;
-  background: var(--color-red);
-}
+
 
 /* Responsive Design for PageHeader */
 @media (max-width: 1200px) {
@@ -84,7 +67,5 @@
     font-size: 2rem;
   }
   
-  .page-subtitle::before {
-    width: 60px;
-  }
+  
 }
