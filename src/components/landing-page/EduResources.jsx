@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../../styles/landing-page/edu-resources.css";
 
+
 const statsData = [
   { id: 1, label: "Primary & Secondary School Books", value: 140 },
   { id: 2, label: "Exam Past Papers", value: 863 },

@@ -1,173 +1,217 @@
-/* ================================
-   Core Services Section
-================================ */
-
-.core-services-section {
-  padding: 4rem 1rem 5rem;
-  background: #f4f6f8; /* sand */
+.edu-resources {
+  padding: clamp(3rem, 6vw, 8rem) clamp(1rem, 3vw, 2rem);
+  max-width: 1400px;
+  margin: 0 auto;
+  background: #f4f6f8;
+  overflow-x: hidden;
 }
 
-/* ================================
-   Section Title
-================================ */
-
-.core-services-section h2 {
+.edu-header {
   text-align: center;
-  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  max-width: min(720px, 95vw);
+  margin: 0 auto clamp(2rem, 5vw, 4rem);
+  padding: 0 0.5rem;
+}
+
+.edu-header h2 {
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
   font-weight: 700;
-  color: #1a3f7a; /* navy */
-  margin-bottom: 4rem;
+  color: #1a3f7a;
+  margin-bottom: 1rem;
   position: relative;
-  padding-bottom: 1.5rem;
   font-family: "Oswald", sans-serif;
   letter-spacing: 0.02em;
+  line-height: 1.2;
+  padding: 0 0.5rem;
 }
 
-.core-services-section h2::after {
+.edu-header h2::after {
   content: "";
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 72px;
+  display: block;
+  width: clamp(60px, 15vw, 72px);
   height: 3px;
-  background: #2e9f3a; /* progressive green */
+  margin: 1rem auto 0;
+  background: #2e9f3a;
 }
 
-/* ================================
-   Container
-================================ */
+.edu-header p {
+  font-size: clamp(1.05rem, 2.5vw, 1.15rem);
+  line-height: 1.6;
+  color: #5f6c7b;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  padding: 0 0.5rem;
+}
 
 .services-horizontal-container {
   max-width: 1400px;
   margin: 0 auto;
+  padding: 0 0.5rem;
 }
-
-/* ================================
-   Grid
-================================ */
 
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(1, 1fr);
+  gap: clamp(1rem, 3vw, 2rem);
 }
 
-/* ================================
-   Card
-================================ */
+@media (min-width: 640px) {
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .services-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1400px) {
+  .services-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+}
 
 .service-card-minimal {
   background: #ffffff;
   border: 1px solid #d9dee4;
-  border-radius: 12px;
-  padding: 2.25rem 2rem;
+  border-radius: clamp(10px, 2vw, 12px);
+  padding: clamp(1.75rem, 4vw, 2.25rem) clamp(1.5rem, 3vw, 2rem);
   display: flex;
   flex-direction: column;
   text-align: left;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  transition: all 0.3s ease;
   cursor: pointer;
   height: 100%;
+  min-height: 280px;
 }
 
-.service-card-minimal:hover {
-  transform: translateY(-6px);
-  border-color: #2f5fa8; /* navy light */
-  box-shadow: 0 14px 32px rgba(26, 63, 122, 0.12);
+@media (hover: hover) and (pointer: fine) {
+  .service-card-minimal:hover {
+    transform: translateY(-6px);
+    border-color: #2f5fa8;
+    box-shadow: 0 14px 32px rgba(26, 63, 122, 0.12);
+  }
 }
 
-/* ================================
-   Icon
-================================ */
+.service-card-minimal:active {
+  transform: scale(0.98);
+  border-color: #2f5fa8;
+  transition: transform 0.1s ease;
+}
 
 .service-icon {
-  width: 52px;
-  height: 52px;
-  border-radius: 10px;
+  width: clamp(48px, 10vw, 52px);
+  height: clamp(48px, 10vw, 52px);
+  border-radius: clamp(8px, 1.5vw, 10px);
   background: #f4f6f8;
   border: 1px solid #d9dee4;
-  color: #2e9f3a; /* green accent */
-  font-size: 1.5rem;
+  color: #2e9f3a;
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: clamp(1.25rem, 3vw, 1.5rem);
 }
-
-/* ================================
-   Title
-================================ */
 
 .service-card-minimal h3 {
-  font-size: 1.35rem;
+  font-size: clamp(1.3rem, 3.5vw, 1.45rem);
   font-weight: 600;
   color: #1a3f7a;
-  margin-bottom: 0.75rem;
+  margin-bottom: clamp(0.5rem, 1.5vw, 0.75rem);
   line-height: 1.3;
   font-family: "Roboto", sans-serif;
+  padding: 0 0.25rem;
 }
 
-/* ================================
-   Description
-================================ */
-
 .service-card-minimal p {
-  font-size: 1.05rem;
-  line-height: 1.65;
+  font-size: clamp(1.05rem, 2.5vw, 1.15rem);
+  line-height: 1.6;
   color: #4b5b6b;
-  margin-bottom: 2rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2rem);
   flex-grow: 1;
   font-family: "Roboto", sans-serif;
   font-weight: 400;
+  padding: 0 0.25rem;
 }
 
-/* ================================
-   Link
-================================ */
-
 .service-link {
-  font-size: 0.95rem;
+  font-size: clamp(0.95rem, 2vw, 1.05rem);
   font-weight: 600;
-  color: #2f5fa8; /* navy light */
+  color: #2f5fa8;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  transition: gap 0.2s ease, color 0.2s ease;
+  transition: all 0.2s ease;
+  padding: 0 0.25rem;
 }
 
-.service-card-minimal:hover .service-link {
-  gap: 0.75rem;
-  color: #1a3f7a;
+@media (hover: hover) and (pointer: fine) {
+  .service-card-minimal:hover .service-link {
+    gap: 0.75rem;
+    color: #1a3f7a;
+  }
 }
 
-/* ================================
-   Mobile Refinements
-================================ */
-
-@media (max-width: 768px) {
-  .core-services-section {
-    padding: 3rem 1rem 4rem;
+@media (max-width: 360px) {
+  .edu-resources {
+    padding: 2.5rem 0.75rem 3.5rem;
   }
-
-  .core-services-section h2 {
-    margin-bottom: 3rem;
-  }
-
+  
   .service-card-minimal {
-    padding: 2rem 1.75rem;
+    padding: 1.5rem 1.25rem;
+    min-height: 260px;
   }
-}
-
-@media (max-width: 480px) {
-  .service-card-minimal {
-    padding: 1.75rem 1.5rem;
-  }
-
+  
   .service-card-minimal h3 {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
   }
-
+  
   .service-card-minimal p {
-    font-size: 1rem;
+    font-size: 0.95rem;
+    font-weight: 500; /* Consistent font weight */
+  }
+  
+  .service-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
+  .service-card-minimal {
+    min-height: 240px;
+    padding: 1.5rem 1.25rem;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .service-card-minimal {
+    border: 2px solid #000;
+    background: #fff;
+  }
+  
+  .service-icon {
+    border: 2px solid #000;
+  }
+  
+  .service-card-minimal h3 {
+    color: #000;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-card-minimal,
+  .service-card-minimal:active {
+    transition: none;
+    transform: none;
   }
 }

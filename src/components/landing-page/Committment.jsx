@@ -25,14 +25,21 @@ const Committment = () => {
     {
       title: "Nationwide & Personal",
       description:
-        "Designed to serve learners across all 28 districts, with feedback and progress tracking that supports each learner’s journey.",
+        "Designed to serve learners across all 28 districts, with feedback and progress tracking that supports each learner's journey.",
       icon: <FaUsers />
     }
   ];
 
   return (
-    <section className="institutional-trust-section">
-      <h2>Our Commitment to Excellence</h2>
+    <section className="edu-resources">  {/* Changed to edu-resources */}
+      <header className="edu-header">  {/* Added header wrapper */}
+        <h2>Our Commitment to Excellence</h2>
+        <p>
+          Built on principles of authenticity, verification, accessibility, 
+          and nationwide reach to serve every Malawian learner.
+        </p>
+      </header>
+      
       <div className="trust-grid">
         {trustPrinciples.map((principle) => (
           <article key={principle.title} className="trust-principle">

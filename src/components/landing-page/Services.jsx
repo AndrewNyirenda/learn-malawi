@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FaArrowRight,
   FaBook,
@@ -13,6 +13,7 @@ import "../../styles/landing-page/services.css";
 
 const Services = () => {
   const navigate = useNavigate();
+  const [activeCard, setActiveCard] = useState(null);
 
   const servicesData = [
     {
@@ -53,24 +54,49 @@ const Services = () => {
     }
   ];
 
+  const handleCardClick = (path, index) => {
+    setActiveCard(index);
+    setTimeout(() => {
+      setActiveCard(null);
+      navigate(path);
+    }, 150);
+  };
+
+  const handleKeyDown = (e, path, index) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      handleCardClick(path, index);
+    }
+  };
+
   return (
-    <section className="core-services-section">
-      <h2>Core Services</h2>
+    <section 
+      className="edu-resources"  // Changed from core-services-section
+      aria-labelledby="services-title"
+    >
+      <header className="edu-header">  {/* Added header wrapper */}
+        <h2 id="services-title">Core Services</h2>
+        <p>
+          Comprehensive educational tools and resources designed to support
+          students, teachers, and lifelong learners across Malawi.
+        </p>
+      </header>
 
       <div className="services-horizontal-container">
         <div className="services-grid">
-          {servicesData.map((service) => (
+          {servicesData.map((service, index) => (
             <article
               key={service.title}
-              className="service-card-minimal"
-              onClick={() => navigate(service.path)}
-              role="link"
+              className={`service-card-minimal ${activeCard === index ? 'active' : ''}`}
+              onClick={() => handleCardClick(service.path, index)}
+              role="button"
               tabIndex={0}
-              onKeyDown={(e) =>
-                e.key === "Enter" && navigate(service.path)
-              }
+              onKeyDown={(e) => handleKeyDown(e, service.path, index)}
+              aria-label={`Access ${service.title}: ${service.description}`}
             >
-              <div className="service-icon">{service.icon}</div>
+              <div className="service-icon" aria-hidden="true">
+                {service.icon}
+              </div>
               <h3>{service.title}</h3>
               <p>{service.description}</p>
               <span className="service-link">
