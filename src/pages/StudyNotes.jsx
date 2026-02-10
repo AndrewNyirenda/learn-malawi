@@ -5,14 +5,12 @@ import Footer from "../components/Footer.jsx";
 import { useStudyNotes } from "../contexts/StudyNotesContext";
 import Header from '../components/Header';
 import PageHeader from '../components/page-header';
-import Filter from '../components/Filter';
 import Pagination from '../components/Pagination';
 
 const StudyNotes = () => {
   const [level, setLevel] = useState("secondary");
   const [category, setCategory] = useState("all");
   const [classFilter, setClassFilter] = useState("all");
-  const [viewingResource, setViewingResource] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const itemsPerPage = 12;
@@ -31,24 +29,19 @@ const StudyNotes = () => {
     clearError,
   } = useStudyNotes();
 
-  // Load data when level changes
   useEffect(() => {
     const levelEnum = level === 'primary' ? 'primary' : 'secondary';
-    
     fetchCategories(levelEnum);
     fetchClasses(levelEnum);
   }, [level]);
   
-   // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Fetch books when filters change
   useEffect(() => {
     const loadBooks = async () => {
       const levelEnum = level === 'primary' ? 'primary' : 'secondary';
-      
       const filters = {
         level: levelEnum,
         ...(category !== 'all' && { category }),
@@ -56,8 +49,6 @@ const StudyNotes = () => {
       };
       
       const result = await fetchBooks(currentPage, itemsPerPage, filters);
-      
-      // Store total items from API response
       if (result && result.total) {
         setTotalItems(result.total);
       }
@@ -66,7 +57,6 @@ const StudyNotes = () => {
     loadBooks();
   }, [level, category, classFilter, currentPage]);
 
-  // Reset filters when level changes
   useEffect(() => {
     setCategory("all");
     setClassFilter("all");
@@ -76,8 +66,6 @@ const StudyNotes = () => {
   const getAvailableClasses = () => {
     return classes.map(cls => cls.class);
   };
-
-  const closeViewer = () => setViewingResource(null);
 
   const handleViewResource = async (resource) => {
     try {
@@ -92,7 +80,6 @@ const StudyNotes = () => {
   const handleDownloadResource = async (resource) => {
     try {
       const { downloadUrl, fileName } = await getDownloadUrl(resource.id);
-      
       const link = document.createElement('a');
       link.href = downloadUrl;
       link.download = fileName || resource.title;
@@ -105,32 +92,27 @@ const StudyNotes = () => {
     }
   };
 
-  // Prepare options for Filter components
-  const categoryOptions = ["all", ...categories.map(cat => cat.category)]
-    .filter(Boolean)
-    .map(category => ({
-      value: category,
-      label: category === 'all' ? 'All Categories' : category
-    }));
+  const clearCategoryFilter = () => {
+    setCategory("all");
+    setCurrentPage(1);
+  };
 
-  const classOptions = ["all", ...getAvailableClasses()]
-    .filter(Boolean)
-    .map(cls => ({
-      value: cls,
-      label: cls === 'all' ? 'All Classes' : cls
-    }));
+  const clearClassFilter = () => {
+    setClassFilter("all");
+    setCurrentPage(1);
+  };
 
   if (loading && books.length === 0) {
     return (
       <>
         <Header />
-        <div className="study-notes-wrapper">
+        <div className="study-materials-container">
           <PageHeader 
             title="Study Notes & References"
             description="Access a curated collection of books and reference materials to support your studies."
           />
-          <div className="loading-container">
-            <div className="loading-spinner"></div>
+          <div className="study-loading-state">
+            <div className="study-loading-spinner"></div>
             <p>Loading study materials...</p>
           </div>
         </div>
@@ -143,11 +125,11 @@ const StudyNotes = () => {
     return (
       <>
         <Header />
-        <div className="study-notes-wrapper">
-          <div className="error-container">
-            <h3>Error Loading Study Materials</h3>
-            <p>{error}</p>
-            <button onClick={() => { clearError(); fetchBooks(); }} className="retry-btn">
+        <div className="study-materials-container">
+          <div className="study-error-state">
+            <h3 className="study-error-title">Error Loading Study Materials</h3>
+            <p className="study-error-message">{error}</p>
+            <button onClick={() => { clearError(); fetchBooks(); }} className="study-retry-button">
               Retry
             </button>
           </div>
@@ -160,14 +142,14 @@ const StudyNotes = () => {
   return (
     <>
       <Header />
-      <div className="study-notes-wrapper">
+      <div className="study-materials-container">
         <PageHeader 
           title="Study Notes & References"
           description="Access a curated collection of books and reference materials to support your studies."
         />
 
-        {/* Level Tabs */}
-        <div className="level-tabs">
+        {/* Education Level Tabs */}
+        <div className="education-level-tabs">
           <button
             className={level === "primary" ? "active" : ""}
             onClick={() => setLevel("primary")}
@@ -182,36 +164,79 @@ const StudyNotes = () => {
           </button>
         </div>
 
-        {/* Filters Container - Removed category titles */}
-        <div className="filters-container">
-          <div className="filter-group">
-            <Filter
-              id="category"
-              value={category}
-              onChange={setCategory}
-              options={categoryOptions}
-              showAllOption={false}
-              className="study-notes-filter"
-              placeholder="Select category"
-            />
+        {/* Study Filters Section */}
+        <div className="study-filters-section">
+          {/* Category Filter */}
+          <div className="study-filter-group">
+            <label className="materials-filter-label">Category</label>
+            <div className="materials-filter-container">
+              <select
+                className="materials-filter-select"
+                value={category}
+                onChange={(e) => {
+                  setCategory(e.target.value);
+                  setCurrentPage(1);
+                }}
+                disabled={categories.length === 0}
+              >
+                <option value="all">All Categories</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.category}>
+                    {cat.category}
+                  </option>
+                ))}
+              </select>
+              {category !== 'all' && (
+                <button
+                  className="materials-filter-clear"
+                  onClick={clearCategoryFilter}
+                  title="Clear category filter"
+                  type="button"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
           </div>
 
-          <div className="filter-group">
-            <Filter
-              id="class"
-              value={classFilter}
-              onChange={setClassFilter}
-              options={classOptions}
-              showAllOption={false}
-              className="study-notes-filter"
-              placeholder="Select class"
-            />
+          {/* Class Filter */}
+          <div className="study-filter-group">
+            <label className="materials-filter-label">Class</label>
+            <div className="materials-filter-container">
+              <select
+                className="materials-filter-select"
+                value={classFilter}
+                onChange={(e) => {
+                  setClassFilter(e.target.value);
+                  setCurrentPage(1);
+                }}
+                disabled={classes.length === 0}
+              >
+                <option value="all">All Classes</option>
+                {getAvailableClasses().map((cls, index) => (
+                  <option key={index} value={cls}>
+                    {cls}
+                  </option>
+                ))}
+              </select>
+              {classFilter !== 'all' && (
+                <button
+                  className="materials-filter-clear"
+                  onClick={clearClassFilter}
+                  title="Clear class filter"
+                  type="button"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Books Section */}
-        <section>
-          <div className="grid-container">
+        {/* Materials Section */}
+        <section className="materials-section">
+          <h2 className="materials-section-title">Study Materials</h2>
+          <div className="materials-grid">
             {books.length > 0 ? (
               books.map((resource) => (
                 <ResourceCard
@@ -229,11 +254,11 @@ const StudyNotes = () => {
                 />
               ))
             ) : (
-              <div className="no-results-container">
-                <p className="no-results">
+              <div className="study-empty-state">
+                <p className="empty-state-message">
                   No study materials found matching your filters. Try adjusting your search criteria.
                 </p>
-                <p className="no-results-hint">
+                <p className="empty-state-hint">
                   Note: The backend API might not have any books uploaded yet.
                 </p>
               </div>
@@ -241,7 +266,7 @@ const StudyNotes = () => {
           </div>
         </section>
 
-        {/* Use reusable Pagination component */}
+        {/* Pagination */}
         {totalItems > 0 && (
           <Pagination
             currentPage={currentPage}
@@ -252,13 +277,13 @@ const StudyNotes = () => {
             showPrevNext={true}
             prevLabel="Previous"
             nextLabel="Next"
-            className="pagination"
+            className="study-pagination"
             disabled={loading}
           />
         )}
 
         {/* Connection Status */}
-        <div className="connection-status">
+        <div className="study-connection-status">
           <small>
             Showing {books.length} books from backend API
             {loading && ' (loading more...)'}

@@ -22,10 +22,8 @@ const ResourceCard = ({
     e.stopPropagation();
     setIsBookmarked(prev => !prev);
     
-    // Save to localStorage
     const bookmarks = JSON.parse(localStorage.getItem('studyBookmarks') || '[]');
     if (!isBookmarked) {
-      // Add to bookmarks
       const bookmark = {
         id,
         title,
@@ -36,7 +34,6 @@ const ResourceCard = ({
       const newBookmarks = [...bookmarks, bookmark];
       localStorage.setItem('studyBookmarks', JSON.stringify(newBookmarks));
     } else {
-      // Remove from bookmarks
       const newBookmarks = bookmarks.filter(b => b.id !== id);
       localStorage.setItem('studyBookmarks', JSON.stringify(newBookmarks));
     }
@@ -61,7 +58,6 @@ const ResourceCard = ({
     setImageLoaded(true);
   };
 
-  // Check if already bookmarked on mount
   useEffect(() => {
     const bookmarks = JSON.parse(localStorage.getItem('studyBookmarks') || '[]');
     const isAlreadyBookmarked = bookmarks.some(b => b.id === id);
@@ -70,16 +66,25 @@ const ResourceCard = ({
 
   return (
     <div className="resource-card">
-      {/* Card Header with only Bookmark Button */}
+      {/* Card Header with Bookmark Button */}
       <div className="card-header">
-        <div className="header-badges">
-          {/* Tags moved to content area below */}
-        </div>
-        
-     
+        <button
+          onClick={toggleBookmark}
+          style={{
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: '4px',
+            fontSize: '14px',
+            color: isBookmarked ? '#2f5fa8' : '#94a3b8'
+          }}
+          title={isBookmarked ? "Remove from bookmarks" : "Add to bookmarks"}
+        >
+          {isBookmarked ? <FaBookmark /> : <FaRegBookmark />}
+        </button>
       </div>
 
-      {/* Enhanced Thumbnail with Book Cover Effect */}
+      {/* Thumbnail */}
       <div className="thumbnail-container">
         <div className="book-cover">
           <div className={`cover-inner ${imageLoaded ? 'loaded' : ''}`}>
@@ -102,7 +107,6 @@ const ResourceCard = ({
       <div className="card-content">
         <h3 className="resource-title">{title}</h3>
         
-        
         <div className="resource-tags">
           {category && <span className="badge category-badge">{category}</span>}
           {resourceClass && <span className="badge class-badge">{resourceClass}</span>}
@@ -110,7 +114,7 @@ const ResourceCard = ({
         </div>
       </div>
 
-     
+      {/* Card Footer */}
       <div className="card-footer">
         {onView && (
           <button 
@@ -127,10 +131,8 @@ const ResourceCard = ({
             className="action-btn download-btn"
             onClick={handleDownload}
           >
-            
-            
-            
-            <span>Download PDF</span>
+            <FaDownload className="btn-icon" />
+            <span>Download</span>
           </button>
         )}
         
@@ -140,8 +142,8 @@ const ResourceCard = ({
             download={downloadName}
             className="action-btn download-btn"
           >
-
-            <span>Download PDF</span>
+            <FaDownload className="btn-icon" />
+            <span>Download</span>
           </a>
         )}
       </div>

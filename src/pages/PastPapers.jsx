@@ -5,8 +5,7 @@ import Footer from "../components/Footer.jsx";
 import { usePastPapers } from "../contexts/PastPapersContext";
 import Header from '../components/Header';
 import PageHeader from '../components/page-header';
-import Filter from '../components/Filter'; 
-import Pagination from '../components/Pagination'; 
+import Pagination from '../components/Pagination';
 
 const PastPapers = () => {
   const [level, setLevel] = useState("secondary");
@@ -14,7 +13,6 @@ const PastPapers = () => {
   const [category, setCategory] = useState("all");
   const [classFilter, setClassFilter] = useState("all");
   const [yearFilter, setYearFilter] = useState("all");
-  const [viewingResource, setViewingResource] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const itemsPerPage = 12;
@@ -35,21 +33,17 @@ const PastPapers = () => {
     clearError,
   } = usePastPapers();
   
-   // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Load data when level changes
   useEffect(() => {
     const levelEnum = level === 'primary' ? 'primary' : 'secondary';
-    
     fetchCategories(levelEnum);
     fetchClasses(levelEnum);
     fetchYears(levelEnum);
   }, [level]);
 
-  // Fetch past papers when filters change
   useEffect(() => {
     const loadPastPapers = async () => {
       const levelEnum = level === 'primary' ? 'primary' : 'secondary';
@@ -64,7 +58,6 @@ const PastPapers = () => {
       
       const result = await fetchPastPapers(currentPage, itemsPerPage, filters);
       
-      // Store total items from API response
       if (result && result.total) {
         setTotalItems(result.total);
       }
@@ -73,7 +66,6 @@ const PastPapers = () => {
     loadPastPapers();
   }, [level, category, classFilter, yearFilter, searchTerm, currentPage]);
 
-  // Reset filters when level changes
   useEffect(() => {
     setCategory("all");
     setClassFilter("all");
@@ -89,8 +81,6 @@ const PastPapers = () => {
   const getAvailableYears = () => {
     return years.map(year => year.year);
   };
-
-  const closeViewer = () => setViewingResource(null);
 
   const handleViewResource = async (resource) => {
     try {
@@ -118,39 +108,37 @@ const PastPapers = () => {
     }
   };
 
-  // Prepare options for Filter components
-  const categoryOptions = ["all", ...categories.map(cat => cat.category)]
-    .filter(Boolean)
-    .map(category => ({
-      value: category,
-      label: category === 'all' ? 'All Categories' : category
-    }));
+  const clearCategoryFilter = () => {
+    setCategory("all");
+    setCurrentPage(1);
+  };
 
-  const classOptions = ["all", ...getAvailableClasses()]
-    .filter(Boolean)
-    .map(cls => ({
-      value: cls,
-      label: cls === 'all' ? 'All Classes' : cls
-    }));
+  const clearClassFilter = () => {
+    setClassFilter("all");
+    setCurrentPage(1);
+  };
 
-  const yearOptions = ["all", ...getAvailableYears()]
-    .filter(Boolean)
-    .map(year => ({
-      value: year,
-      label: year === 'all' ? 'All Years' : year.toString()
-    }));
+  const clearYearFilter = () => {
+    setYearFilter("all");
+    setCurrentPage(1);
+  };
+
+  const clearSearch = () => {
+    setSearchTerm("");
+    setCurrentPage(1);
+  };
 
   if (loading && pastPapers.length === 0) {
     return (
       <>
         <Header />
-        <div className="pastpapers-wrapper">
+        <div className="past-papers-container">
           <PageHeader 
             title="Past Papers & Reviews"
             description="Access a curated collection of past papers and reviews to support your primary and secondary school studies."
           />
-          <div className="loading-container">
-            <div className="loading-spinner"></div>
+          <div className="papers-loading-state">
+            <div className="papers-loading-spinner"></div>
             <p>Loading past papers...</p>
           </div>
         </div>
@@ -163,11 +151,11 @@ const PastPapers = () => {
     return (
       <>
         <Header />
-        <div className="pastpapers-wrapper">
-          <div className="error-container">
-            <h3>Error Loading Past Papers</h3>
-            <p>{error}</p>
-            <button onClick={() => { clearError(); fetchPastPapers(); }} className="retry-btn">
+        <div className="past-papers-container">
+          <div className="papers-error-state">
+            <h3 className="papers-error-title">Error Loading Past Papers</h3>
+            <p className="papers-error-message">{error}</p>
+            <button onClick={() => { clearError(); fetchPastPapers(); }} className="papers-retry-button">
               Retry
             </button>
           </div>
@@ -180,14 +168,14 @@ const PastPapers = () => {
   return (
     <>
       <Header />
-      <div className="pastpapers-wrapper">
+      <div className="past-papers-container">
         <PageHeader 
           title="Past Papers & Reviews"
           description="Access a curated collection of past papers and reviews to support your primary and secondary school studies."
         />
 
-        {/* Level Tabs */}
-        <div className="level-tabs">
+        {/* Papers Level Tabs */}
+        <div className="papers-level-tabs">
           <button
             className={level === "primary" ? "active" : ""}
             onClick={() => setLevel("primary")}
@@ -202,60 +190,139 @@ const PastPapers = () => {
           </button>
         </div>
 
-        {/* Search Bar */}
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Search past papers..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
-          />
-        </div>
-
-        {/* Filters Container - Using reusable Filter components */}
-        <div className="filters-container">
-          <div className="filter-group">
-            <Filter
-              id="category"
-              value={category}
-              onChange={setCategory}
-              options={categoryOptions}
-              showAllOption={false}
-              className="pastpapers-filter"
-              placeholder="Select category"
+        {/* Search Section */}
+        <div className="papers-search-section">
+          <div className="papers-search-container">
+            <input
+              type="text"
+              placeholder="Search past papers..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="papers-search-input"
             />
-          </div>
-
-          <div className="filter-group">
-            <Filter
-              id="class"
-              value={classFilter}
-              onChange={setClassFilter}
-              options={classOptions}
-              showAllOption={false}
-              className="pastpapers-filter"
-              placeholder="Select class"
-            />
-          </div>
-
-          <div className="filter-group">
-            <Filter
-              id="year"
-              value={yearFilter}
-              onChange={setYearFilter}
-              options={yearOptions}
-              showAllOption={false}
-              className="pastpapers-filter"
-              placeholder="Select year"
-            />
+            {searchTerm && (
+              <button
+                className="papers-filter-clear"
+                onClick={clearSearch}
+                title="Clear search"
+                type="button"
+                style={{ right: '20px' }}
+              >
+                ✕
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Past Papers Section */}
-        <section>
-          
-          <div className="grid-container">
+        {/* Papers Filters Section */}
+        <div className="papers-filters-section">
+          {/* Category Filter */}
+          <div className="papers-filter-group">
+            <label className="papers-filter-label">Category</label>
+            <div className="papers-filter-container">
+              <select
+                className="papers-filter-select"
+                value={category}
+                onChange={(e) => {
+                  setCategory(e.target.value);
+                  setCurrentPage(1);
+                }}
+                disabled={categories.length === 0}
+              >
+                <option value="all">All Categories</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.category}>
+                    {cat.category}
+                  </option>
+                ))}
+              </select>
+              {category !== 'all' && (
+                <button
+                  className="papers-filter-clear"
+                  onClick={clearCategoryFilter}
+                  title="Clear category filter"
+                  type="button"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Class Filter */}
+          <div className="papers-filter-group">
+            <label className="papers-filter-label">Class</label>
+            <div className="papers-filter-container">
+              <select
+                className="papers-filter-select"
+                value={classFilter}
+                onChange={(e) => {
+                  setClassFilter(e.target.value);
+                  setCurrentPage(1);
+                }}
+                disabled={classes.length === 0}
+              >
+                <option value="all">All Classes</option>
+                {getAvailableClasses().map((cls, index) => (
+                  <option key={index} value={cls}>
+                    {cls}
+                  </option>
+                ))}
+              </select>
+              {classFilter !== 'all' && (
+                <button
+                  className="papers-filter-clear"
+                  onClick={clearClassFilter}
+                  title="Clear class filter"
+                  type="button"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Year Filter */}
+          <div className="papers-filter-group">
+            <label className="papers-filter-label">Year</label>
+            <div className="papers-filter-container">
+              <select
+                className="papers-filter-select"
+                value={yearFilter}
+                onChange={(e) => {
+                  setYearFilter(e.target.value);
+                  setCurrentPage(1);
+                }}
+                disabled={years.length === 0}
+              >
+                <option value="all">All Years</option>
+                {getAvailableYears().map((year, index) => (
+                  <option key={index} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+              {yearFilter !== 'all' && (
+                <button
+                  className="papers-filter-clear"
+                  onClick={clearYearFilter}
+                  title="Clear year filter"
+                  type="button"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Papers Section */}
+        <section className="papers-section">
+          <h2 className="papers-section-title">Past Papers</h2>
+          <div className="papers-grid">
             {pastPapers.length > 0 ? (
               pastPapers.map((resource) => (
                 <ResourceCard
@@ -278,11 +345,11 @@ const PastPapers = () => {
                 />
               ))
             ) : (
-              <div className="no-results-container">
-                <p className="no-results">
+              <div className="papers-empty-state">
+                <p className="papers-empty-message">
                   No past papers found matching your filters. Try adjusting your search criteria.
                 </p>
-                <p className="no-results-hint">
+                <p className="papers-empty-hint">
                   Note: The backend API might not have any past papers uploaded yet.
                 </p>
               </div>
@@ -290,7 +357,7 @@ const PastPapers = () => {
           </div>
         </section>
 
-        {/* Use reusable Pagination component */}
+        {/* Pagination */}
         {totalItems > 0 && (
           <Pagination
             currentPage={currentPage}
@@ -301,37 +368,18 @@ const PastPapers = () => {
             showPrevNext={true}
             prevLabel="Previous"
             nextLabel="Next"
-            className="pagination"
+            className="papers-pagination"
             disabled={loading}
           />
         )}
 
         {/* Connection Status */}
-        <div className="connection-status">
+        <div className="papers-connection-status">
           <small>
             Showing {pastPapers.length} past papers from backend API
             {loading && ' (loading more...)'}
           </small>
         </div>
-
-        {/* Modal */}
-        {viewingResource && (
-          <div className="modal-overlay" onClick={closeViewer}>
-            <div className="modal-content" onClick={e => e.stopPropagation()}>
-              <button className="modal-close-btn" onClick={closeViewer}>
-                &times;
-              </button>
-              <h2>{viewingResource.title}</h2>
-              <iframe
-                src={viewingResource.downloadLink}
-                title={viewingResource.title}
-                width="100%"
-                height="600px"
-                style={{ border: "none" }}
-              />
-            </div>
-          </div>
-        )}
       </div>
       
       <Footer />
