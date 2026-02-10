@@ -1,142 +1,142 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import "../styles/news.css";
 import Footer from "../components/Footer.jsx";
 import { useNavigate } from "react-router-dom";
 import { useNews } from "../contexts/NewsContext";
 import Header from '../components/Header';
 import PageHeader from '../components/page-header';
-import Filter from '../components/Filter';
-import Pagination from '../components/Pagination'; 
+import Pagination from '../components/Pagination';
 
 const News = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("all");
-  const [selectedArticle, setSelectedArticle] = useState(null);
+  const [dateSort, setDateSort] = useState("newest");
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalItems, setTotalItems] = useState(0); // Add state for total items
+  const [totalItems, setTotalItems] = useState(0);
   const itemsPerPage = 12;
   
   const navigate = useNavigate();
   const {
     news,
-    categories,
     loading,
     error,
     fetchNews,
-    fetchCategories,
     clearError,
   } = useNews();
   
-   // Scroll to top when component mounts
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   useEffect(() => {
-    fetchCategories();
-  }, []);
+    scrollToTop();
+  }, [currentPage]);
 
   useEffect(() => {
     const loadNews = async () => {
       const filters = {
-        ...(categoryFilter !== "all" && { category: categoryFilter }),
+        sortBy: dateSort === 'newest' ? 'date_desc' : 'date_asc'
       };
       const result = await fetchNews(currentPage, itemsPerPage, filters);
       
-      // Store the total items from API response
       if (result && result.total) {
         setTotalItems(result.total);
       }
     };
     
     loadNews();
-  }, [currentPage, categoryFilter]);
+  }, [currentPage, dateSort]);
 
-  const handleCardClick = (article) => {
+  const handleCardClick = useCallback((article) => {
     navigate(`/news/${article.id}`);
-  };
+  }, [navigate]);
 
-  // Prepare categories for the Filter component
-  const categoryOptions = [
-    ...new Set([
-      ...categories.map(cat => cat.category),
-      ...news.map(article => article.category)
-    ])
-  ]
-  .filter(Boolean)
-  .map(category => ({
-    value: category,
-    label: category.charAt(0).toUpperCase() + category.slice(1)
-  }));
+  const sortOptions = [
+    { value: "newest", label: "Newest First" },
+    { value: "oldest", label: "Oldest First" }
+  ];
 
-  const filteredNews = news.filter(article => {
-    if (!article) return false;
-    
-    const matchesSearch = 
-      article.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      article.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      article.content?.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesCategory = categoryFilter === "all" || article.category === categoryFilter;
-    
-    return matchesSearch && matchesCategory;
-  });
+  const filteredNews = useMemo(() => {
+    return [...news].sort((a, b) => {
+      if (dateSort === 'newest') {
+        return new Date(b.publishedAt || b.createdAt) - new Date(a.publishedAt || a.createdAt);
+      } else if (dateSort === 'oldest') {
+        return new Date(a.publishedAt || a.createdAt) - new Date(b.publishedAt || b.createdAt);
+      }
+      return 0;
+    });
+  }, [news, dateSort]);
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "Unknown date";
+  const formatDate = useCallback((dateString) => {
+    if (!dateString) return "";
     try {
       const date = new Date(dateString);
+      const now = new Date();
+      const diffTime = Math.abs(now - date);
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      
+      if (diffDays === 0) {
+        return "Today";
+      } else if (diffDays === 1) {
+        return "Yesterday";
+      } else if (diffDays < 7) {
+        return `${diffDays} days ago`;
+      }
+      
       return date.toLocaleDateString('en-US', {
         year: 'numeric',
-        month: 'long',
+        month: 'short',
         day: 'numeric',
       });
     } catch {
-      return dateString;
+      return "";
     }
-  };
+  }, []);
 
-  const truncateText = (text, maxLength = 150) => {
+  const truncateText = useCallback((text, maxLength = 120) => {
     if (!text) return "";
     if (text.length <= maxLength) return text;
     return text.substr(0, maxLength) + "...";
-  };
-
-  const getAuthorName = (author) => {
-    if (!author) return "Unknown Author";
-    if (typeof author === 'object') {
-      return `${author.firstName || ''} ${author.lastName || ''}`.trim() || author.email || "Unknown Author";
-    }
-    return author;
-  };
+  }, []);
 
   if (loading && news.length === 0) {
-  return (
-    <>
-      <Header />
-      <div className="news-wrapper">
-        <div className="loading-container">
-          <div className="loading-spinner"></div>
-          <p>Loading news articles...</p>
-        </div>
-      </div> 
-      <Footer /> 
-    </>
-  );
-}
+    return (
+      <>
+        <Header />
+        <div className="news-wrapper">
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <p>Loading news articles...</p>
+          </div>
+        </div> 
+        <Footer /> 
+      </>
+    );
+  }
 
   if (error && news.length === 0) {
     return (
-      <div className="news-wrapper">
-        <div className="error-container">
-          <h3>Error Loading News</h3>
-          <p>{error}</p>
-          <button onClick={() => { clearError(); fetchNews(); }} className="retry-btn">
-            Retry
-          </button>
+      <>
+        <Header />
+        <div className="news-wrapper">
+          <PageHeader 
+            title="Education News & Updates"
+            description="Stay informed with the latest education news, examination updates, and policy changes from Malawi."
+          />
+          <div className="error-container">
+            <div className="error-icon">⚠️</div>
+            <h3>Unable to Load News</h3>
+            <p>{error}</p>
+            <div className="error-actions">
+              <button onClick={() => { clearError(); fetchNews(); }} className="retry-btn">
+                Try Again
+              </button>
+              <button onClick={() => navigate('/')} className="error-secondary-btn">
+                Return Home
+              </button>
+            </div>
+          </div>
         </div>
         <Footer />
-      </div>
+      </>
     );
   }
 
@@ -144,148 +144,112 @@ const News = () => {
     <>
       <Header />
       <div className="news-wrapper">
-      
         <PageHeader 
           title="Education News & Updates"
-          description="Stay informed with the latest education news, examination updates, and policy changes from Malawi."
+          description="Stay informed with the latest education news, examination updates, and policy changes across Malawi."
+          badge={{
+            text: `${totalItems} Articles`,
+            color: "accent"
+          }}
         />
 
-        {/* Filters Section - Using reusable components */}
-        <div className="news-filters">
-          <div className="filter-group">
-            <input
-              type="text"
-              placeholder="Search news articles..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="news-search-input"
-            />
-          </div>
-          
-          {/* Use the reusable Filter component for categories */}
-          <div className="filter-group">
-            <Filter
-              value={categoryFilter}
-              onChange={setCategoryFilter}
-              options={categoryOptions}
-              showAllOption={true}
-              allOptionLabel="All Categories"
-              allOptionValue="all"
-              className="news-category-filter"
-              id="news-category-filter"
-            />
-          </div>
-        </div>
-
-        {/* News Grid */}
-        <div className="news-grid">
-          {filteredNews.length > 0 ? (
-            filteredNews.map((article) => (
-              <div 
-                key={article.id} 
-                className="news-card"
-                onClick={() => handleCardClick(article)}
+        <main className="news-main-content">
+          {/* Results Summary - Only Sort Option */}
+          <div className="results-summary">
+            <div className="results-stats">
+              <span className="results-count">
+                Showing <strong>{filteredNews.length}</strong> of <strong>{totalItems}</strong> articles
+              </span>
+            </div>
+            <div className="results-sort">
+              <span>Sorted by: </span>
+              <select 
+                value={dateSort} 
+                onChange={(e) => setDateSort(e.target.value)}
+                className="inline-sort-select"
               >
-                <div className="news-card-image">
-                  <img 
-                    src={article.imageUrl || "/default-news-image.jpg"} 
-                    alt={article.title} 
-                    onError={(e) => {
-                      e.target.src = "/default-news-image.jpg";
-                    }}
-                  />
+                {sortOptions.map(option => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* News Grid */}
+          <div className="news-grid-container">
+            {filteredNews.length > 0 ? (
+              <div className="news-grid">
+                {filteredNews.map((article) => (
+                  <article 
+                    key={article.id} 
+                    className="news-card"
+                    onClick={() => handleCardClick(article)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => e.key === 'Enter' && handleCardClick(article)}
+                  >
+                    <div className="news-card-image">
+                      <img 
+                        src={article.imageUrl || "/api/placeholder/400/240"} 
+                        alt={article.title} 
+                        onError={(e) => {
+                          e.target.src = "/api/placeholder/400/240";
+                        }}
+                      />
+                    </div>
+                    
+                    <div className="news-card-content">
+                      <h3 className="news-card-title">{article.title}</h3>
+                      
+                      <p className="news-card-excerpt">
+                        {truncateText(article.description || article.content, 140)}
+                      </p>
+                      
+                      <time className="news-card-date">
+                        {formatDate(article.publishedAt || article.createdAt)}
+                      </time>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="no-results-state">
+                <div className="no-results-illustration">
+                  📰
                 </div>
-                {/* SIMPLIFIED CONTENT STRUCTURE - Strict column layout */}
-                <div className="news-card-content">
-                  <div className="news-card-text">
-                    <h3 className="news-card-title">{article.title}</h3>
-                    <p className="news-card-description">{truncateText(article.description, 120)}</p>
-                  </div>
-                  <button className="read-more-btn">Read Full Story →</button>
+                <div className="no-results-content">
+                  <h3>No articles found</h3>
+                  <p>
+                    No news articles are currently available. Please check back soon for updates.
+                  </p>
                 </div>
               </div>
-            ))
-          ) : (
-            <div className="no-news-found">
-              {searchTerm || categoryFilter !== "all" ? (
-                <p>No news articles found matching your search criteria.</p>
-              ) : (
-                <p>No news articles available at the moment.</p>
-              )}
+            )}
+          </div>
+
+          {/* Pagination */}
+          {totalItems > itemsPerPage && (
+            <div className="news-pagination-container">
+              <Pagination
+                currentPage={currentPage}
+                onPageChange={(page) => {
+                  setCurrentPage(page);
+                  scrollToTop();
+                }}
+                totalItems={totalItems}
+                itemsPerPage={itemsPerPage}
+                showPageNumbers={true}
+                showPrevNext={true}
+                prevLabel="Previous"
+                nextLabel="Next"
+                className="news-pagination"
+                maxVisiblePages={5}
+                disabled={loading}
+                showPageSummary={true}
+              />
             </div>
           )}
-        </div>
-
-        {/* Article Modal */}
-        {selectedArticle && (
-          <div className="article-modal-overlay" onClick={() => setSelectedArticle(null)}>
-            <div className="article-modal-content" onClick={(e) => e.stopPropagation()}>
-              <button className="modal-close-btn" onClick={() => setSelectedArticle(null)}>
-                &times;
-              </button>
-              
-              <div className="article-modal-header">
-                {selectedArticle.category && (
-                  <div className="article-category">{selectedArticle.category}</div>
-                )}
-                <h2>{selectedArticle.title}</h2>
-                <div className="article-meta">
-                  <span className="article-date">
-                    {formatDate(selectedArticle.publishedAt || selectedArticle.createdAt)}
-                  </span>
-                  <span>•</span>
-                  <span className="article-read-time">{selectedArticle.readTime || '5'} min read</span>
-                  <span>•</span>
-                  <span className="article-author">By {getAuthorName(selectedArticle.author)}</span>
-                </div>
-              </div>
-
-              <div className="article-modal-body">
-                <div className="article-image">
-                  <img 
-                    src={selectedArticle.imageUrl || "/default-news-image.jpg"} 
-                    alt={selectedArticle.title}
-                    onError={(e) => {
-                      e.target.src = "/default-news-image.jpg";
-                    }}
-                  />
-                </div>
-                <div className="article-content">
-                  <p className="article-description">{selectedArticle.description}</p>
-                  <div className="article-full-content">
-                    {selectedArticle.content?.split('\n').map((paragraph, index) => (
-                      <p key={index}>{paragraph}</p>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="article-modal-footer">
-                <button className="share-btn">Share Article</button>
-                <button className="close-article-btn" onClick={() => setSelectedArticle(null)}>
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Use the reusable Pagination component */}
-        {totalItems > itemsPerPage && (
-          <Pagination
-            currentPage={currentPage}
-            onPageChange={setCurrentPage}
-            totalItems={totalItems}
-            itemsPerPage={itemsPerPage}
-            showPageNumbers={true}
-            showPrevNext={true}
-            prevLabel="Previous"
-            nextLabel="Next"
-            className="news-pagination"
-            maxVisiblePages={5}
-            disabled={loading}
-          />
-        )}
+        </main>
       </div>
       
       <Footer />
@@ -293,4 +257,4 @@ const News = () => {
   );
 };
 
-export default News
+export default News;

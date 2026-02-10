@@ -1,8 +1,8 @@
 .page-header {
   text-align: center;
   
-  padding-top: var(--spacing-xxl);
-  padding-bottom: var(--spacing-lg);
+  padding-top: var(--spacing-xl);
+  padding-bottom: var(--spacing-sm);
   background: var(--color-sand);
   border-bottom: var(--border-thin);
   position: relative;
@@ -16,9 +16,9 @@
 
 .page-header h1 {
   font-family: "Oswald";
-  font-size: 3.5rem;
+  font-size: 3.2rem;
   color: var(--color-navy);
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
   font-weight: 700;
   line-height: 1.1;
   letter-spacing: -0.01em;
@@ -51,7 +51,7 @@
   }
   
   .page-header h1 {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
   }
   
   .page-subtitle {
