@@ -5,7 +5,8 @@ import "../styles/quizes.css";
 import Footer from "../components/Footer.jsx";
 import Header from '../components/Header';
 import PageHeader from '../components/page-header';
-import Filter from '../components/Filter'; // Import reusable Filter
+import Filter from '../components/Filter';
+import { FaClock, FaQuestionCircle } from 'react-icons/fa';
 
 const Quizes = () => {
   const [level, setLevel] = useState("primary");
@@ -14,9 +15,6 @@ const Quizes = () => {
   const [difficultyFilter, setDifficultyFilter] = useState("all");
   const navigate = useNavigate();
   
-  
-  
-  // Get context values
   const {
     quizzes: contextQuizzes,
     subjects,
@@ -29,12 +27,10 @@ const Quizes = () => {
     clearError,
   } = useQuizzes();
   
-   // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
   
-  // Prepare options for Filter components
   const subjectOptions = ["all", ...(subjects || [])]
     .map(subject => ({
       value: subject,
@@ -54,26 +50,10 @@ const Quizes = () => {
              difficulty.charAt(0).toUpperCase() + difficulty.slice(1)
     }));
   
-  // Filter quizzes by level from API data
-  const filteredQuizzes = (contextQuizzes || []).filter((quiz) => {
-    if (level !== "all" && quiz.level !== level) return false;
-    return true;
-  });
-  
-  // Apply filters to displayed quizzes
-  const displayedQuizzes = filteredQuizzes.filter((quiz) => {
-    const matchesSubject = subjectFilter === "all" || quiz.subject === subjectFilter;
-    const matchesClass = classFilter === "all" || quiz.class === classFilter;
-    const matchesDifficulty = difficultyFilter === "all" || quiz.difficulty === difficultyFilter;
-    
-    return matchesSubject && matchesClass && matchesDifficulty;
-  });
-  
-  // Fetch data from API when filters change
   useEffect(() => {
     const loadData = async () => {
       const filters = {
-        level: level === 'all' ? undefined : level,
+        level: level,
         ...(subjectFilter !== 'all' && { subject: subjectFilter }),
         ...(difficultyFilter !== 'all' && { difficulty: difficultyFilter }),
         ...(classFilter !== 'all' && { class: classFilter }),
@@ -89,43 +69,38 @@ const Quizes = () => {
     loadData();
   }, [level, subjectFilter, difficultyFilter, classFilter]);
   
-  // Reset filters when level changes
   useEffect(() => {
     setSubjectFilter("all");
     setClassFilter("all");
     setDifficultyFilter("all");
   }, [level]);
   
-  // Format time helper
   const formatTime = (seconds) => {
-    if (!seconds) return "0:00";
+    if (!seconds) return "0 min";
     const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+    return `${mins} min`;
   };
   
-  // Calculate total time for a quiz
   const calculateTotalTime = (questions) => {
     if (!questions || questions.length === 0) return 0;
-    return questions.reduce((sum, q) => sum + (q.timeLimit || 0), 0);
+    return questions.reduce((sum, q) => sum + (q.timeLimit || 30), 0);
   };
   
-  const handleQuizSelect = (quiz) => {
+  const handleStart = (quiz) => {
     navigate(`/quiz/${quiz.id}`);
   };
   
-  // Add loading state
-  if (loading && displayedQuizzes.length === 0) {
+  if (loading && !contextQuizzes?.length) {
     return (
       <>
         <Header />
-        <div className="quizes-wrapper">
+        <div className="quizes-container">
           <PageHeader 
             title="Interactive Quizzes"
             description="Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz."
           />
-          <div className="loading-container">
-            <div className="loading-spinner"></div>
+          <div className="state-box">
+            <span className="spinner"></span>
             <p>Loading quizzes...</p>
           </div>
         </div>
@@ -134,21 +109,23 @@ const Quizes = () => {
     );
   }
   
-  // Add error state
-  if (error && displayedQuizzes.length === 0) {
+  if (error && !contextQuizzes?.length) {
     return (
       <>
         <Header />
-        <div className="quizes-wrapper">
-          <div className="error-container">
+        <div className="quizes-container">
+          <PageHeader 
+            title="Interactive Quizzes"
+            description="Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz."
+          />
+          <div className="state-box">
             <h3>Error Loading Quizzes</h3>
             <p>{error}</p>
             <button 
               onClick={() => { 
                 clearError(); 
                 fetchQuizzes({ level }); 
-              }} 
-              className="retry-btn"
+              }}
             >
               Retry
             </button>
@@ -162,29 +139,28 @@ const Quizes = () => {
   return (
     <>
       <Header />
-      <div className="quizes-wrapper">
+      <div className="quizes-container">
         <PageHeader 
           title="Interactive Quizzes"
           description="Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz."
         />
         
-        <div className="level-tabs">
+        <div className="level-switch">
           <button
             className={level === "primary" ? "active" : ""}
             onClick={() => setLevel("primary")}
           >
-            Primary 
+            Primary Level
           </button>
           <button
             className={level === "secondary" ? "active" : ""}
             onClick={() => setLevel("secondary")}
           >
-            Secondary 
+            Secondary Level
           </button>
         </div>
         
-        {/* Filters Container - Using reusable Filter components */}
-        <div className="filters-container compact">
+        <div className="qz-filters">
           <div className="filter-group">
             <Filter
               id="subject"
@@ -192,7 +168,6 @@ const Quizes = () => {
               onChange={setSubjectFilter}
               options={subjectOptions}
               showAllOption={false}
-              className="quizes-filter"
               placeholder="Select subject"
               disabled={loading}
             />
@@ -205,7 +180,6 @@ const Quizes = () => {
               onChange={setClassFilter}
               options={classOptions}
               showAllOption={false}
-              className="quizes-filter"
               placeholder="Select class"
               disabled={loading}
             />
@@ -218,64 +192,68 @@ const Quizes = () => {
               onChange={setDifficultyFilter}
               options={difficultyOptions}
               showAllOption={false}
-              className="quizes-filter"
               placeholder="Select difficulty"
               disabled={loading}
             />
           </div>
         </div>
         
-        <div className="quiz-list">
-          {displayedQuizzes.length === 0 ? (
-            <div className="no-quizzes">
-              {loading ? "Loading..." : "No quizzes available for the selected filters. Try adjusting your criteria."}
-            </div>
-          ) : (
-            displayedQuizzes.map((quiz) => (
-              <div key={quiz.id} className="quiz-card gradient-card">
-                <div className="quiz-card-header">
-                  <h3>{quiz.title}</h3>
-                  <div className="quiz-badges">
-                    <span className="level-badge">{quiz.level === 'primary' ? 'Primary' : 'Secondary'}</span>
-                    <span className={`difficulty-badge ${quiz.difficulty}`}>
-                      {quiz.difficulty?.charAt(0).toUpperCase() + quiz.difficulty?.slice(1)}
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="quiz-card-body">
-                  <div className="quiz-meta">
-                    <div className="meta-item">
-                      <span className="meta-label">Subject:</span>
-                      <span className="meta-value">{quiz.subject}</span>
-                    </div>
-                    <div className="meta-item">
-                      <span className="meta-label">Class:</span>
-                      <span className="meta-value">{quiz.class}</span>
-                    </div>
-                    <div className="meta-item">
-                      <span className="meta-label">Questions:</span>
-                      <span className="meta-value">{quiz.questions?.length || 0}</span>
-                    </div>
-                    <div className="meta-item">
-                      <span className="meta-label">Time:</span>
-                      <span className="meta-value">{formatTime(calculateTotalTime(quiz.questions))}</span>
+        <section className="quiz-section">
+          <div className="quiz-grid">
+            {contextQuizzes?.length === 0 ? (
+              <div className="empty">
+                <FaQuestionCircle size={64} color="#94a3b8" />
+                <h3>No Quizzes Available</h3>
+                <p>No quizzes found for the selected filters. Please try different subject, class, or difficulty.</p>
+              </div>
+            ) : (
+              contextQuizzes?.map((quiz) => (
+                <div key={quiz.id} className="qz-card">
+                  {/* Purple Header - News style */}
+                  <div className="qz-card-header">
+                    <h3>{quiz.title}</h3>
+                    <div className="qz-badges">
+                      <span className="qz-level-badge">
+                        {quiz.level === 'primary' ? 'Primary' : 'Secondary'}
+                      </span>
+                      <span className={`qz-difficulty-badge ${quiz.difficulty?.toLowerCase()}`}>
+                        {quiz.difficulty?.charAt(0).toUpperCase() + quiz.difficulty?.slice(1)}
+                      </span>
                     </div>
                   </div>
                   
-                  {quiz.description && (
-                    <p className="quiz-description">{quiz.description.substring(0, 100)}...</p>
-                  )}
+                  {/* Card Body - Only Time and Questions */}
+                  <div className="qz-card-body">
+                    <div className="qz-meta">
+                      <div className="qz-meta-item">
+                        <FaQuestionCircle className="qz-meta-icon" />
+                        <span className="qz-meta-value">{quiz.questions?.length || 0} Questions</span>
+                      </div>
+                      <div className="qz-meta-item">
+                        <FaClock className="qz-meta-icon" />
+                        <span className="qz-meta-value">{formatTime(calculateTotalTime(quiz.questions))}</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Card Footer - Take Quiz Button */}
+                  <div className="qz-card-footer">
+                    <button 
+                      onClick={() => handleStart(quiz)} 
+                      className="qz-start-btn"
+                    >
+                      Take Quiz
+                    </button>
+                  </div>
                 </div>
-                
-                <div className="quiz-card-footer">
-                  <button onClick={() => handleQuizSelect(quiz)} className="start-quiz-btn">
-                    Take Quiz
-                  </button>
-                </div>
-              </div>
-            ))
-          )}
+              ))
+            )}
+          </div>
+        </section>
+        
+        <div className="quiz-status">
+          Showing {contextQuizzes?.length || 0} {contextQuizzes?.length === 1 ? "quiz" : "quizzes"}
+          {loading && " · loading"}
         </div>
       </div>
       <Footer />
