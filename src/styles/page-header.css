@@ -1,7 +1,6 @@
 .page-header {
   width: 100%;
   background: #f4f6f8;
-  border-bottom: 1px solid rgba(26, 63, 122, 0.08);
   padding-top: 7rem;
   padding-bottom: 2rem;
   margin-bottom: 2rem;
@@ -93,13 +92,13 @@
 /* Mobile */
 @media (max-width: 576px) {
   .page-header {
-    padding-top: 7rem;
-    padding-bottom: 3rem;
+    padding-top: 8rem;
+    padding-bottom: 4rem;
   }
 
   .page-title {
-    font-size: 1.75rem;
-    line-height: 1.25;
+    font-size: 2.2rem;
+    line-height: 1.7;
   }
 
   .page-title::after {
@@ -108,7 +107,7 @@
   }
 
   .page-subtitle {
-    font-size: 1rem;
+    font-size: 1.2rem;
     line-height: 1.55;
     margin-top: 1rem;
   }
