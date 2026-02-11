@@ -23,24 +23,23 @@ const Footer = () => {
   };
 
   const links = [
-    { name: "Study Notes", link: "/study-notes", icon: <FaBook className="footer-icon" /> },
-    { name: "Past Papers", link: "/past-papers", icon: <FaFileAlt className="footer-icon" /> },
-    { name: "Video Tutorials", link: "/tutorials", icon: <FaVideo className="footer-icon" /> },
-    { name: "Practice Quizzes", link: "/quizes", icon: <FaQuestionCircle className="footer-icon" /> },
+    { name: "Study Notes", link: "/study-notes", icon: <FaBook /> },
+    { name: "Past Papers", link: "/past-papers", icon: <FaFileAlt /> },
+    { name: "Video Tutorials", link: "/tutorials", icon: <FaVideo /> },
+    { name: "Practice Quizzes", link: "/quizes", icon: <FaQuestionCircle /> },
   ];
 
   return (
     <footer className="FooterWrapper">
       <div className="footer-content">
-        
-       
+        {/* Logo */}
         <div className="footer-section footer-logo">
           <Link to="/" aria-label="Go to homepage">
             <img src={Logo} alt="Learn Malawi Logo" />
           </Link>
         </div>
 
-        
+        {/* Quick Links */}
         <div className="footer-section footer-box quick-links">
           <h3>Quick Links</h3>
           <ul>
@@ -54,15 +53,15 @@ const Footer = () => {
           </ul>
         </div>
 
-       
-        <address className="footer-section footer-box contact">
+        {/* Contact Info */}
+        <div className="footer-section footer-box contact">
           <h3>Contact Us</h3>
           <p>
-            <FaEnvelope className="footer-icon" /> 
+            <FaEnvelope className="footer-icon" />
             <a href={`mailto:${contactDetails.email}`}>{contactDetails.email}</a>
           </p>
           <p>
-            <FaWhatsapp className="footer-icon" /> 
+            <FaWhatsapp className="footer-icon" />
             <a href={`https://wa.me/${contactDetails.whatsapp.replace(/\s/g, "")}`} target="_blank" rel="noopener noreferrer">
               {contactDetails.whatsapp}
             </a>
@@ -70,37 +69,42 @@ const Footer = () => {
           <p>
             <FaMapMarkerAlt className="footer-icon" /> {contactDetails.office}
           </p>
-        </address>
-      </div>
-        
-      
-      <div className="social-icons">
-        <a href="https://x.com/LearnMalawi/" target="_blank" rel="noopener noreferrer" aria-label="Visit our Twitter">
-          <FaTwitter />
-        </a>
-        <a href="https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=zsfhaxa" target="_blank" rel="noopener noreferrer" aria-label="Visit our Instagram">
-          <FaInstagram />
-        </a>
-        <a href="https://www.facebook.com/share/172CUpW5Hw/" target="_blank" rel="noopener noreferrer" aria-label="Visit our Facebook">
-          <FaFacebook />
-        </a>
-
+        </div>
       </div>
 
-      <hr />
+<div className="social-icons">
+  <a 
+    href="https://x.com/LearnMalawi/" 
+    target="_blank" 
+    rel="noopener noreferrer" 
+    aria-label="Twitter"
+    className="twitter"
+  >
+    <FaTwitter />
+  </a>
+  <a 
+    href="https://www.instagram.com/LearnMalawi" 
+    target="_blank" 
+    rel="noopener noreferrer" 
+    aria-label="Instagram"
+    className="instagram"
+  >
+    <FaInstagram />
+  </a>
+  <a 
+    href="https://www.facebook.com/LearnMalawi" 
+    target="_blank" 
+    rel="noopener noreferrer" 
+    aria-label="Facebook"
+    className="facebook"
+  >
+    <FaFacebook />
+  </a>
+</div>
 
-      
+      {/* Footer Bottom */}
       <div className="footer-bottom">
         <p>© {new Date().getFullYear()} Learn Malawi. All Rights Reserved.</p>
-        
-        {/*
-        <div className="legal-links">
-        
-          <Link to="/privacy-policy">Privacy Policy</Link>
-          <Link to="/terms">Terms of Service</Link>
-          <Link to="/support">Support</Link>
-        </div>
-        */}
       </div>
     </footer>
   );

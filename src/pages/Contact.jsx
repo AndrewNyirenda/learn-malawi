@@ -25,11 +25,10 @@ const Contact = () => {
   
   const { loading, error, success, sendMessage, clearError, clearSuccess } = useContact();
 
-     // Scroll to top when component mounts
+  // Scroll to top
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
 
   const contactInfo = [
     {
@@ -67,7 +66,7 @@ const Contact = () => {
     {
       icon: <FaClock />,
       title: "Business Hours",
-      details: "Monday - Friday: 8:00 AM - 5:00 PM",
+      details: "Mon - Fri: 8:00 AM - 5:00 PM",
       link: null,
       action: null,
       description: "Saturday: 9:00 AM - 1:00 PM"
@@ -75,29 +74,18 @@ const Contact = () => {
   ];
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    setFormData({...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+    clearError();
+    clearSuccess();
     try {
-      // Clear previous states
-      clearError();
-      clearSuccess();
-      
-      // Send message to backend
       await sendMessage(formData);
-      
-      // Reset form on success
       setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
-      
     } catch (err) {
-      // Error is already handled in the context
-      console.error('Form submission error:', err);
+      console.error(err);
     }
   };
 
@@ -105,203 +93,161 @@ const Contact = () => {
     <>
       <Header />
       <div className="contact-wrapper">
-        {/* Replace Hero Section with PageHeader */}
         <PageHeader 
           title="Contact Learn Malawi"
-          description="Get in touch with our team. We're here to support your educational journey and answer any questions about our platform and services."
+          description="Reach our team for support or inquiries. We're committed to assisting your educational journey."
         />
 
-        {/* Contact Information Grid */}
+        {/* Contact Info */}
         <section className="contact-info-section">
           <div className="section-header">
             <h2>Contact Information</h2>
             <div className="section-divider"></div>
             <p className="section-subtitle">Multiple ways to reach our support team</p>
           </div>
-          
+
           <div className="contact-info-grid">
-            {contactInfo.map((info, index) => (
-              <div key={index} className="contact-info-card">
-                <div className="info-icon-container">
-                  {info.icon}
-                </div>
-                <div className="info-content">
-                  <h3>{info.title}</h3>
-                  <p className="info-details">{info.details}</p>
-                  <p className="info-description">{info.description}</p>
-                  {info.link && info.action && (
-                    <a 
-                      href={info.link} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="info-action"
-                    >
-                      {info.action} <FaArrowRight />
-                    </a>
-                  )}
-                </div>
+            {contactInfo.map((info, i) => (
+              <div key={i} className="contact-card">
+                <div className="contact-icon">{info.icon}</div>
+                <h3>{info.title}</h3>
+                <p className="contact-details">{info.details}</p>
+                <p className="contact-desc">{info.description}</p>
+                {info.link && info.action && (
+                  <a 
+                    href={info.link} 
+                    target="_blank" 
+                    rel="noopener noreferrer nofollow"
+                    className="contact-action"
+                  >
+                    {info.action} <FaArrowRight />
+                  </a>
+                )}
               </div>
             ))}
           </div>
         </section>
 
-        {/* Contact Form Section */}
+        {/* Contact Form */}
         <section className="contact-form-section">
           <div className="section-header">
             <h2>Send Us a Message</h2>
             <div className="section-divider"></div>
-            <p className="section-subtitle">We'll respond within 24 hours</p>
+            <p className="section-subtitle">We’ll respond within 24 hours</p>
           </div>
 
           <div className="contact-form-container">
-            <div className="form-wrapper">
-              {/* Status Messages */}
-              {success && (
-                <div className="success-message">
-                  <div className="success-content">
-                    <div className="success-icon">✓</div>
-                    <div>
-                      <h3>Message Sent Successfully</h3>
-                      <p>Thank you for contacting Learn Malawi. We'll get back to you within 24 hours.</p>
-                    </div>
+            {success && (
+              <div className="success-message">
+                <div className="status-content">
+                  <div className="status-icon">✓</div>
+                  <div>
+                    <h3>Message Sent Successfully</h3>
+                    <p>Thank you! We'll respond within 24 hours.</p>
                   </div>
                 </div>
-              )}
+              </div>
+            )}
 
-              {error && (
-                <div className="error-message">
-                  <div className="error-content">
-                    <div className="error-icon">✗</div>
-                    <div>
-                      <h3>Message Failed to Send</h3>
-                      <p>Please try again or use one of our other contact methods.</p>
-                      <button 
-                        onClick={clearError}
-                        className="retry-btn"
-                      >
-                        Try Again
-                      </button>
-                    </div>
+            {error && (
+              <div className="error-message">
+                <div className="status-content">
+                  <div className="status-icon">✗</div>
+                  <div>
+                    <h3>Message Failed</h3>
+                    <p>Please try again or use another contact method.</p>
+                    <button className="retry-btn" onClick={clearError}>Try Again</button>
                   </div>
                 </div>
-              )}
+              </div>
+            )}
 
-              <form className="contact-form" onSubmit={handleSubmit}>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="name">
-                      Full Name *
-                      <span className="required-dot"></span>
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                      placeholder="John Doe"
-                      disabled={loading}
-                      className="form-input"
-                    />
-                  </div>
-                  
-                  <div className="form-group">
-                    <label htmlFor="email">
-                      Email Address *
-                      <span className="required-dot"></span>
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      placeholder="john@example.com"
-                      disabled={loading}
-                      className="form-input"
-                    />
-                  </div>
-                </div>
-
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="phone">Phone Number</label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      placeholder="+265 XXX XXX XXX"
-                      disabled={loading}
-                      className="form-input"
-                    />
-                  </div>
-                  
-                  <div className="form-group">
-                    <label htmlFor="subject">
-                      Subject *
-                      <span className="required-dot"></span>
-                    </label>
-                    <input
-                      type="text"
-                      id="subject"
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleChange}
-                      required
-                      placeholder="General Inquiry"
-                      disabled={loading}
-                      className="form-input"
-                    />
-                  </div>
-                </div>
-
+            <form className="contact-form" onSubmit={handleSubmit}>
+              <div className="form-row">
                 <div className="form-group">
-                  <label htmlFor="message">
-                    Message *
-                    <span className="required-dot"></span>
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
+                  <label>Full Name *</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
                     onChange={handleChange}
                     required
-                    rows="6"
-                    placeholder="Please describe how we can assist you..."
+                    placeholder="John Doe"
                     disabled={loading}
-                    className="form-textarea"
-                  ></textarea>
+                    className="form-input"
+                  />
                 </div>
+                <div className="form-group">
+                  <label>Email Address *</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    placeholder="john@example.com"
+                    disabled={loading}
+                    className="form-input"
+                  />
+                </div>
+              </div>
 
-                <div className="form-footer">
-                  <p className="required-note">
-                    <span className="required-dot"></span> Indicates required field
-                  </p>
-                  
-                  <button 
-                    type="submit" 
-                    className={`submit-btn ${loading ? 'loading' : ''}`}
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Phone Number</label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="+265 XXX XXX XXX"
                     disabled={loading}
-                  >
-                    {loading ? (
-                      <>
-                        <div className="spinner"></div>
-                        Sending Message...
-                      </>
-                    ) : (
-                      <>
-                        <FaPaperPlane className="btn-icon" />
-                        Send Message
-                      </>
-                    )}
-                  </button>
+                    className="form-input"
+                  />
                 </div>
-              </form>
-            </div>
+                <div className="form-group">
+                  <label>Subject *</label>
+                  <input
+                    type="text"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    required
+                    placeholder="General Inquiry"
+                    disabled={loading}
+                    className="form-input"
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Message *</label>
+                <textarea
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  rows="6"
+                  placeholder="Please describe how we can assist you..."
+                  disabled={loading}
+                  className="form-textarea"
+                  required
+                ></textarea>
+              </div>
+
+              <button 
+                type="submit" 
+                className={`submit-btn ${loading ? 'loading' : ''}`}
+                disabled={loading}
+              >
+                {loading ? (
+                  <>Sending Message...</>
+                ) : (
+                  <>
+                    <FaPaperPlane className="btn-icon" /> Send Message
+                  </>
+                )}
+              </button>
+            </form>
           </div>
         </section>
       </div>
