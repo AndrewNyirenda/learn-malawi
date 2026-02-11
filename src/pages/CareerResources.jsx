@@ -77,9 +77,9 @@ const CareerResources = () => {
     return (
       <>
         <Header />
-        <div className="career-resources-wrapper">
-          <div className="loading-container">
-            <div className="loading-spinner"></div>
+        <div className="cr-wrapper">
+          <div className="cr-loading-container">
+            <div className="cr-loading-spinner"></div>
             <p>Loading career resources...</p>
           </div>
         </div>
@@ -92,13 +92,13 @@ const CareerResources = () => {
     return (
       <>
         <Header />
-        <div className="career-resources-wrapper">
-          <div className="error-container">
+        <div className="cr-wrapper">
+          <div className="cr-error-container">
             <h3>Error Loading Resources</h3>
             <p>{error}</p>
             <button 
               onClick={() => { clearError(); fetchCareerResources(); }} 
-              className="retry-btn"
+              className="cr-retry-btn"
             >
               Retry
             </button>
@@ -112,47 +112,42 @@ const CareerResources = () => {
   return (
     <>
       <Header />
-      <div className="career-resources-wrapper">
-        {/* Replace Hero Section with PageHeader */}
+      <div className="cr-wrapper">
         <PageHeader 
           title="Career Guidance Resources"
           description="Comprehensive career development resources designed to help Malawian students explore opportunities, develop skills, and plan successful career pathways aligned with national development goals."
         />
 
         {/* Resources Grid */}
-        <section className="career-resources-section">
-          <div className="section-header">
-            <h2>Career Development Resources</h2>
-            <div className="section-divider"></div>
-            <p className="section-subtitle">Essential tools and information for career planning</p>
-          </div>
+        <section className="cr-resources-section">
           
-          <div className="resources-grid">
+          
+          <div className="cr-resources-grid">
             {careerResources.length > 0 ? (
               careerResources.map((resource) => (
-                <div key={resource.id} className="resource-card-enhanced">
-                  <div className="resource-icon-enhanced">
+                <div key={resource.id} className="cr-resource-card">
+                  <div className="cr-resource-icon">
                     {getIcon(resource.icon)}
                   </div>
                   
-                  <h3 className="resource-title-enhanced">{resource.title}</h3>
+                  <h3 className="cr-resource-title">{resource.title}</h3>
                   
-                  <p className="resource-description-enhanced">{resource.description}</p>
+                  <p className="cr-resource-description">{resource.description}</p>
                   
                   <a
                     href={resource.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="resource-link-enhanced"
+                    className="cr-resource-link"
                   >
-                    <FaExternalLinkAlt className="link-icon-enhanced" />
+                    <FaExternalLinkAlt className="cr-link-icon" />
                     Access Resource
                   </a>
                 </div>
               ))
             ) : (
-              <div className="no-resources">
-                <div className="no-resources-icon">
+              <div className="cr-no-resources">
+                <div className="cr-no-resources-icon">
                   <FaFileAlt />
                 </div>
                 <h3>No career resources available yet</h3>
@@ -163,133 +158,133 @@ const CareerResources = () => {
         </section>
 
         {/* Motivational Figures Section */}
-        <section className="motivation-section">
-          <div className="section-header">
+        <section className="cr-motivation-section">
+          <div className="cr-section-header">
             <h2>Inspirational Figures</h2>
-            <div className="section-divider"></div>
-            <p className="section-subtitle">Global leaders who exemplify perseverance and achievement</p>
+            <div className="cr-section-divider"></div>
+            <p className="cr-section-subtitle">Global leaders who exemplify perseverance and achievement</p>
           </div>
 
-          <div className="figures-grid">
-            <div className="figure-card-enhanced">
-              <div className="figure-image-container">
+          <div className="cr-figures-grid">
+            <div className="cr-figure-card">
+              <div className="cr-figure-image-container">
                 <img 
                   src={OprahImage} 
                   alt="Oprah Winfrey" 
-                  className="figure-image"
+                  className="cr-figure-image"
                   onError={(e) => {
                     e.target.style.display = 'none';
-                    e.target.parentElement.innerHTML = '<div className="figure-icon-enhanced"><FaUserTie /></div>';
+                    e.target.parentElement.innerHTML = '<div className="cr-figure-icon"><FaUserTie /></div>';
                   }}
                 />
               </div>
-              <h3 className="figure-title-enhanced">Oprah Winfrey</h3>
-              <p className="figure-description-enhanced">
+              <h3 className="cr-figure-title">Oprah Winfrey</h3>
+              <p className="cr-figure-description">
                 From a troubled childhood to becoming a media mogul and philanthropist, 
                 Oprah's journey demonstrates the power of resilience and self-belief.
               </p>
-              <div className="figure-tag-enhanced">Media & Philanthropy</div>
+              <div className="cr-figure-tag">Media & Philanthropy</div>
             </div>
             
-            <div className="figure-card-enhanced">
-              <div className="figure-image-container">
+            <div className="cr-figure-card">
+              <div className="cr-figure-image-container">
                 <img 
                   src={ElonImage} 
                   alt="Elon Musk" 
-                  className="figure-image"
+                  className="cr-figure-image"
                   onError={(e) => {
                     e.target.style.display = 'none';
-                    e.target.parentElement.innerHTML = '<div className="figure-icon-enhanced"><FaLightbulb /></div>';
+                    e.target.parentElement.innerHTML = '<div className="cr-figure-icon"><FaLightbulb /></div>';
                   }}
                 />
               </div>
-              <h3 className="figure-title-enhanced">Elon Musk</h3>
-              <p className="figure-description-enhanced">
+              <h3 className="cr-figure-title">Elon Musk</h3>
+              <p className="cr-figure-description">
                 Founder of Tesla and SpaceX, Elon Musk continues to push technological boundaries 
                 through relentless innovation and perseverance.
               </p>
-              <div className="figure-tag-enhanced">Technology & Innovation</div>
+              <div className="cr-figure-tag">Technology & Innovation</div>
             </div>
             
-            <div className="figure-card-enhanced">
-              <div className="figure-image-container">
+            <div className="cr-figure-card">
+              <div className="cr-figure-image-container">
                 <img 
                   src={MalalaImage} 
                   alt="Malala Yousafzai" 
-                  className="figure-image"
+                  className="cr-figure-image"
                   onError={(e) => {
                     e.target.style.display = 'none';
-                    e.target.parentElement.innerHTML = '<div className="figure-icon-enhanced"><FaGraduationCap /></div>';
+                    e.target.parentElement.innerHTML = '<div className="cr-figure-icon"><FaGraduationCap /></div>';
                   }}
                 />
               </div>
-              <h3 className="figure-title-enhanced">Malala Yousafzai</h3>
-              <p className="figure-description-enhanced">
+              <h3 className="cr-figure-title">Malala Yousafzai</h3>
+              <p className="cr-figure-description">
                 Nobel Peace Prize winner and advocate for girls' education, Malala's courage 
                 and determination have inspired millions worldwide.
               </p>
-              <div className="figure-tag-enhanced">Education & Activism</div>
+              <div className="cr-figure-tag">Education & Activism</div>
             </div>
             
-            <div className="figure-card-enhanced">
-              <div className="figure-image-container">
+            <div className="cr-figure-card">
+              <div className="cr-figure-image-container">
                 <img 
                   src={SteveImage} 
                   alt="Steve Jobs" 
-                  className="figure-image"
+                  className="cr-figure-image"
                   onError={(e) => {
                     e.target.style.display = 'none';
-                    e.target.parentElement.innerHTML = '<div className="figure-icon-enhanced"><FaChartLine /></div>';
+                    e.target.parentElement.innerHTML = '<div className="cr-figure-icon"><FaChartLine /></div>';
                   }}
                 />
               </div>
-              <h3 className="figure-title-enhanced">Steve Jobs</h3>
-              <p className="figure-description-enhanced">
+              <h3 className="cr-figure-title">Steve Jobs</h3>
+              <p className="cr-figure-description">
                 Co-founder of Apple Inc., Steve Jobs revolutionized personal technology 
                 through his commitment to innovation and excellence.
               </p>
-              <div className="figure-tag-enhanced">Technology & Design</div>
+              <div className="cr-figure-tag">Technology & Design</div>
             </div>
           </div>
         </section>
 
         {/* Career Planning Tips */}
-        <section className="tips-section">
-          <div className="section-header">
+        <section className="cr-tips-section">
+          <div className="cr-section-header">
             <h2>Career Planning Strategies</h2>
-            <div className="section-divider"></div>
-            <p className="section-subtitle">Practical steps for career development</p>
+            <div className="cr-section-divider"></div>
+            <p className="cr-section-subtitle">Practical steps for career development</p>
           </div>
 
-          <div className="tips-container">
-            <div className="tip-card-enhanced">
-              <div className="tip-number-enhanced">01</div>
-              <h3 className="tip-title-enhanced">Self-Assessment</h3>
-              <p className="tip-description-enhanced">Identify your strengths, interests, values, and skills to align with suitable career paths.</p>
+          <div className="cr-tips-container">
+            <div className="cr-tip-card">
+              <div className="cr-tip-number">01</div>
+              <h3 className="cr-tip-title">Self-Assessment</h3>
+              <p className="cr-tip-description">Identify your strengths, interests, values, and skills to align with suitable career paths.</p>
             </div>
             
-            <div className="tip-card-enhanced">
-              <div className="tip-number-enhanced">02</div>
-              <h3 className="tip-title-enhanced">Research Careers</h3>
-              <p className="tip-description-enhanced">Explore different professions, job requirements, and growth opportunities in various sectors.</p>
+            <div className="cr-tip-card">
+              <div className="cr-tip-number">02</div>
+              <h3 className="cr-tip-title">Research Careers</h3>
+              <p className="cr-tip-description">Explore different professions, job requirements, and growth opportunities in various sectors.</p>
             </div>
             
-            <div className="tip-card-enhanced">
-              <div className="tip-number-enhanced">03</div>
-              <h3 className="tip-title-enhanced">Skill Development</h3>
-              <p className="tip-description-enhanced">Acquire relevant skills through education, training, and practical experience.</p>
+            <div className="cr-tip-card">
+              <div className="cr-tip-number">03</div>
+              <h3 className="cr-tip-title">Skill Development</h3>
+              <p className="cr-tip-description">Acquire relevant skills through education, training, and practical experience.</p>
             </div>
             
-            <div className="tip-card-enhanced">
-              <div className="tip-number-enhanced">04</div>
-              <h3 className="tip-title-enhanced">Networking</h3>
-              <p className="tip-description-enhanced">Build professional connections through mentors, internships, and industry events.</p>
+            <div className="cr-tip-card">
+              <div className="cr-tip-number">04</div>
+              <h3 className="cr-tip-title">Networking</h3>
+              <p className="cr-tip-description">Build professional connections through mentors, internships, and industry events.</p>
             </div>
           </div>
         </section>
 
         {/* Connection Status */}
-        <div className="connection-status">
+        <div className="cr-connection-status">
           <small>
             Displaying {careerResources.length} career resources from national database
           </small>
