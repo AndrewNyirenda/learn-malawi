@@ -24,6 +24,19 @@ const Header = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isOpen && isMobile) {
+      document.body.classList.add('menu-open');
+    } else {
+      document.body.classList.remove('menu-open');
+    }
+    
+    return () => {
+      document.body.classList.remove('menu-open');
+    };
+  }, [isOpen, isMobile]);
+
   const toggleMenu = () => {
     setIsOpen((prev) => !prev);
   };
@@ -60,14 +73,11 @@ const Header = () => {
 
       {/* Mobile Top Bar */}
       <div className="mobile-top-bar">
-        {/* Logo */}
         <div className="LogoWrapper">
           <img src={logo} alt="Learn Malawi logo" id="Logo" />
         </div>
 
-        {/* Mobile Actions */}
         <div className="mobile-actions">
-          {/* Search Icon */}
           <div className={`SearchIconWrapper ${showSearch ? "active" : ""}`}>
             {showSearch && (
               <input
@@ -86,14 +96,13 @@ const Header = () => {
             />
           </div>
 
-          {/* Hamburger Menu */}
           <div className="hamburger" onClick={toggleMenu}>
             {isOpen ? <FaTimes /> : <FaBars />}
           </div>
         </div>
       </div>
 
-      {/* Menu Items */}
+      {/* Menu Items - Fixed: Always present, visibility controlled by CSS */}
       <div className={`Menu ${isOpen ? "open" : ""}`}>
         <NavLink
           to="/"
@@ -179,7 +188,7 @@ const Header = () => {
         </NavLink>
       </div>
 
-      {/* Desktop Search - Only show on desktop */}
+      {/* Desktop Search */}
       {!isMobile && (
         <div className={`SearchIconWrapper ${showSearch ? "active" : ""}`}>
           {showSearch && (

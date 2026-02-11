@@ -138,7 +138,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.7) !;
   border-radius: 50%;
   width: 60px;
   height: 60px;
@@ -273,7 +273,7 @@
 }
 
 .action-link.youtube {
-  background: #2e9f3a;
+  background: #2e9f3a !important;
   color: white;
   border: 1px solid #2e9f3a;
 }
