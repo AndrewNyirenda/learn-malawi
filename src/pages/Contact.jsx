@@ -25,7 +25,6 @@ const Contact = () => {
   
   const { loading, error, success, sendMessage, clearError, clearSuccess } = useContact();
 
-  // Scroll to top
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -59,8 +58,8 @@ const Contact = () => {
       icon: <FaMapMarkerAlt />,
       title: "Office Location",
       details: "Area 8, Biwi, Lilongwe",
-      link: "https://maps.google.com/?q=Area+8+Biwi+Lilongwe+Malawi",
-      action: "View on Map",
+      link: null,
+      action: null,
       description: "Visit our office in Lilongwe"
     },
     {
@@ -92,33 +91,26 @@ const Contact = () => {
   return (
     <>
       <Header />
-      <div className="contact-wrapper">
+      <div className="lm-contact-wrapper">
         <PageHeader 
           title="Contact Learn Malawi"
           description="Reach our team for support or inquiries. We're committed to assisting your educational journey."
         />
 
-        {/* Contact Info */}
-        <section className="contact-info-section">
-          <div className="section-header">
-            <h2>Contact Information</h2>
-            <div className="section-divider"></div>
-            <p className="section-subtitle">Multiple ways to reach our support team</p>
-          </div>
-
-          <div className="contact-info-grid">
+        <section className="lm-contact-info-section">
+          <div className="lm-contact-info-grid">
             {contactInfo.map((info, i) => (
-              <div key={i} className="contact-card">
-                <div className="contact-icon">{info.icon}</div>
+              <div key={i} className="lm-contact-card">
+                <div className="lm-contact-icon">{info.icon}</div>
                 <h3>{info.title}</h3>
-                <p className="contact-details">{info.details}</p>
-                <p className="contact-desc">{info.description}</p>
+                <p className="lm-contact-details">{info.details}</p>
+                <p className="lm-contact-desc">{info.description}</p>
                 {info.link && info.action && (
                   <a 
                     href={info.link} 
                     target="_blank" 
                     rel="noopener noreferrer nofollow"
-                    className="contact-action"
+                    className="lm-contact-action"
                   >
                     {info.action} <FaArrowRight />
                   </a>
@@ -128,43 +120,45 @@ const Contact = () => {
           </div>
         </section>
 
-        {/* Contact Form */}
-        <section className="contact-form-section">
-          <div className="section-header">
+        <section className="lm-contact-form-section">
+          <div className="lm-section-header">
             <h2>Send Us a Message</h2>
-            <div className="section-divider"></div>
-            <p className="section-subtitle">We’ll respond within 24 hours</p>
+            <p className="lm-section-subtitle">
+              We'll respond within 24 hours — usually much sooner
+            </p>
           </div>
 
-          <div className="contact-form-container">
+          <div className="lm-contact-form-container">
             {success && (
-              <div className="success-message">
-                <div className="status-content">
-                  <div className="status-icon">✓</div>
+              <div className="lm-success-message">
+                <div className="lm-status-content">
+                  <div className="lm-status-icon">✓</div>
                   <div>
                     <h3>Message Sent Successfully</h3>
-                    <p>Thank you! We'll respond within 24 hours.</p>
+                    <p>Thank you for reaching out. We'll respond within 24 hours.</p>
                   </div>
                 </div>
               </div>
             )}
 
             {error && (
-              <div className="error-message">
-                <div className="status-content">
-                  <div className="status-icon">✗</div>
+              <div className="lm-error-message">
+                <div className="lm-status-content">
+                  <div className="lm-status-icon">✗</div>
                   <div>
-                    <h3>Message Failed</h3>
-                    <p>Please try again or use another contact method.</p>
-                    <button className="retry-btn" onClick={clearError}>Try Again</button>
+                    <h3>Message Failed to Send</h3>
+                    <p>Please try again or use one of our alternative contact methods.</p>
+                    <button className="lm-retry-btn" onClick={clearError}>
+                      Try Again
+                    </button>
                   </div>
                 </div>
               </div>
             )}
 
-            <form className="contact-form" onSubmit={handleSubmit}>
-              <div className="form-row">
-                <div className="form-group">
+            <form className="lm-contact-form" onSubmit={handleSubmit}>
+              <div className="lm-form-row">
+                <div className="lm-form-group">
                   <label>Full Name *</label>
                   <input
                     type="text"
@@ -172,12 +166,12 @@ const Contact = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    placeholder="John Doe"
+                    placeholder="Your Full Name"
                     disabled={loading}
-                    className="form-input"
+                    className="lm-form-input"
                   />
                 </div>
-                <div className="form-group">
+                <div className="lm-form-group">
                   <label>Email Address *</label>
                   <input
                     type="email"
@@ -185,15 +179,15 @@ const Contact = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    placeholder="john@example.com"
+                    placeholder="Your Email Address"
                     disabled={loading}
-                    className="form-input"
+                    className="lm-form-input"
                   />
                 </div>
               </div>
 
-              <div className="form-row">
-                <div className="form-group">
+              <div className="lm-form-row">
+                <div className="lm-form-group">
                   <label>Phone Number</label>
                   <input
                     type="tel"
@@ -202,10 +196,10 @@ const Contact = () => {
                     onChange={handleChange}
                     placeholder="+265 XXX XXX XXX"
                     disabled={loading}
-                    className="form-input"
+                    className="lm-form-input"
                   />
                 </div>
-                <div className="form-group">
+                <div className="lm-form-group">
                   <label>Subject *</label>
                   <input
                     type="text"
@@ -213,14 +207,14 @@ const Contact = () => {
                     value={formData.subject}
                     onChange={handleChange}
                     required
-                    placeholder="General Inquiry"
+                    placeholder="How can we help?"
                     disabled={loading}
-                    className="form-input"
+                    className="lm-form-input"
                   />
                 </div>
               </div>
 
-              <div className="form-group">
+              <div className="lm-form-group">
                 <label>Message *</label>
                 <textarea
                   name="message"
@@ -229,21 +223,21 @@ const Contact = () => {
                   rows="6"
                   placeholder="Please describe how we can assist you..."
                   disabled={loading}
-                  className="form-textarea"
+                  className="lm-form-textarea"
                   required
-                ></textarea>
+                />
               </div>
 
               <button 
                 type="submit" 
-                className={`submit-btn ${loading ? 'loading' : ''}`}
+                className={`lm-submit-btn ${loading ? 'loading' : ''}`}
                 disabled={loading}
               >
                 {loading ? (
                   <>Sending Message...</>
                 ) : (
                   <>
-                    <FaPaperPlane className="btn-icon" /> Send Message
+                    <FaPaperPlane className="lm-btn-icon" /> Send Message
                   </>
                 )}
               </button>
