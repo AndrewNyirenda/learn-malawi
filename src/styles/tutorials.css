@@ -49,38 +49,6 @@
 
 /* ================= FILTERS ================= */
 
-.filters {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px;
-  margin: 0 auto 40px;
-  padding: 0 32px;
-  max-width: 1400px;
-  width: 100%;
-}
-
-.filters select {
-  width: 100%;
-  padding: 14px 16px;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  font-size: 15px;
-  background: #f9fafb;
-  color: #1e293b;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.filters select:hover {
-  border-color: #94a3b8;
-  background: #ffffff;
-}
-
-.filters select:focus {
-  outline: none;
-  border-color: #2f5fa8;
-  box-shadow: 0 0 0 3px rgba(47, 95, 168, 0.1);
-}
 
 /* ================= MATERIALS GRID ================= */
 
@@ -437,12 +405,7 @@
     font-size: 14px;
   }
 
-  .filters {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    padding: 0 20px;
-    margin-bottom: 32px;
-  }
+
 
   .materials {
     padding: 0 20px;

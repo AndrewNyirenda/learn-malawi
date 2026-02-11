@@ -121,10 +121,10 @@ const StudyNotes = () => {
 
         <div className="level-switch">
           <button className={level === "primary" ? "active" : ""} onClick={() => setLevel("primary")}>
-            Primary
+            Primary Level
           </button>
           <button className={level === "secondary" ? "active" : ""} onClick={() => setLevel("secondary")}>
-            Secondary
+            Secondary Level
           </button>
         </div>
 
