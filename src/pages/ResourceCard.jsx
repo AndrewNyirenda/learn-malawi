@@ -89,7 +89,7 @@ const ResourceCard = ({
         <div className="book-cover">
           <div className={`cover-inner ${imageLoaded ? 'loaded' : ''}`}>
             <img
-              src={thumbnail || "/images/pdf.png"}
+              src={thumbnail || "/images/pdf3.png"}
               alt={title}
               className="thumbnail"
               onError={handleImageError}
