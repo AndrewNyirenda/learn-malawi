@@ -1,440 +1,171 @@
-
 .about-wrapper {
-  min-height: 100vh;
-  background: var(--color-white);
-  
+  background: #ffffff;
 }
 
+/* ===== STORY SPLIT ===== */
 
-
-/* ============ SECTION COMMON STYLES ============ */
-.section-header {
-  text-align: center;
-  margin-bottom: var(--spacing-lg);
-}
-
-.section-header h2 {
-  font-family: var(--font-serif);
-  font-size: 2.25rem;
-  color: var(--color-navy);
-  margin-bottom: var(--spacing-md);
-  font-weight: 600;
-}
-
-.section-divider {
-  width: 60px;
-  height: 2px;
-  background: var(--color-red);
-  margin: 0 auto;
-}
-
-/* ============ STORY SECTION ============ */
 .story-section {
-  padding: var(--spacing-xl) var(--spacing-xl);
-  border-bottom: var(--border-thin);
+  padding: 6rem 2rem;
+  max-width: 1200px;
+  margin: auto;
 }
 
-.story-content {
-  max-width: 900px;
-  margin: 0 auto;
-  text-align: center;
+.story-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 4rem;
+  align-items: center;
 }
 
-.story-content p {
-  font-size: 1.125rem;
-  line-height: 1.7;
-  color: var(--color-navy-light);
-  font-weight: 300;
+.story-left h2 {
+  font-family: 'Oswald', sans-serif;
+  font-size: 2.5rem;
+  color: #1a3f7a;
+  margin-bottom: 1.5rem;
 }
 
-/* ============ MISSION & VISION ============ */
-.mission-vision-section {
-  padding: var(--spacing-xl) var(--spacing-xl);
-  background: var(--color-sand);
-  border-bottom: var(--border-thin);
+.story-left p {
+  line-height: 1.8;
+  margin-bottom: 1.2rem;
+  color: #2f5fa8;
+}
+
+.story-highlight {
+  background: #1a3f7a;
+  color: #ffffff;
+  padding: 3rem;
+}
+
+.story-highlight h3 {
+  font-family: 'Oswald', sans-serif;
+  margin-bottom: 1rem;
+}
+
+/* ===== MISSION VISION ===== */
+
+.mv-section {
+  padding: 6rem 2rem;
+  background: #f4f6f8;
 }
 
 .mv-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-lg);
-  max-width: 1200px;
-  margin: 0 auto;
+  gap: 3rem;
+  max-width: 1100px;
+  margin: auto;
 }
 
-.mv-card {
-  padding: var(--spacing-lg);
-  border: var(--border-thin);
-  background: var(--color-white);
-  transition: var(--transition-normal);
-  text-align: center;
-  height: 100%;
-}
-
-.mv-card:hover {
-  border-color: var(--color-navy);
-}
-
-.mv-icon-container {
-  width: 60px;
-  height: 60px;
-  background: var(--color-sand);
-  border: var(--border-thin);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto var(--spacing-md);
+.mv-block {
+  background: #ffffff;
+  padding: 3rem;
+  border-left: 4px solid #2e9f3a;
 }
 
 .mv-icon {
-  font-size: 1.5rem;
-  color: var(--color-red);
+  font-size: 2rem;
+  color: #2e9f3a;
+  margin-bottom: 1rem;
 }
 
-.mv-card h3 {
-  font-family: var(--font-sans);
-  font-size: 1.375rem;
-  color: var(--color-navy);
-  margin-bottom: var(--spacing-md);
-  font-weight: 600;
-}
+/* ===== VALUES ===== */
 
-.mv-card p {
-  font-size: 1rem;
-  line-height: 1.7;
-  color: var(--color-navy-light);
-  font-weight: 300;
-}
-
-/* ============ VALUES SECTION ============ */
 .values-section {
-  padding: var(--spacing-xl) var(--spacing-xl);
-  border-bottom: var(--border-thin);
+  padding: 6rem 2rem;
+  max-width: 1100px;
+  margin: auto;
 }
 
-.values-container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.values-scroll-wrapper {
-  overflow-x: visible;
-  padding-bottom: var(--spacing-sm);
-}
-
-.values-scroll-content {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-lg);
-  width: 100%;
-}
-
-.value-card {
-  padding: var(--spacing-lg);
-  border: var(--border-thin);
-  transition: var(--transition-normal);
+.center-title {
   text-align: center;
-  height: 100%;
-  min-width: 100%;
-  box-sizing: border-box;
+  font-family: 'Oswald', sans-serif;
+  font-size: 2.3rem;
+  color: #1a3f7a;
+  margin-bottom: 3rem;
 }
 
-.value-card:hover {
-  border-color: var(--color-navy);
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
 }
 
-.value-icon-container {
-  width: 56px;
-  height: 56px;
-  background: var(--color-sand);
-  border: var(--border-thin);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto var(--spacing-md);
+.value-box {
+  text-align: center;
 }
 
 .value-icon {
-  font-size: 1.5rem;
-  color: var(--color-red);
+  font-size: 2rem;
+  color: #2e9f3a;
+  margin-bottom: 1rem;
 }
 
-.value-card h3 {
-  font-family: var(--font-sans);
-  font-size: 1.25rem;
-  color: var(--color-navy);
-  margin-bottom: var(--spacing-md);
-  font-weight: 600;
-}
+/* ===== PHILOSOPHY ===== */
 
-.value-card p {
-  font-size: 1rem;
-  line-height: 1.7;
-  color: var(--color-navy-light);
-  font-weight: 300;
-}
-
-/* ============ PHILOSOPHY SECTION ============ */
 .philosophy-section {
-  padding: var(--spacing-xl) var(--spacing-xl);
-  background: var(--color-sand);
-  border-bottom: var(--border-thin);
+  padding: 6rem 2rem;
+  background: #f4f6f8;
 }
 
-.philosophy-content {
-  max-width: 1000px;
-  margin: 0 auto;
+.philosophy-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  max-width: 1100px;
+  margin: auto;
 }
 
-.philosophy-list {
-  list-style: none;
-  padding: 0;
+.philosophy-card {
+  text-align: center;
 }
 
-.philosophy-point {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--spacing-lg);
-  padding: var(--spacing-lg);
-  border: var(--border-thin);
-  background: var(--color-white);
-  margin-bottom: var(--spacing-md);
-  transition: var(--transition-normal);
+.philosophy-icon {
+  font-size: 2rem;
+  color: #2e9f3a;
+  margin-bottom: 1rem;
 }
 
-.philosophy-point:hover {
-  border-color: var(--color-navy);
-}
+/* ===== TEAM ===== */
 
-.phil-icon-container {
-  flex-shrink: 0;
-  width: 48px;
-  height: 48px;
-  background: var(--color-sand);
-  border: var(--border-thin);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.phil-icon {
-  font-size: 1.25rem;
-  color: var(--color-red);
-}
-
-.phil-text {
-  font-size: 1.125rem;
-  line-height: 1.7;
-  color: var(--color-navy-light);
-  font-weight: 300;
-  flex: 1;
-}
-
-/* ============ TEAM SECTION ============ */
 .team-section {
-  padding: var(--spacing-xl) var(--spacing-xl);
+  padding: 6rem 2rem;
+  max-width: 1100px;
+  margin: auto;
 }
 
 .team-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-lg);
-  max-width: 1200px;
-  margin: 0 auto;
+  gap: 3rem;
 }
 
 .team-card {
-  padding: var(--spacing-lg);
-  border: var(--border-thin);
-  transition: var(--transition-normal);
   text-align: center;
-  height: 100%;
 }
 
-.team-card:hover {
-  border-color: var(--color-navy);
-}
-
-.team-image-container {
-  margin-bottom: var(--spacing-md);
-}
-
-.team-image {
-  width: 130px;
-  height: 130px;
+.team-card img {
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
   object-fit: cover;
-  border: var(--border-thin);
-  background: var(--color-sand);
+  margin-bottom: 1rem;
 }
 
-.team-info h3 {
-  font-family: var(--font-sans);
-  font-size: 1.375rem;
-  color: var(--color-navy);
-  margin-bottom: var(--spacing-xs);
-  font-weight: 600;
+.team-card span {
+  display: block;
+  color: #2e9f3a;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
 }
 
-.team-role {
-  font-size: 0.875rem;
-  color: var(--color-red);
-  font-weight: 500;
-  margin-bottom: var(--spacing-md);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
+/* ===== RESPONSIVE ===== */
 
-.team-bio {
-  font-size: 0.938rem;
-  line-height: 1.6;
-  color: var(--color-navy-light);
-  font-weight: 300;
-}
-
-/* ============ RESPONSIVE DESIGN ============ */
-@media (max-width: 1200px) {
-  .mv-grid {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-lg);
-  }
-  
-  .team-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-lg);
-  }
-  
-  /* Adjust padding for all sections */
-  .story-section,
-  .mission-vision-section,
-  .values-section,
-  .philosophy-section,
-  .team-section {
-    padding: var(--spacing-lg) var(--spacing-md);
-  }
-}
-
-@media (max-width: 768px) {
-  .about-wrapper {
-    
-  }
-  
-  .section-header h2 {
-    font-size: 1.875rem;
-  }
-  
-  /* Reduce padding top/bottom for all sections */
-  .story-section,
-  .mission-vision-section,
-  .values-section,
-  .philosophy-section,
-  .team-section {
-    padding: var(--spacing-lg) var(--spacing-md);
-  }
-  
-  /* VALUES SECTION - HORIZONTAL SCROLL ON MOBILE */
-  .values-scroll-wrapper {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: var(--spacing-sm);
-    margin: 0 calc(var(--spacing-md) * -1);
-    padding-left: var(--spacing-md);
-    padding-right: var(--spacing-md);
-  }
-  
-  .values-scroll-content {
-    display: flex;
-    gap: var(--spacing-md);
-    width: max-content;
-    padding-right: var(--spacing-md);
-  }
-  
-  .value-card {
-    min-width: 280px;
-    max-width: 280px;
-    flex-shrink: 0;
-    scroll-snap-align: start;
-  }
-  
+@media (max-width: 992px) {
+  .story-grid,
+  .mv-grid,
+  .values-grid,
+  .philosophy-grid,
   .team-grid {
     grid-template-columns: 1fr;
-    gap: var(--spacing-lg);
-  }
-  
-  .philosophy-point {
-    flex-direction: column;
-    gap: var(--spacing-md);
-    padding: var(--spacing-md);
-  }
-  
-  .phil-icon-container {
-    width: 40px;
-    height: 40px;
-  }
-  
-  .phil-icon {
-    font-size: 1rem;
-  }
-  
-  .mv-icon-container {
-    width: 50px;
-    height: 50px;
-  }
-  
-  .mv-icon {
-    font-size: 1.25rem;
-  }
-  
-  .team-image {
-    width: 120px;
-    height: 120px;
-  }
-}
-
-@media (max-width: 480px) {
-  .section-header h2 {
-    font-size: 1.625rem;
-  }
-  
-  .about-description,
-  .story-content p,
-  .mv-card p,
-  .value-card p,
-  .phil-text,
-  .team-bio {
-    font-size: 0.938rem;
-  }
-  
-  /* Further reduce padding for mobile */
-  .story-section,
-  .mission-vision-section,
-  .values-section,
-  .philosophy-section,
-  .team-section {
-    padding: var(--spacing-md) var(--spacing-sm);
-  }
-  
-  .mv-card,
-  .value-card,
-  .team-card {
-    padding: var(--spacing-md);
-  }
-  
-  .value-card {
-    min-width: 260px;
-    max-width: 260px;
-  }
-  
-  .team-image {
-    width: 110px;
-    height: 110px;
-  }
-  
-  .team-info h3 {
-    font-size: 1.25rem;
-  }
-  
-  .team-role {
-    font-size: 0.813rem;
   }
 }
