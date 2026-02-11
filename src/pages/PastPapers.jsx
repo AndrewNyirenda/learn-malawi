@@ -9,7 +9,6 @@ import Pagination from "../components/Pagination";
 
 const PastPapers = () => {
   const [level, setLevel] = useState("secondary");
-  const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("all");
   const [classFilter, setClassFilter] = useState("all");
   const [yearFilter, setYearFilter] = useState("all");
@@ -53,7 +52,6 @@ const PastPapers = () => {
         ...(category !== "all" && { category }),
         ...(classFilter !== "all" && { class: classFilter }),
         ...(yearFilter !== "all" && { year: parseInt(yearFilter) }),
-        ...(searchTerm && { search: searchTerm }),
       };
 
       const result = await fetchPastPapers(currentPage, itemsPerPage, filters);
@@ -61,13 +59,12 @@ const PastPapers = () => {
     };
 
     loadPastPapers();
-  }, [level, category, classFilter, yearFilter, searchTerm, currentPage]);
+  }, [level, category, classFilter, yearFilter, currentPage]);
 
   useEffect(() => {
     setCategory("all");
     setClassFilter("all");
     setYearFilter("all");
-    setSearchTerm("");
     setCurrentPage(1);
   }, [level]);
 
@@ -153,34 +150,6 @@ const PastPapers = () => {
           </button>
         </div>
 
-        <div className="papers-search-section">
-          <div className="papers-search-container">
-            <input
-              className="papers-search-input"
-              type="text"
-              placeholder="Search past papers..."
-              value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setCurrentPage(1);
-              }}
-            />
-            {searchTerm && (
-              <button
-                className="papers-filter-clear"
-                onClick={() => {
-                  setSearchTerm("");
-                  setCurrentPage(1);
-                }}
-                type="button"
-                style={{ right: "20px" }}
-              >
-                ✕
-              </button>
-            )}
-          </div>
-        </div>
-
         <div className="papers-filters-section">
           <div className="papers-filter-group">
             <label className="papers-filter-label">Category</label>
@@ -247,16 +216,25 @@ const PastPapers = () => {
         </div>
 
         <section className="papers-section">
-          <h2 className="papers-section-title">Past Papers</h2>
+
           <div className="papers-grid">
-            {pastPapers.map((resource) => (
-              <ResourceCard
-                key={resource.id}
-                {...resource}
-                onView={() => handleViewResource(resource)}
-                onDownload={() => handleDownloadResource(resource)}
-              />
-            ))}
+            {pastPapers.length > 0 ? (
+              pastPapers.map((resource) => (
+                <ResourceCard
+                  key={resource.id}
+                  {...resource}
+                  onView={() => handleViewResource(resource)}
+                  onDownload={() => handleDownloadResource(resource)}
+                />
+              ))
+            ) : (
+              <div className="papers-empty-state">
+                <div className="papers-empty-message">No Past Papers Available</div>
+                <div className="papers-empty-hint">
+                  No past papers found for the selected filters. Please try different category, class, or year.
+                </div>
+              </div>
+            )}
           </div>
         </section>
 
