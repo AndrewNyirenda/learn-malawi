@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
 import logo from "../images/Logo.png";
 import "../styles/header.css";
@@ -64,17 +64,22 @@ const Header = () => {
 
   return (
     <header className="HeaderWrapper">
-      {/* Desktop Logo */}
+      {/* Desktop Logo - Clickable */}
       {!isMobile && (
         <div className="LogoWrapper">
-          <img src={logo} alt="Learn Malawi logo" id="Logo" />
+          <Link to="/" onClick={closeMenu}>
+            <img src={logo} alt="Learn Malawi logo" id="Logo" />
+          </Link>
         </div>
       )}
 
       {/* Mobile Top Bar */}
       <div className="mobile-top-bar">
+        {/* Mobile Logo - Clickable */}
         <div className="LogoWrapper">
-          <img src={logo} alt="Learn Malawi logo" id="Logo" />
+          <Link to="/" onClick={closeMenu}>
+            <img src={logo} alt="Learn Malawi logo" id="Logo" />
+          </Link>
         </div>
 
         <div className="mobile-actions">
@@ -102,7 +107,7 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Menu Items - Fixed: Always present, visibility controlled by CSS */}
+      {/* Menu Items */}
       <div className={`Menu ${isOpen ? "open" : ""}`}>
         <NavLink
           to="/"

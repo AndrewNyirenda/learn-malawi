@@ -30,6 +30,8 @@ a {
 #Logo {
   height: 38px;
   max-width: 148px;
+  background: #fff;
+  padding: 3px;
  
  
 }
@@ -37,7 +39,8 @@ a {
 .LogoWrapper {
   display: flex;
   align-items: center;
-  background: #fff;
+ 
+  padding: 0 !important;
 }
 
 /* Desktop Menu */
