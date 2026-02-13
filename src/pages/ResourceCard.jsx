@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { FaBookmark, FaRegBookmark, FaEye, FaDownload } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaEye, FaDownload } from "react-icons/fa";
 import "../styles/resource-card.css";
 
 const ResourceCard = ({ 
@@ -14,30 +14,7 @@ const ResourceCard = ({
   class: resourceClass,
   year
 }) => {
-  const [isBookmarked, setIsBookmarked] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
-
-  const toggleBookmark = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsBookmarked(prev => !prev);
-    
-    const bookmarks = JSON.parse(localStorage.getItem('studyBookmarks') || '[]');
-    if (!isBookmarked) {
-      const bookmark = {
-        id,
-        title,
-        category,
-        class: resourceClass,
-        date: new Date().toISOString()
-      };
-      const newBookmarks = [...bookmarks, bookmark];
-      localStorage.setItem('studyBookmarks', JSON.stringify(newBookmarks));
-    } else {
-      const newBookmarks = bookmarks.filter(b => b.id !== id);
-      localStorage.setItem('studyBookmarks', JSON.stringify(newBookmarks));
-    }
-  };
 
   const handleView = (e) => {
     e.preventDefault();
@@ -58,32 +35,8 @@ const ResourceCard = ({
     setImageLoaded(true);
   };
 
-  useEffect(() => {
-    const bookmarks = JSON.parse(localStorage.getItem('studyBookmarks') || '[]');
-    const isAlreadyBookmarked = bookmarks.some(b => b.id === id);
-    setIsBookmarked(isAlreadyBookmarked);
-  }, [id]);
-
   return (
     <div className="resource-card">
-      {/* Card Header with Bookmark Button */}
-      <div className="card-header">
-        <button
-          onClick={toggleBookmark}
-          style={{
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            padding: '4px',
-            fontSize: '14px',
-            color: isBookmarked ? '#2f5fa8' : '#94a3b8'
-          }}
-          title={isBookmarked ? "Remove from bookmarks" : "Add to bookmarks"}
-        >
-          {isBookmarked ? <FaBookmark /> : <FaRegBookmark />}
-        </button>
-      </div>
-
       {/* Thumbnail */}
       <div className="thumbnail-container">
         <div className="book-cover">

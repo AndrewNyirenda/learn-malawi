@@ -134,6 +134,15 @@
     grid-template-columns: 1fr;
     padding: 0 20px;
   }
+  
+  .level-switch{
+    flex-direction: row !important;
+  }
+
+ .card-footer {
+   flex-direction: row !important;
+ }
+
 
   .level-switch,
   .materials,
