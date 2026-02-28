@@ -96,7 +96,7 @@ const AdminStudyNotes = () => {
     await Promise.all([
       fetchCategories(levelEnum),
       fetchClasses(levelEnum),
-      fetchBooks(1, 50, filters) // Show 50 items for admin gallery
+      fetchBooks(1, 200, filters) // Show 50 items for admin gallery
     ]);
     
     // Fetch stats if admin
@@ -118,7 +118,7 @@ const AdminStudyNotes = () => {
       ...(filters.search && { search: filters.search })
     };
     
-    fetchBooks(1, 50, filterParams);
+    fetchBooks(1, 200, filterParams);
   }, [filters]);
 
   // Handle filter changes

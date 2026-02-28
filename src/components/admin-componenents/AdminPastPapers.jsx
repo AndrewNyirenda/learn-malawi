@@ -97,7 +97,7 @@ const AdminPastPapers = () => {
       fetchClasses(levelEnum),
       fetchYears(levelEnum),
       fetchExaminationBodies(levelEnum),
-      fetchPastPapers(1, 50, filters)
+      fetchPastPapers(1, 200, filters)
     ]);
     
     // Fetch stats if admin
