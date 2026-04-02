@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Oswald:wght@200..700&display=swap');
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 a {
@@ -16,70 +16,94 @@ a {
   top: 0;
   left: 0;
   width: 100%;
-  padding: 1rem 2rem;
-  background: #1a3f7a !important;
+  padding: 0.5rem 2rem;
+  background: #1a3f7f !important;
   display: flex;
   align-items: center;
   justify-content: space-between;
   z-index: 1000;
   flex-wrap: wrap;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
-
-#Logo {
-  height: 38px;
-  max-width: 148px;
-  background: #fff;
-  padding: 3px;
- 
- 
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
 }
 
 .LogoWrapper {
   display: flex;
   align-items: center;
- 
-  padding: 0 !important;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
 }
 
-/* Desktop Menu */
+.LogoWrapper a {
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.LogoWrapper a:hover {
+  transform: scale(1.02);
+}
+
+#Logo {
+  height: 72px;
+  width: auto;
+  max-width: 260px;
+  object-fit: contain;
+  filter: brightness(1.05) contrast(1.05);
+  transition: all 0.2s ease;
+}
+
+@media (min-width: 769px) {
+  .LogoWrapper {
+    margin-right: 1.5rem;
+  }
+  
+  #Logo {
+    height: 80px;
+    max-width: 280px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  #Logo {
+    height: 64px;
+    max-width: 220px;
+  }
+}
+
 .Menu {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
 
 .nav-link {
   padding: 0.5rem 1rem;
-  border-radius: 6px;
+  border-radius: 8px;
   font-weight: 500;
-  font-size: 0.9rem;
-  color: #ffffff;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.85);
   text-decoration: none;
   transition: all 0.2s ease;
   letter-spacing: 0.3px;
   text-transform: uppercase;
-  font-family: 'Oswald', sans-serif;
-  opacity: 0.9;
+  font-family: 'Oswald', 'Inter', sans-serif;
 }
 
 .nav-link:hover {
   background: rgba(255, 255, 255, 0.08);
-  opacity: 1;
+  color: #ffffff;
 }
 
 .nav-link.active {
   background: #1e6f3c;
   color: #ffffff;
   font-weight: 600;
-  opacity: 1;
   box-shadow: 0 2px 8px rgba(30, 111, 60, 0.3);
 }
 
-/* Desktop Search */
 .SearchIconWrapper {
   display: flex;
   align-items: center;
@@ -91,38 +115,41 @@ a {
   opacity: 0;
   padding: 0.6rem 1rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
+  border-radius: 40px;
   outline: none;
   font-size: 0.9rem;
   transition: width 0.25s ease, opacity 0.2s ease, margin 0.25s ease;
   margin-right: 0;
-  background: #ffffff;
-  color: #0a2647;
-  font-family: 'Roboto', sans-serif;
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .SearchIconWrapper.active .search-input {
-  width: 240px;
+  width: 260px;
   opacity: 1;
   margin-right: 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .search-icon {
   font-size: 1.2rem;
-  color: #ffffff;
+  color: rgba(255, 255, 255, 0.85);
   cursor: pointer;
   transition: all 0.2s ease;
   padding: 0.5rem;
-  border-radius: 4px;
-  opacity: 0.85;
+  border-radius: 40px;
 }
 
 .search-icon:hover {
-  opacity: 1;
-  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
 }
 
-/* Mobile Top Bar */
 .mobile-top-bar {
   display: none;
   width: 100%;
@@ -144,14 +171,12 @@ a {
   user-select: none;
   z-index: 1101;
   padding: 0.5rem;
-  border-radius: 6px;
+  border-radius: 8px;
   transition: background-color 0.2s ease;
-  opacity: 0.9;
 }
 
 .hamburger:hover {
   background: rgba(255, 255, 255, 0.08);
-  opacity: 1;
 }
 
 .backdrop {
@@ -160,7 +185,7 @@ a {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(10, 38, 71, 0.7);
+  background: rgba(10, 38, 71, 0.8);
   backdrop-filter: blur(4px);
   z-index: 1099;
   animation: fadeIn 0.2s ease;
@@ -171,11 +196,10 @@ a {
   to { opacity: 1; }
 }
 
-/* ===== PROFESSIONAL MOBILE STYLES - FIXED ===== */
 @media (max-width: 768px) {
   .HeaderWrapper {
-    padding: 0.75rem 1.25rem;
-    background: #1a3f7a;
+    padding: 0.5rem 1.25rem;
+    background: #0a2647;
   }
 
   .mobile-top-bar {
@@ -183,12 +207,16 @@ a {
   }
 
   .LogoWrapper {
-    justify-content: flex-start;
+    flex: 1;
   }
-
+  
+  .LogoWrapper a {
+    display: inline-flex;
+  }
+  
   #Logo {
-    height: 34px;
-    max-width: 136px;
+    height: 70px;
+    max-width: 250px;
   }
 
   .hamburger {
@@ -197,16 +225,14 @@ a {
     justify-content: center;
   }
 
-  /* Hide desktop menu */
   .HeaderWrapper > .Menu {
     display: none;
   }
 
-
   .Menu {
     display: flex !important;
     flex-direction: column;
-    background: #1a3f7a;
+    background: #0a2647;
     position: fixed;
     top: 0;
     right: 0;
@@ -214,7 +240,7 @@ a {
     max-width: 85vw;
     height: 100vh;
     padding: 5rem 1.5rem 2rem;
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
+    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.3);
     transform: translateX(100%);
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     overflow-y: auto;
@@ -227,57 +253,48 @@ a {
     transform: translateX(0);
   }
 
-  /* Header branding in drawer */
   .Menu::before {
-    content: "MENU";
+    content: "LEARN MALAWI";
     display: block;
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Oswald', 'Inter', sans-serif;
     font-size: 0.75rem;
     letter-spacing: 3px;
     color: rgba(255, 255, 255, 0.5);
     margin-bottom: 1.5rem;
     padding-bottom: 0.75rem;
     border-bottom: 2px solid #1e6f3c;
-    width: 40px;
+    width: auto;
+    text-align: left;
   }
 
   .Menu a {
     padding: 0.9rem 1.25rem;
     font-size: 1rem;
     font-weight: 500;
-    color: #ffffff;
+    color: rgba(255, 255, 255, 0.85);
     width: 100%;
     text-align: left;
-    border-radius: 6px;
+    border-radius: 8px;
     margin: 0.1rem 0;
     transition: all 0.2s ease;
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Oswald', 'Inter', sans-serif;
     text-transform: uppercase;
     letter-spacing: 1px;
-    opacity: 0.85;
     border: none;
   }
 
   .Menu a:hover,
   .Menu a.active {
     background: rgba(30, 111, 60, 0.25);
-    opacity: 1;
-    transform: translateX(4px);
     color: #ffffff;
+    transform: translateX(4px);
   }
 
   .Menu a.active {
     background: #1e6f3c;
-    opacity: 1;
     box-shadow: 0 4px 12px rgba(30, 111, 60, 0.25);
   }
 
-  .Menu a:active {
-    background: rgba(30, 111, 60, 0.4);
-    transform: scale(0.98);
-  }
-
-  /* Mobile Search */
   .mobile-actions .SearchIconWrapper {
     position: relative;
     display: flex;
@@ -290,10 +307,10 @@ a {
     left: 1.25rem;
     right: 1.25rem;
     width: auto;
-    background: #0f2e4f;
+    background: #0c2e52;
     padding: 0.75rem;
-    border-radius: 8px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
     z-index: 1102;
     border: 1px solid rgba(255, 255, 255, 0.1);
     animation: slideDown 0.25s ease;
@@ -305,15 +322,13 @@ a {
     padding: 0.85rem 1.25rem;
     font-size: 0.95rem;
     border: 1px solid rgba(255, 255, 255, 0.15);
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.08);
     color: #ffffff;
-    border-radius: 6px;
-    opacity: 1;
+    border-radius: 40px;
   }
 
   .mobile-actions .search-input::placeholder {
     color: rgba(255, 255, 255, 0.5);
-    font-weight: 300;
   }
 
   .mobile-actions .search-icon {
@@ -321,7 +336,6 @@ a {
     padding: 0.5rem;
   }
 
-  /* Hide desktop search on mobile */
   .HeaderWrapper > .SearchIconWrapper:not(.mobile-actions .SearchIconWrapper) {
     display: none;
   }
@@ -338,15 +352,14 @@ a {
   }
 }
 
-/* ===== SMALL MOBILE ===== */
 @media (max-width: 480px) {
   .HeaderWrapper {
-    padding: 0.6rem 1rem;
+    padding: 0.4rem 1rem;
   }
 
   #Logo {
-    height: 32px;
-    max-width: 128px;
+    height: 56px;
+    max-width: 200px;
   }
 
   .mobile-actions {
@@ -384,15 +397,14 @@ a {
   }
 }
 
-/* ===== EXTRA SMALL MOBILE ===== */
 @media (max-width: 360px) {
   .HeaderWrapper {
-    padding: 0.5rem 0.875rem;
+    padding: 0.35rem 0.875rem;
   }
 
   #Logo {
-    height: 30px;
-    max-width: 120px;
+    height: 48px;
+    max-width: 170px;
   }
 
   .mobile-actions {
@@ -401,11 +413,6 @@ a {
 
   .hamburger {
     font-size: 1.2rem;
-    padding: 0.35rem;
-  }
-
-  .mobile-actions .search-icon {
-    font-size: 1rem;
     padding: 0.35rem;
   }
 
@@ -418,22 +425,15 @@ a {
     padding: 0.75rem 0.875rem;
     font-size: 0.9rem;
   }
-
-  .Menu::before {
-    font-size: 0.7rem;
-    margin-bottom: 1.25rem;
-    width: 35px;
-  }
 }
 
-/* ===== TABLET STYLES ===== */
 @media (min-width: 769px) and (max-width: 1024px) {
   .HeaderWrapper {
-    padding: 0.875rem 1.5rem;
+    padding: 0.5rem 1.5rem;
   }
 
   .Menu {
-    gap: 0.2rem;
+    gap: 0.3rem;
   }
 
   .nav-link {
@@ -446,15 +446,14 @@ a {
   }
 
   #Logo {
-    height: 36px;
-    max-width: 140px;
+    height: 64px;
+    max-width: 220px;
   }
 }
 
-/* ===== DESKTOP REFINEMENTS ===== */
 @media (min-width: 1025px) {
   .HeaderWrapper {
-    padding: 1rem 3rem;
+    padding: 0.6rem 3rem;
   }
 
   .Menu {
@@ -467,16 +466,55 @@ a {
   }
 
   .SearchIconWrapper.active .search-input {
-    width: 280px;
+    width: 300px;
+  }
+  
+  #Logo {
+    height: 80px;
+    max-width: 280px;
   }
 }
 
-/* ===== BODY SCROLL LOCK ===== */
+@media (min-width: 1440px) {
+  .HeaderWrapper {
+    padding: 0.6rem 4rem;
+  }
+  
+  #Logo {
+    height: 85px;
+    max-width: 300px;
+  }
+  
+  .nav-link {
+    padding: 0.7rem 1.3rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (min-width: 1920px) {
+  .HeaderWrapper {
+    padding: 0.75rem 5rem;
+  }
+  
+  #Logo {
+    height: 90px;
+    max-width: 320px;
+  }
+  
+  .nav-link {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .Menu {
+    gap: 0.8rem;
+  }
+}
+
 body.menu-open {
   overflow: hidden;
 }
 
-/* ===== HIGH CONTRAST MODE ===== */
 @media (prefers-contrast: high) {
   .HeaderWrapper {
     background: #000000;
@@ -494,7 +532,6 @@ body.menu-open {
   }
 }
 
-/* ===== REDUCED MOTION ===== */
 @media (prefers-reduced-motion: reduce) {
   .HeaderWrapper,
   .Menu,
@@ -502,7 +539,8 @@ body.menu-open {
   .hamburger,
   .backdrop,
   .Menu a,
-  .mobile-actions .SearchIconWrapper.active {
+  .mobile-actions .SearchIconWrapper.active,
+  .LogoWrapper a {
     transition: none !important;
     animation: none !important;
     transform: none !important;

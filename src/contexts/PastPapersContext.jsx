@@ -78,6 +78,8 @@ export const PastPapersProvider = ({ children }) => {
 
       const response = await api.get(`/past-papers?${params}`);
       
+      console.log(response.data)
+      
       if (response.data && response.data.data) {
         setPastPapers(response.data.data);
         return {
