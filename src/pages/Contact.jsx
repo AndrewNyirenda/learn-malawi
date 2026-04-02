@@ -41,16 +41,16 @@ const Contact = () => {
     {
       icon: <FaWhatsapp />,
       title: "WhatsApp",
-      details: "+265 997 674 758",
-      link: "https://wa.me/265997674758",
+      details: "+265 889 766 298",
+      link: "https://wa.me/265889766298",
       action: "Chat on WhatsApp",
       description: "Quick responses for urgent matters"
     },
     {
       icon: <FaPhone />,
       title: "Phone",
-      details: "+265 997 674 758",
-      link: "tel:+265997674758",
+      details: "+265 889 766 298",
+      link: "tel:+265889766298",
       action: "Call Us",
       description: "Available during business hours"
     },
