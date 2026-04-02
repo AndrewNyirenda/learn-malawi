@@ -25,13 +25,13 @@ a {
   flex-wrap: wrap;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
-  overflow-x: hidden;
+  overflow-x: visible;
 }
 
 .LogoWrapper {
   display: flex;
   align-items: center;
-  flex-shrink: 0;
+  flex-shrink: 1;
   transition: all 0.2s ease;
 }
 
@@ -46,9 +46,9 @@ a {
 }
 
 #Logo {
-  height: 72px;
+  height: 60px;
   width: auto;
-  max-width: 260px;
+  max-width: 220px;
   object-fit: contain;
   filter: brightness(1.05) contrast(1.05);
   transition: all 0.2s ease;
@@ -60,15 +60,15 @@ a {
   }
   
   #Logo {
-    height: 80px;
-    max-width: 280px;
+    height: 70px;
+    max-width: 260px;
   }
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
   #Logo {
-    height: 64px;
-    max-width: 220px;
+    height: 65px;
+    max-width: 240px;
   }
 }
 
@@ -91,6 +91,7 @@ a {
   letter-spacing: 0.3px;
   text-transform: uppercase;
   font-family: 'Oswald', 'Inter', sans-serif;
+  white-space: nowrap;
 }
 
 .nav-link:hover {
@@ -206,7 +207,7 @@ a {
   .HeaderWrapper {
     padding: 0.5rem 1rem;
     background: #0a2647;
-    overflow-x: hidden;
+    overflow-x: visible;
   }
 
   .mobile-top-bar {
@@ -223,9 +224,9 @@ a {
   }
   
   #Logo {
-    height: 70px;
+    height: 50px;
     width: auto;
-    max-width: calc(100vw - 120px);
+    max-width: 180px;
     object-fit: contain;
   }
 
@@ -246,7 +247,7 @@ a {
     position: fixed;
     top: 0;
     right: 0;
-    width: 320px;
+    width: 280px;
     max-width: 85vw;
     height: 100vh;
     padding: 5rem 1.5rem 2rem;
@@ -291,6 +292,7 @@ a {
     text-transform: uppercase;
     letter-spacing: 1px;
     border: none;
+    white-space: normal;
   }
 
   .Menu a:hover,
@@ -313,7 +315,7 @@ a {
 
   .mobile-actions .SearchIconWrapper.active {
     position: fixed;
-    top: 70px;
+    top: 60px;
     left: 1rem;
     right: 1rem;
     width: auto;
@@ -368,8 +370,8 @@ a {
   }
 
   #Logo {
-    height: 56px;
-    max-width: calc(100vw - 100px);
+    height: 45px;
+    max-width: 160px;
   }
 
   .mobile-actions {
@@ -397,7 +399,7 @@ a {
   }
 
   .mobile-actions .SearchIconWrapper.active {
-    top: 60px;
+    top: 52px;
     left: 0.75rem;
     right: 0.75rem;
   }
@@ -414,8 +416,8 @@ a {
   }
 
   #Logo {
-    height: 48px;
-    max-width: calc(100vw - 80px);
+    height: 40px;
+    max-width: 140px;
   }
 
   .mobile-actions {
@@ -438,7 +440,7 @@ a {
   }
 
   .mobile-actions .SearchIconWrapper.active {
-    top: 52px;
+    top: 48px;
   }
 }
 
@@ -454,6 +456,7 @@ a {
   .nav-link {
     padding: 0.45rem 0.8rem;
     font-size: 0.8rem;
+    white-space: nowrap;
   }
 
   .SearchIconWrapper.active .search-input {
@@ -461,8 +464,8 @@ a {
   }
 
   #Logo {
-    height: 64px;
-    max-width: 220px;
+    height: 65px;
+    max-width: 240px;
   }
 }
 
@@ -485,8 +488,8 @@ a {
   }
   
   #Logo {
-    height: 80px;
-    max-width: 280px;
+    height: 70px;
+    max-width: 260px;
   }
 }
 
@@ -496,8 +499,8 @@ a {
   }
   
   #Logo {
-    height: 85px;
-    max-width: 300px;
+    height: 75px;
+    max-width: 280px;
   }
   
   .nav-link {
@@ -512,8 +515,8 @@ a {
   }
   
   #Logo {
-    height: 90px;
-    max-width: 320px;
+    height: 80px;
+    max-width: 300px;
   }
   
   .nav-link {
