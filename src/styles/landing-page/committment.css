@@ -25,7 +25,7 @@
   width: clamp(60px, 15vw, 72px);
   height: 3px;
   margin: 1rem auto clamp(2rem, 5vw, 4rem);
-  background: #2e9f3a;
+  background: rgb(218,200,32);
 }
 
 .trust-grid {
@@ -101,7 +101,7 @@
 }
 
 .trust-principle h3 svg {
-  color: #2e9f3a;
+  color: rgb(218,190,32);
   font-size: clamp(1.2rem, 2.5vw, 1.4rem);
   flex-shrink: 0;
 }
