@@ -52,6 +52,7 @@ a {
   object-fit: contain;
   filter: brightness(1.05) contrast(1.05);
   transition: all 0.2s ease;
+  margin: 0.2rem;
 }
 
 @media (min-width: 769px) {

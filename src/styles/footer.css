@@ -1,5 +1,5 @@
 .FooterWrapper {
-  background: #1a3f7a; /* Dark navy */
+  background: #0a2647; 
   color: #fff;
   padding: 4rem 2rem 2rem;
   font-family: 'Roboto', sans-serif;
@@ -15,7 +15,7 @@
 }
 
 .footer-logo img {
-  height: 60px;
+  height: 100px;
   width: auto;
   transition: transform 0.3s ease;
 }
