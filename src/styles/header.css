@@ -31,7 +31,7 @@ a {
 .LogoWrapper {
   display: flex;
   align-items: center;
-  flex-shrink: 1;
+  flex-shrink: 0;
   transition: all 0.2s ease;
 }
 
@@ -46,9 +46,9 @@ a {
 }
 
 #Logo {
-  height: 60px;
+  height: 65px;
   width: auto;
-  max-width: 220px;
+  max-width: 240px;
   object-fit: contain;
   filter: brightness(1.05) contrast(1.05);
   transition: all 0.2s ease;
@@ -56,7 +56,7 @@ a {
 
 @media (min-width: 769px) {
   .LogoWrapper {
-    margin-right: 1.5rem;
+    margin-right: 0;
   }
   
   #Logo {
@@ -78,6 +78,8 @@ a {
   align-items: center;
   gap: 0.5rem;
   flex-wrap: wrap;
+  margin-left: auto;
+  margin-right: 1rem;
 }
 
 .nav-link {
@@ -110,6 +112,7 @@ a {
   display: flex;
   align-items: center;
   position: relative;
+  flex-shrink: 0;
 }
 
 .search-input {
@@ -224,9 +227,9 @@ a {
   }
   
   #Logo {
-    height: 50px;
+    height: 55px;
     width: auto;
-    max-width: 180px;
+    max-width: 190px;
     object-fit: contain;
   }
 
@@ -258,6 +261,8 @@ a {
     z-index: 1100;
     gap: 0.25rem;
     border-left: 1px solid rgba(255, 255, 255, 0.06);
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .Menu.open {
@@ -370,8 +375,8 @@ a {
   }
 
   #Logo {
-    height: 45px;
-    max-width: 160px;
+    height: 60px;
+    max-width: 200px;
   }
 
   .mobile-actions {
@@ -416,8 +421,8 @@ a {
   }
 
   #Logo {
-    height: 40px;
-    max-width: 140px;
+    height: 50px;
+    max-width: 160px;
   }
 
   .mobile-actions {
