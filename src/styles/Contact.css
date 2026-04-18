@@ -36,7 +36,7 @@
   width: clamp(70px, 12vw, 80px);
   height: 4px;
   margin: 1.25rem auto 0;
-  background: #1e6f3c;
+  background: #D4AF37;
   border-radius: 0;
 }
 
@@ -112,7 +112,7 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: #1e6f3c;
+  background: #D4AF37;
   transform: scaleX(0);
   transition: transform 0.25s ease;
 }
@@ -129,7 +129,7 @@
 
 .lm-contact-icon {
   font-size: clamp(2rem, 4.5vw, 2.35rem);
-  color: #1e6f3c;
+  color: #D4AF37;
   margin-bottom: 1.25rem;
   transition: all 0.2s ease;
   display: inline-flex;
@@ -192,9 +192,9 @@
 }
 
 .lm-contact-action:hover {
-  background: #1e6f3c;
+  background: #D4AF37;
   transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(30, 111, 60, 0.25);
+  box-shadow: 0 6px 14px rgb(218,190,32);
 }
 
 .lm-contact-action svg {
