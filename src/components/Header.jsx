@@ -120,15 +120,6 @@ const Header = () => {
           Home
         </NavLink>
         <NavLink
-          to="/news"
-          onClick={closeMenu}
-          className={({ isActive }) =>
-            isActive ? "nav-link active" : "nav-link"
-          }
-        >
-          News
-        </NavLink>
-        <NavLink
           to="/study-notes"
           onClick={closeMenu}
           className={({ isActive }) =>
@@ -172,6 +163,15 @@ const Header = () => {
           }
         >
           Career Resources
+        </NavLink>
+        <NavLink
+          to="/news"
+          onClick={closeMenu}
+          className={({ isActive }) =>
+            isActive ? "nav-link active" : "nav-link"
+          }
+        >
+          News
         </NavLink>
         <NavLink
           to="/abouts"

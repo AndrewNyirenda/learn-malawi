@@ -13,7 +13,7 @@
 
 .card-inner {
   position: relative;
-  background: #ffffff; /* White background */
+  background: #ffffff;
   border-radius: 12px;
   padding: 0;
   box-shadow: 0 8px 24px rgba(10, 38, 71, 0.1);
@@ -29,16 +29,39 @@
   box-shadow: 0 12px 32px rgba(10, 38, 71, 0.15);
 }
 
-/* Top Accent Bar - Blue */
+/* Top Accent Bar - BLUE */
 .card-accent {
-  height: 6px;
-  background: #4A90E2; /* Light blue */
+  height: 4px;
+  background: #4A90E2;
   width: 100%;
+}
+
+/* Resource Image Container - REDUCED SIZE */
+.card-image-container {
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+  background: #f5f7fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid rgba(10, 38, 71, 0.1);
+}
+
+.resource-image {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.resource-card:hover .resource-image {
+  transform: scale(1.05);
 }
 
 /* Card Header */
 .card-header {
-  padding: 1.25rem 1.25rem 0.75rem 1.25rem;
+  padding: 0.75rem 1.25rem 0.5rem 1.25rem;
 }
 
 .title-container {
@@ -48,7 +71,7 @@
 }
 
 .resource-icon {
-  color: #D4AF37; /* Elegant institutional gold */
+  color: #D4AF37;
   font-size: 1.5rem;
   flex-shrink: 0;
   margin-top: 0.125rem;
@@ -56,9 +79,9 @@
 
 .resource-title {
   font-family: 'Oswald', 'Inter', sans-serif;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  color: #0a2647; /* Deep institutional blue */
+  color: #0a2647;
   margin: 0;
   line-height: 1.4;
   letter-spacing: 0.3px;
@@ -66,43 +89,103 @@
   word-break: break-word;
 }
 
-/* Resource Type Badge - REMOVED */
-.resource-type-badge {
-  display: none;
-}
-
-/* Metadata Section */
-.card-metadata {
-  padding: 0.75rem 1.25rem;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.75rem 1rem;
-  background: rgba(212, 175, 55, 0.04);
-  margin: 0.5rem 0;
-  border-top: 1px solid rgba(212, 175, 55, 0.15);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.15);
-}
-
-.metadata-item {
+/* Tags Section - Professional Tagged Look */
+.card-tags {
+  padding: 0.5rem 1.25rem;
   display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
 }
 
-.metadata-label {
-  font-size: 0.65rem;
+.tag-wrapper {
+  display: inline-flex;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.7rem;
   font-weight: 500;
+  letter-spacing: 0.3px;
+  background: #f8f9fa;
+  border: 1px solid rgba(10, 38, 71, 0.15);
+  transition: all 0.2s ease;
+}
+
+.tag:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tag-label {
   color: rgba(10, 38, 71, 0.6);
+  text-transform: uppercase;
+  font-size: 0.6rem;
+  font-weight: 600;
+}
+
+.tag-value {
+  color: #0a2647;
+  font-weight: 700;
+  font-family: 'Oswald', 'Inter', sans-serif;
+  font-size: 0.7rem;
+}
+
+/* Category Tag - Gold theme */
+.tag-category {
+  background: linear-gradient(135deg, #fff8e7 0%, #fef3d6 100%);
+  border-color: #D4AF37;
+}
+
+.tag-category .tag-value {
+  color: #9e7400;
+}
+
+/* Class Tag - Gold theme */
+.tag-class {
+  background: linear-gradient(135deg, #fff8e7 0%, #fef3d6 100%);
+  border-color: #D4AF37;
+}
+
+.tag-class .tag-value {
+  color: #9e7400;
+}
+
+/* Year Tag - Gold theme */
+.tag-year {
+  background: linear-gradient(135deg, #fff8e7 0%, #fef3d6 100%);
+  border-color: #D4AF37;
+}
+
+.tag-year .tag-value {
+  color: #9e7400;
+}
+
+/* Subject Section */
+.card-subject {
+  padding: 0 1.25rem 0.35rem 1.25rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.subject-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: rgba(10, 38, 71, 0.5);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.metadata-value {
-  font-size: 0.85rem;
-  font-weight: 600;
+.subject-value {
+  font-size: 0.75rem;
   color: #0a2647;
-  font-family: 'Oswald', 'Inter', sans-serif;
-  letter-spacing: 0.3px;
+  font-weight: 500;
 }
 
 /* Divider */
@@ -111,7 +194,8 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.25rem 1.25rem;
+  padding: 0.35rem 1.25rem;
+  margin-top: auto;
 }
 
 .divider-line {
@@ -121,17 +205,16 @@
 }
 
 .divider-diamond {
-  color: #D4AF37; /* Elegant institutional gold */
-  font-size: 0.5rem;
+  color: #D4AF37;
+  font-size: 0.45rem;
   opacity: 0.8;
 }
 
-/* Action Buttons */
+/* Action Buttons - BLUE THEME */
 .card-actions {
-  padding: 1rem 1.25rem 1.25rem 1.25rem;
+  padding: 0.5rem 1.25rem 1rem 1.25rem;
   display: flex;
   gap: 0.75rem;
-  margin-top: auto;
 }
 
 .action-btn {
@@ -139,12 +222,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.7rem 0.5rem;
+  gap: 0.4rem;
+  padding: 0.5rem 0.5rem;
   border: none;
   border-radius: 6px;
   font-family: 'Oswald', 'Inter', sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -159,40 +242,40 @@
 }
 
 .view-btn {
-  background: #4A90E2; /* Light blue */
+  background: #4A90E2;
   border: 1px solid #4A90E2;
   color: #ffffff;
 }
 
 .view-btn:hover {
-  background: #357ABD; /* Darker light blue on hover */
+  background: #357ABD;
   border-color: #357ABD;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
 }
 
 .download-btn {
-  background: #4A90E2; /* Light blue */
+  background: #4A90E2;
   color: #ffffff;
   border: 1px solid #4A90E2;
   font-weight: 600;
 }
 
 .download-btn:hover {
-  background: #357ABD; /* Darker light blue on hover */
+  background: #357ABD;
   border-color: #357ABD;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
 }
 
 .btn-icon {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 /* Hover Effects */
 .resource-card:hover .resource-icon {
   animation: pulse 0.5s ease;
-  color: #C4A030; /* Slightly darker gold on hover */
+  color: #C4A030;
 }
 
 .resource-card:hover .card-accent {
@@ -226,32 +309,47 @@
     max-width: 100%;
   }
   
+  .card-image-container {
+    height: 100px;
+  }
+  
+  .resource-image {
+    width: 70%;
+    height: 70%;
+  }
+  
   .card-header {
-    padding: 1rem 1rem 0.5rem 1rem;
+    padding: 0.5rem 1rem 0.35rem 1rem;
   }
   
   .resource-title {
-    font-size: 1rem;
+    font-size: 0.85rem;
   }
   
-  .card-metadata {
-    padding: 0.5rem 1rem;
-    gap: 0.5rem;
+  .card-tags {
+    padding: 0.35rem 1rem;
+    gap: 0.4rem;
   }
   
-  .metadata-value {
-    font-size: 0.8rem;
+  .tag {
+    padding: 0.2rem 0.6rem;
+    font-size: 0.65rem;
+  }
+  
+  .tag-label,
+  .tag-value {
+    font-size: 0.55rem;
   }
   
   .card-actions {
-    padding: 0.75rem 1rem 1rem 1rem;
+    padding: 0.35rem 1rem 0.75rem 1rem;
     flex-direction: column;
     gap: 0.5rem;
   }
   
   .action-btn {
-    padding: 0.6rem 0.5rem;
-    font-size: 0.8rem;
+    padding: 0.45rem 0.5rem;
+    font-size: 0.75rem;
   }
 }
 
@@ -262,6 +360,10 @@
   }
   
   .action-btn {
+    display: none;
+  }
+  
+  .card-image-container {
     display: none;
   }
 }
@@ -279,19 +381,13 @@
   }
   
   .resource-title,
-  .metadata-value {
+  .tag-value,
+  .subject-value {
     color: #0a2647 !important;
   }
   
-  .resource-icon {
-    color: #D4AF37 !important;
-  }
-  
-  .view-btn,
-  .download-btn {
-    background: #0a2647;
-    color: #ffffff;
-    border: 2px solid #0a2647;
+  .tag {
+    border: 2px solid currentColor;
   }
 }
 
@@ -301,7 +397,8 @@
   .card-inner,
   .action-btn,
   .resource-icon,
-  .card-accent {
+  .card-accent,
+  .resource-image {
     transition: none !important;
     animation: none !important;
     transform: none !important;

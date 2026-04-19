@@ -1,6 +1,7 @@
 import React from "react";
 import { FaEye, FaDownload, FaFilePdf, FaFileAlt, FaBookOpen } from "react-icons/fa";
 import "../styles/resource-card.css";
+import bookPng from "../images/book.png"; 
 
 const ResourceCard = ({ 
   id,
@@ -13,7 +14,8 @@ const ResourceCard = ({
   class: resourceClass,
   year,
   subject,
-  type = "PDF"
+  type = "PDF",
+  customImage = null
 }) => {
   const handleView = (e) => {
     e.preventDefault();
@@ -25,73 +27,77 @@ const ResourceCard = ({
     if (onDownload) onDownload();
   };
 
-  // Get icon based on resource type
-  const getResourceIcon = () => {
-    switch(type?.toLowerCase()) {
-      case 'pdf':
-        return <FaFilePdf />;
-      case 'document':
-        return <FaFileAlt />;
-      case 'book':
-        return <FaBookOpen />;
-      default:
-        return <FaFilePdf />;
-    }
+  // Determine which image to show
+  const getImageSrc = () => {
+    if (customImage) return customImage;
+    if (type?.toLowerCase() === 'book') return bookPng;
+    return null;
   };
+
+  const imageSrc = getImageSrc();
 
   // Truncate title if too long
   const truncateTitle = (text, maxLength = 50) => {
+    if (!text) return '';
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength) + '...';
   };
 
   return (
     <div className="resource-card">
-      {/* Professional Blue & Gold Card Design */}
       <div className="card-inner">
         {/* Top Accent Bar */}
         <div className="card-accent"></div>
         
+        {/* Resource Image Section - Shows for book type or when custom image provided */}
+        {imageSrc && (
+          <div className="card-image-container">
+            <img 
+              src={imageSrc} 
+              alt={title || 'Resource cover'}
+              className="resource-image"
+            />
+          </div>
+        )}
+        
         {/* Card Header with Title */}
         <div className="card-header">
           <div className="title-container">
-            <span className="resource-icon">{getResourceIcon()}</span>
+            {!imageSrc && (
+              <span className="resource-icon">
+                {type?.toLowerCase() === 'pdf' ? <FaFilePdf /> : <FaFileAlt />}
+              </span>
+            )}
             <h3 className="resource-title">{truncateTitle(title)}</h3>
           </div>
         </div>
 
-        {/* Resource Type Badge */}
-        <div className="resource-type-badge">
-          <span>{type}</span>
-        </div>
-
-        {/* Metadata Section */}
-        <div className="card-metadata">
+        {/* Tags Section - Professional Tagged Look */}
+        <div className="card-tags">
           {category && (
-            <div className="metadata-item">
-              <span className="metadata-label">Category</span>
-              <span className="metadata-value">{category}</span>
+            <div className="tag-wrapper">
+              <span className="tag tag-category">
+                <span className="tag-label">Category</span>
+                <span className="tag-value">{category}</span>
+              </span>
             </div>
           )}
           
           {resourceClass && (
-            <div className="metadata-item">
-              <span className="metadata-label">Class</span>
-              <span className="metadata-value">{resourceClass}</span>
-            </div>
-          )}
-          
-          {subject && (
-            <div className="metadata-item">
-              <span className="metadata-label">Subject</span>
-              <span className="metadata-value">{subject}</span>
+            <div className="tag-wrapper">
+              <span className="tag tag-class">
+                <span className="tag-label">Class</span>
+                <span className="tag-value">{resourceClass}</span>
+              </span>
             </div>
           )}
           
           {year && (
-            <div className="metadata-item">
-              <span className="metadata-label">Year</span>
-              <span className="metadata-value">{year}</span>
+            <div className="tag-wrapper">
+              <span className="tag tag-year">
+                <span className="tag-label">Year</span>
+                <span className="tag-value">{year}</span>
+              </span>
             </div>
           )}
         </div>

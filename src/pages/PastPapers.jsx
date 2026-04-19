@@ -201,12 +201,13 @@ description="Access a curated collection of past papers and reviews to support y
       <div className="materials-grid">
         {pastPapers.length > 0 ? (
           pastPapers.map((resource) => (
-            <ResourceCard
-              key={resource.id}
-              {...resource}
-              onView={() => handleViewResource(resource)}
-              onDownload={() => handleDownloadResource(resource)}
-            />
+<ResourceCard
+  key={resource.id}
+  {...resource}
+  type="book"  // Add this line to show book image for all past papers
+  onView={() => handleViewResource(resource)}
+  onDownload={() => handleDownloadResource(resource)}
+/>
           ))
         ) : (
           <div className="empty">

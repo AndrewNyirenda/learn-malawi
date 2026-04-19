@@ -148,16 +148,17 @@ const StudyNotes = () => {
           {books.length > 0 ? (
             <div className="materials-grid">
               {books.map(resource => (
-                <ResourceCard
-                  key={resource.id}
-                  title={resource.title}
-                  thumbnail={resource.thumbnailUrl || "/images/pdf.png"}
-                  category={resource.category}
-                  class={resource.class}
-                  year={resource.year}
-                  onView={() => handleViewResource(resource)}
-                  onDownload={() => handleDownloadResource(resource)}
-                />
+<ResourceCard
+  key={resource.id}
+  title={resource.title}
+  type="book"  // Add this line to show the book image
+  thumbnail={resource.thumbnailUrl || "/images/pdf.png"}
+  category={resource.category}
+  class={resource.class}
+  year={resource.year}
+  onView={() => handleViewResource(resource)}
+  onDownload={() => handleDownloadResource(resource)}
+/>
               ))}
             </div>
           ) : (
