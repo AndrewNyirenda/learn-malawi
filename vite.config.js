@@ -17,6 +17,7 @@ export default defineConfig(({ mode }) => {
         'https://learn-malawi-plum.vercel.app/',
         'https://learn-malawi-nestjs-api-v1-production-b67e.up.railway.app',
         'railway.app',
+        'https://learn-malawi-nestjs-api-v1-production-5aa2.up.railway.app'
         
         
         
