@@ -1,0 +1,483 @@
+/* ================================================================
+   QUIZES PAGE — Layout uses global.css; quiz card styles below
+================================================================ */
+
+.quizes-container,
+.lm-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--white);
+}
+
+/* ─── Quiz Grid ─── */
+.quiz-section {
+  max-width: var(--container-max);
+  margin: 0 auto var(--sp-12);
+  padding: 0 var(--container-pad);
+  width: 100%;
+}
+
+.quiz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--sp-6);
+}
+
+/* ─── Quiz Status ─── */
+.quiz-status {
+  text-align: center;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  padding: var(--sp-5);
+  border-top: 1px solid var(--border);
+  letter-spacing: 0.04em;
+}
+
+/* ─── Quiz Cards ─── */
+.qz-card {
+  background: #ffffff;
+  border-radius: 24px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+/* Premium Gold Border Accent */
+.qz-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #d4af37, #f5e6a3, #d4af37);
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.qz-card:hover::before {
+  opacity: 1;
+}
+
+.qz-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 36px -12px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(212, 175, 55, 0.1);
+  border-color: transparent;
+}
+
+/* Premium Card Header */
+.qz-card-header {
+  padding: 28px 28px 20px;
+  background: linear-gradient(135deg, #ffffff 0%, #fefef8 100%);
+  border-bottom: 1px solid #f0f0ea;
+  position: relative;
+}
+
+/* Gold Accent Line in Header */
+.qz-card-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 28px;
+  right: 28px;
+  height: 2px;
+  background: linear-gradient(90deg, #d4af37, #f5e6a3, #d4af37);
+  opacity: 0.4;
+}
+
+.qz-card-header h3 {
+  font-family: "Inter", "Roboto", sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #1a2a3a 0%, #2c3e50 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 18px;
+  line-height: 1.35;
+  letter-spacing: -0.3px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.qz-badges {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Premium Badges */
+.qz-level-badge {
+  padding: 6px 16px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: inline-block;
+  border-radius: 40px;
+  background: linear-gradient(135deg, #f8f6f0 0%, #f0ede5 100%);
+  color: #8b7355;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.qz-difficulty-badge {
+  padding: 6px 16px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: inline-block;
+  border-radius: 40px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  background: linear-gradient(135deg, #f8f6f0 0%, #f0ede5 100%);
+  color: #8b7355;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+/* Difficulty-specific subtle gold variations */
+.qz-difficulty-badge.easy {
+  background: linear-gradient(135deg, #f0f9f0 0%, #e8f3e8 100%);
+  color: #2d6a4f;
+  border-color: rgba(45, 106, 79, 0.3);
+}
+
+.qz-difficulty-badge.medium {
+  background: linear-gradient(135deg, #fff8e7 0%, #fef3d6 100%);
+  color: #b8860b;
+  border-color: rgba(184, 134, 11, 0.3);
+}
+
+.qz-difficulty-badge.hard {
+  background: linear-gradient(135deg, #fef2f2 0%, #fce8e8 100%);
+  color: #c0392b;
+  border-color: rgba(192, 57, 43, 0.3);
+}
+
+/* ===== CARD BODY ===== */
+.qz-card-body {
+  padding: 24px 28px;
+  flex: 1;
+  background: #ffffff;
+}
+
+.qz-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+  text-align: left;
+  
+}
+
+.qz-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f8fafc;
+  padding: 10px 18px;
+  border-radius: 60px;
+  flex: 1;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.qz-meta-item:hover {
+  background: #fefef7;
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.08);
+}
+
+.qz-meta-icon {
+  font-size: 1.1rem;
+  color: #d4af37;
+  opacity: 0.9;
+}
+
+.qz-meta-value {
+  font-size: 0.9rem;
+  color: #334155;
+  font-weight: 600;
+  font-family: "Inter", "Roboto", sans-serif;
+}
+
+/* ===== CARD FOOTER ===== */
+.qz-card-footer {
+  padding: 0 28px 28px;
+  background: #ffffff;
+}
+
+/* Premium Gold Button */
+.qz-start-btn {
+  width: 100%;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #d4af37 0%, #c5a028 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 40px;
+  font-family: "Inter", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.qz-start-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.qz-start-btn:hover::before {
+  left: 100%;
+}
+
+.qz-start-btn:hover {
+  background: linear-gradient(135deg, #c5a028 0%, #b8941e 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
+}
+
+.qz-start-btn:active {
+  transform: translateY(0px);
+}
+
+/* ===== EMPTY STATE ===== */
+.empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 80px 32px;
+  background: linear-gradient(135deg, #ffffff 0%, #fefef8 100%);
+  border-radius: 32px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
+}
+
+.empty svg {
+  margin-bottom: 20px;
+  color: #d4af37;
+  opacity: 0.6;
+}
+
+.empty h3 {
+  margin-top: 20px;
+  font-size: 1.35rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #1a2a3a 0%, #2c3e50 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.empty p {
+  margin-top: 10px;
+  font-size: 0.95rem;
+  color: #64748b;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ===== STATE BOX ===== */
+.state-box {
+  max-width: 1400px;
+  margin: 0 auto 48px;
+  padding: 64px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: linear-gradient(135deg, #ffffff 0%, #fefef8 100%);
+  border-radius: 32px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
+}
+
+.state-box h3 {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #1a2a3a 0%, #2c3e50 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
+}
+
+.state-box p {
+  color: #64748b;
+  margin-bottom: 28px;
+  font-size: 1rem;
+}
+
+.state-box button {
+  padding: 14px 36px;
+  background: linear-gradient(135deg, #d4af37 0%, #c5a028 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 40px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+}
+
+.state-box button:hover {
+  background: linear-gradient(135deg, #c5a028 0%, #b8941e 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
+}
+
+/* ===== SPINNER ===== */
+.spinner {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #d4af37, #f5e6a3, #d4af37);
+  mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3px));
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3px));
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 28px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== QUIZ STATUS ===== */
+.quiz-status {
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #8b7355;
+  padding: 28px;
+  border-top: 1px solid rgba(212, 175, 55, 0.2);
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  letter-spacing: 0.3px;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1024px) {
+  .quiz-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .qz-filters {
+    grid-template-columns: 1fr;
+    padding: 0 20px;
+    gap: 16px;
+  }
+
+  .level-switch {
+    flex-direction: column;
+    align-items: center;
+    padding: 0 20px;
+    gap: 12px;
+  }
+
+  .level-switch button {
+    width: 100%;
+    min-width: auto;
+    padding: 12px 24px;
+  }
+
+  .quiz-section {
+    padding: 0 20px;
+  }
+
+  .quiz-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .state-box {
+    padding: 48px 20px;
+    margin: 0 20px;
+  }
+
+  .qz-card-header h3 {
+    font-size: 1.2rem;
+  }
+  
+  .qz-card-header {
+    padding: 24px 24px 18px;
+  }
+  
+  .qz-card-body,
+  .qz-card-footer {
+    padding: 20px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .qz-meta {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .qz-meta-item {
+    width: 100%;
+    padding: 8px 16px;
+  }
+  
+  .qz-badges {
+    gap: 8px;
+  }
+
+  .qz-level-badge,
+  .qz-difficulty-badge {
+    padding: 5px 12px;
+    font-size: 0.65rem;
+  }
+  
+  .qz-start-btn {
+    padding: 12px 20px;
+    font-size: 0.8rem;
+    letter-spacing: 1.2px;
+  }
+}
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  .qz-card,
+  .qz-card:hover,
+  .qz-start-btn,
+  .qz-start-btn:hover,
+  .state-box button,
+  .state-box button:hover,
+  .qz-card::before,
+  .qz-start-btn::before {
+    transition: none;
+    transform: none;
+    animation: none;
+  }
+  
+  .spinner {
+    animation: none;
+  }
+}
+

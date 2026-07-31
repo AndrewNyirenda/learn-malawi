@@ -1,0 +1,6 @@
+/* PastPapers page — layout overrides beyond global.css */
+.past-papers-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

@@ -1,0 +1,219 @@
+/* ================================================================
+   FOOTER — Learn Malawi
+   Uses global CSS variables
+================================================================ */
+
+.FooterWrapper {
+  background: var(--navy);
+  color: var(--white);
+  padding: var(--sp-16) 0 0;
+  font-family: var(--font-body);
+  position: relative;
+  overflow: hidden;
+}
+
+.FooterWrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent);
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--sp-10);
+  max-width: var(--container-max);
+  margin: 0 auto var(--sp-10);
+  padding: 0 var(--container-pad);
+}
+
+.footer-logo img {
+  height: 140px;
+  width: auto;
+  transition: transform var(--ease);
+  filter: brightness(1.05);
+}
+
+.footer-logo img:hover {
+  transform: scale(1.03);
+}
+
+.footer-section h3 {
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: var(--sp-5);
+  padding-bottom: var(--sp-3);
+  border-bottom: 1px solid rgba(201,168,76,0.25);
+}
+
+.footer-section p,
+.footer-section a {
+  color: rgba(255,255,255,0.7);
+  font-size: var(--text-sm);
+  margin: var(--sp-2) 0;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  transition: color var(--ease);
+  line-height: 1.5;
+}
+
+.footer-section a:hover {
+  color: var(--gold-light);
+}
+
+.footer-box {
+  min-width: 180px;
+}
+
+.footer-icon {
+  color: var(--gold);
+  flex-shrink: 0;
+  font-size: 0.85rem;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul li {
+  margin: var(--sp-2) 0;
+}
+
+ul li a {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  color: rgba(255,255,255,0.7);
+  font-size: var(--text-sm);
+  transition: color var(--ease), transform var(--ease-fast);
+  text-decoration: none;
+}
+
+ul li a:hover {
+  color: var(--gold-light);
+  transform: translateX(4px);
+}
+
+/* Social Icons */
+.footer-socials {
+  max-width: var(--container-max);
+  margin: 0 auto var(--sp-8);
+  padding: 0 var(--container-pad);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.footer-socials-label {
+  font-family: var(--font-heading);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  margin-right: var(--sp-2);
+}
+
+.social-icons {
+  display: flex;
+  gap: var(--sp-3);
+  max-width: var(--container-max);
+  margin: 0 auto var(--sp-8);
+  padding: 0 var(--container-pad);
+}
+
+.social-icons a {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--white);
+  font-size: 1rem;
+  transition: all var(--ease);
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+}
+
+.social-icons a:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.15);
+  color: var(--gold-light);
+}
+
+.social-icons a.twitter  { }
+.social-icons a.instagram{ }
+.social-icons a.facebook { }
+
+/* Footer Bottom */
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: var(--sp-5) var(--container-pad);
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+}
+
+.footer-bottom p {
+  font-size: var(--text-xs);
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.04em;
+}
+
+.footer-bottom-links {
+  display: flex;
+  gap: var(--sp-5);
+}
+
+.footer-bottom-links a {
+  font-size: var(--text-xs);
+  color: rgba(255,255,255,0.4);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: color var(--ease-fast);
+}
+
+.footer-bottom-links a:hover {
+  color: var(--gold-light);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    gap: var(--sp-8);
+  }
+
+  .footer-box {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .footer-logo img {
+    height: 100px;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--sp-3);
+  }
+}

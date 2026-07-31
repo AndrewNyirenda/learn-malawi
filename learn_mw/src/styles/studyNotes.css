@@ -1,0 +1,6 @@
+/* StudyNotes page — layout overrides beyond global.css */
+.study-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

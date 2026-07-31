@@ -15,6 +15,11 @@ export default defineConfig(({ mode }) => {
         'learn-malawi.onrender.com',
         '.onrender.com',
         'https://learn-malawi-plum.vercel.app/',
+        'https://learn-malawi-nestjs-api-v1-production-b67e.up.railway.app',
+        'railway.app',
+        
+        
+        
         
         
       ]
