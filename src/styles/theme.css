@@ -1,0 +1,132 @@
+/* styles/theme.css */
+
+:root {
+  /* ============================================
+     COLOR — Brand: shield navy, sky blue, sun gold
+     ============================================ */
+
+  /* Core brand */
+  --color-navy: #16457d;         /* Dark Blue — main shield body */
+  --color-blue: #2a8cfb;         /* Bright Blue — accents, "Learn Smart" text */
+  --color-black: #000000;        /* Black — logo background */
+
+  /* Gold — split into resting (muted) and bright (true brand) */
+  --color-gold: #b8912f;              /* resting gold — default for hairlines, eyebrows, rules, static icons */
+  --color-gold-light: #d4af5a;        /* resting gold, lightened — secondary rule stops */
+  --color-gold-dark: #96741f;         /* resting gold, darkened — pressed states */
+  --color-gold-bright: #fdd41a;       /* true brand gold — hover reveals, focus rings, active/press moments only */
+  --color-gold-bright-light: #fee065; /* true brand gold, lightened — bright-gold gradient stops */
+
+  /* Derived shades (blended toward black/white for UI roles the logo doesn't cover) */
+  --color-navy-deep: #102f57;     /* navy blended ~30% toward black — dark panels */
+  --color-navy-deepest: #091c32;  /* navy blended ~60% toward black — deepest panels */
+  --color-blue-light: #5ca8fc;    /* bright blue lightened — hover states */
+
+  /* Surfaces */
+  --color-paper: #fbfaf7;
+  --color-paper-bright: #fdfcfa;
+  --color-surface: #ffffff;
+  --color-cream: #f4f1ea;
+
+  /* Text */
+  --color-ink: #1c2b3a;
+  --color-slate: #5f6c7b;
+  --color-slate-light: #9fb0c9;
+  --color-text-on-dark: #f4f4f4;
+  --color-text-on-dark-muted: #a9b8cf;
+
+  /* Lines & dividers — derived from brand navy/resting gold at low opacity */
+  --color-hairline: rgba(22, 69, 125, 0.1);
+  --color-hairline-light: rgba(184, 145, 47, 0.22);
+
+  /* Feedback (kept separate from brand palette on purpose) */
+  --color-success: #2e7d32;
+  --color-error: #b3261e;
+  --color-warning: #96741f;
+
+  /* ============================================
+     TYPOGRAPHY
+     ============================================ */
+
+  --font-display: "Lora", "Playfair Display", Georgia, serif;
+  --font-body: "Roboto", sans-serif;
+  --font-accent: "Oswald", "Roboto", sans-serif; /* stat numbers, condensed labels */
+
+  --text-eyebrow: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.15rem;
+  --text-xl: clamp(1.4rem, 2.5vw, 1.75rem);
+  --text-2xl: clamp(1.9rem, 5vw, 2.75rem);
+  --text-3xl: clamp(2.5rem, 6vw, 4rem);
+
+  --tracking-eyebrow: 0.22em;
+  --tracking-label: 0.09em;
+  --tracking-tight: -0.01em;
+
+  --leading-tight: 1.2;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.7;
+
+  /* ============================================
+     SPACING — 4px base scale
+     ============================================ */
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 2.5rem;
+  --space-8: 3rem;
+  --space-9: 4rem;
+
+  --section-padding-y: clamp(3.5rem, 7vw, 8rem);
+  --section-padding-x: clamp(1rem, 3vw, 2rem);
+  --section-max-width: 1400px;
+
+  /* ============================================
+     RADIUS, BORDERS, SHADOW
+     ============================================ */
+
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-full: 50%;
+
+  --border-hairline: 1px solid var(--color-hairline);
+  --border-hairline-light: 1px solid var(--color-hairline-light);
+
+  --shadow-sm: 0 4px 16px rgba(22, 69, 125, 0.06);
+  --shadow-md: 0 12px 28px rgba(22, 69, 125, 0.1);
+  --shadow-lg: 0 20px 40px rgba(22, 69, 125, 0.14);
+  --shadow-panel: -12px 0 32px rgba(0, 0, 0, 0.2);
+
+  /* ============================================
+     MOTION
+     ============================================ */
+
+  --ease-standard: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --duration-fast: 0.25s;
+  --duration-base: 0.35s;
+  --duration-slow: 0.4s;
+
+  /* ============================================
+     PATTERNS — reused decorative motifs
+     ============================================ */
+
+  --pattern-dot-grid: radial-gradient(var(--color-hairline) 1px, transparent 1px);
+  --pattern-dot-grid-size: 22px 22px;
+  --gradient-gold-rule: linear-gradient(90deg, var(--color-gold), var(--color-gold-light));
+  --gradient-navy-panel: linear-gradient(180deg, var(--color-navy-deep) 0%, var(--color-navy-deepest) 100%);
+
+  /* ============================================
+     Z-INDEX SCALE
+     ============================================ */
+
+  --z-sticky-header: 100;
+  --z-mobile-menu: 101;
+  --z-search-dropdown: 102;
+  --z-backdrop: 99;
+}

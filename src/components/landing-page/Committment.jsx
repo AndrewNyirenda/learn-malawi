@@ -1,6 +1,9 @@
+// components/landing-page/Committment.jsx
 import React from "react";
 import { FaCheckCircle, FaBookOpen, FaLock, FaUsers } from "react-icons/fa";
 import "../../styles/landing-page/committment.css";
+
+const romanNumerals = ["I", "II", "III", "IV"];
 
 const Committment = () => {
   const trustPrinciples = [
@@ -31,25 +34,33 @@ const Committment = () => {
   ];
 
   return (
-    <section className="edu-resources">  {/* Changed to edu-resources */}
-      <header className="edu-header">  {/* Added header wrapper */}
-        <h2>Our Commitment to Excellence</h2>
-        <p>
-          Built on principles of authenticity, verification, accessibility, 
-          and nationwide reach to serve every Malawian learner.
-        </p>
-      </header>
-      
-      <div className="trust-grid">
-        {trustPrinciples.map((principle) => (
-          <article key={principle.title} className="trust-principle">
-            <h3>
-              {principle.icon}
-              {principle.title}
-            </h3>
-            <p>{principle.description}</p>
-          </article>
-        ))}
+    <section className="commitment-section" aria-labelledby="commitment-title">
+      <div className="commitment-inner">
+        <header className="commitment-header">
+          <span className="commitment-eyebrow">Our Charter</span>
+          <h2 id="commitment-title">Our Commitment to Excellence</h2>
+          <p>
+            Built on principles of authenticity, verification, accessibility,
+            and nationwide reach to serve every Malawian learner.
+          </p>
+        </header>
+
+        <div className="trust-grid">
+          {trustPrinciples.map((principle, index) => (
+            <article key={principle.title} className="trust-principle">
+              <span className="trust-numeral" aria-hidden="true">
+                {romanNumerals[index]}
+              </span>
+              <div className="trust-principle-body">
+                <h3>
+                  {principle.icon}
+                  {principle.title}
+                </h3>
+                <p>{principle.description}</p>
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );

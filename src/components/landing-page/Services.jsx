@@ -1,3 +1,4 @@
+// components/landing-page/Services.jsx
 import React, { useState } from "react";
 import {
   FaArrowRight,
@@ -70,11 +71,9 @@ const Services = () => {
   };
 
   return (
-    <section 
-      className="edu-resources"  // Changed from core-services-section
-      aria-labelledby="services-title"
-    >
-      <header className="edu-header">  {/* Added header wrapper */}
+    <section className="services-section" aria-labelledby="services-title">
+      <header className="services-header">
+        <span className="services-eyebrow">What We Offer</span>
         <h2 id="services-title">Core Services</h2>
         <p>
           Comprehensive educational tools and resources designed to support
@@ -82,29 +81,27 @@ const Services = () => {
         </p>
       </header>
 
-      <div className="services-horizontal-container">
-        <div className="services-grid">
-          {servicesData.map((service, index) => (
-            <article
-              key={service.title}
-              className={`service-card-minimal ${activeCard === index ? 'active' : ''}`}
-              onClick={() => handleCardClick(service.path, index)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => handleKeyDown(e, service.path, index)}
-              aria-label={`Access ${service.title}: ${service.description}`}
-            >
-              <div className="service-icon" aria-hidden="true">
-                {service.icon}
-              </div>
-              <h3>{service.title}</h3>
-              <p>{service.description}</p>
-              <span className="service-link">
-                Access service <FaArrowRight />
-              </span>
-            </article>
-          ))}
-        </div>
+      <div className="services-grid">
+        {servicesData.map((service, index) => (
+          <article
+            key={service.title}
+            className={`service-card-minimal ${activeCard === index ? "active" : ""}`}
+            onClick={() => handleCardClick(service.path, index)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => handleKeyDown(e, service.path, index)}
+            aria-label={`Access ${service.title}: ${service.description}`}
+          >
+            <div className="service-icon" aria-hidden="true">
+              {service.icon}
+            </div>
+            <h3>{service.title}</h3>
+            <p>{service.description}</p>
+            <span className="service-link">
+              Access service <FaArrowRight />
+            </span>
+          </article>
+        ))}
       </div>
     </section>
   );
