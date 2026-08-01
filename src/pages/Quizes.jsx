@@ -95,10 +95,12 @@ const Quizes = () => {
       <>
         <Header />
         <div className="quizes-container">
-          <PageHeader 
-            title="Interactive Quizzes"
-            description="Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz."
-          />
+          <div className="page-masthead">
+  <PageHeader 
+    title="Interactive Quizzes"
+    description="Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz."
+  />
+</div>
           <div className="state-box">
             <span className="spinner"></span>
             <p>Loading quizzes...</p>
@@ -114,10 +116,12 @@ const Quizes = () => {
       <>
         <Header />
         <div className="quizes-container">
-          <PageHeader 
-            title="Interactive Quizzes"
-            description="Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz."
-          />
+          <div className="page-masthead">
+  <PageHeader 
+    title="Interactive Quizzes"
+    description="Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz."
+  />
+</div>
           <div className="state-box">
             <h3>Error Loading Quizzes</h3>
             <p>{error}</p>

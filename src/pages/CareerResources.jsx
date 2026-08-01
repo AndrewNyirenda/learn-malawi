@@ -113,15 +113,16 @@ const CareerResources = () => {
     <>
       <Header />
       <div className="cr-wrapper">
-        <PageHeader 
-          title="Career Guidance Resources"
-          description="Comprehensive career development resources designed to help Malawian students explore opportunities, develop skills, and plan successful career pathways aligned with national development goals."
-        />
+        {/* ===== HERO / MASTHEAD ===== */}
+        <div className="page-masthead">
+          <PageHeader 
+            title="Career Guidance Resources"
+            description="Comprehensive career development resources designed to help Malawian students explore opportunities, develop skills, and plan successful career pathways aligned with national development goals."
+          />
+        </div>
 
-        {/* Resources Grid */}
+        {/* ===== RESOURCES GRID ===== */}
         <section className="cr-resources-section">
-          
-          
           <div className="cr-resources-grid">
             {careerResources.length > 0 ? (
               careerResources.map((resource) => (
@@ -157,7 +158,7 @@ const CareerResources = () => {
           </div>
         </section>
 
-        {/* Motivational Figures Section */}
+        {/* ===== MOTIVATIONAL FIGURES ===== */}
         <section className="cr-motivation-section">
           <div className="cr-section-header">
             <h2>Inspirational Figures</h2>
@@ -166,6 +167,7 @@ const CareerResources = () => {
           </div>
 
           <div className="cr-figures-grid">
+            {/* Oprah Winfrey */}
             <div className="cr-figure-card">
               <div className="cr-figure-image-container">
                 <img 
@@ -183,9 +185,10 @@ const CareerResources = () => {
                 From a troubled childhood to becoming a media mogul and philanthropist, 
                 Oprah's journey demonstrates the power of resilience and self-belief.
               </p>
-              <div className="cr-figure-tag">Media & Philanthropy</div>
+              <div className="cr-figure-tag">Media &amp; Philanthropy</div>
             </div>
             
+            {/* Elon Musk */}
             <div className="cr-figure-card">
               <div className="cr-figure-image-container">
                 <img 
@@ -203,9 +206,10 @@ const CareerResources = () => {
                 Founder of Tesla and SpaceX, Elon Musk continues to push technological boundaries 
                 through relentless innovation and perseverance.
               </p>
-              <div className="cr-figure-tag">Technology & Innovation</div>
+              <div className="cr-figure-tag">Technology &amp; Innovation</div>
             </div>
             
+            {/* Malala Yousafzai */}
             <div className="cr-figure-card">
               <div className="cr-figure-image-container">
                 <img 
@@ -223,9 +227,10 @@ const CareerResources = () => {
                 Nobel Peace Prize winner and advocate for girls' education, Malala's courage 
                 and determination have inspired millions worldwide.
               </p>
-              <div className="cr-figure-tag">Education & Activism</div>
+              <div className="cr-figure-tag">Education &amp; Activism</div>
             </div>
             
+            {/* Steve Jobs */}
             <div className="cr-figure-card">
               <div className="cr-figure-image-container">
                 <img 
@@ -243,12 +248,12 @@ const CareerResources = () => {
                 Co-founder of Apple Inc., Steve Jobs revolutionized personal technology 
                 through his commitment to innovation and excellence.
               </p>
-              <div className="cr-figure-tag">Technology & Design</div>
+              <div className="cr-figure-tag">Technology &amp; Design</div>
             </div>
           </div>
         </section>
 
-        {/* Career Planning Tips */}
+        {/* ===== CAREER PLANNING TIPS ===== */}
         <section className="cr-tips-section">
           <div className="cr-section-header">
             <h2>Career Planning Strategies</h2>
@@ -283,7 +288,7 @@ const CareerResources = () => {
           </div>
         </section>
 
-        {/* Connection Status */}
+        {/* ===== CONNECTION STATUS ===== */}
         <div className="cr-connection-status">
           <small>
             Displaying {careerResources.length} career resources from national database
