@@ -6,7 +6,7 @@ import Footer from "../components/Footer.jsx";
 import Header from '../components/Header';
 import PageHeader from '../components/page-header';
 import Filter from '../components/Filter';
-import { FaClock, FaQuestionCircle } from 'react-icons/fa';
+import { FaClock, FaQuestionCircle, FaArrowRight } from 'react-icons/fa';
 
 const Quizes = () => {
   const [level, setLevel] = useState("primary");
@@ -96,11 +96,11 @@ const Quizes = () => {
         <Header />
         <div className="quizes-container">
           <div className="page-masthead">
-  <PageHeader 
-    title="Interactive Quizzes"
-    description="Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz."
-  />
-</div>
+            <PageHeader 
+              title="Interactive Quizzes"
+              description="Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz."
+            />
+          </div>
           <div className="state-box">
             <span className="spinner"></span>
             <p>Loading quizzes...</p>
@@ -117,11 +117,11 @@ const Quizes = () => {
         <Header />
         <div className="quizes-container">
           <div className="page-masthead">
-  <PageHeader 
-    title="Interactive Quizzes"
-    description="Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz."
-  />
-</div>
+            <PageHeader 
+              title="Interactive Quizzes"
+              description="Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz."
+            />
+          </div>
           <div className="state-box">
             <h3>Error Loading Quizzes</h3>
             <p>{error}</p>
@@ -144,10 +144,13 @@ const Quizes = () => {
     <>
       <Header />
       <div className="quizes-container">
-        <PageHeader 
-          title="Interactive Quizzes"
-          description="Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz."
-        />
+        {/* ===== HERO ===== */}
+        <div className="page-masthead">
+          <PageHeader 
+            title="Interactive Quizzes"
+            description="Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz."
+          />
+        </div>
         
         <div className="level-switch">
           <button
@@ -213,7 +216,10 @@ const Quizes = () => {
             ) : (
               contextQuizzes?.map((quiz) => (
                 <div key={quiz.id} className="qz-card">
-                  {/* Purple Header - News style */}
+                  {/* Gold accent bar */}
+                  <div className="qz-card-accent"></div>
+                  
+                  {/* Header - Navy gradient with pattern */}
                   <div className="qz-card-header">
                     <h3>{quiz.title}</h3>
                     <div className="qz-badges">
@@ -226,7 +232,7 @@ const Quizes = () => {
                     </div>
                   </div>
                   
-                  {/* Card Body - Only Time and Questions */}
+                  {/* Card Body - Stats with icons */}
                   <div className="qz-card-body">
                     <div className="qz-meta">
                       <div className="qz-meta-item">
@@ -238,6 +244,11 @@ const Quizes = () => {
                         <span className="qz-meta-value">{formatTime(calculateTotalTime(quiz.questions))}</span>
                       </div>
                     </div>
+                    {/* Subject & Class info */}
+                    <div className="qz-meta-tags">
+                      <span className="qz-subject-tag">{quiz.subject || 'General'}</span>
+                      <span className="qz-class-tag">Class {quiz.class || 'N/A'}</span>
+                    </div>
                   </div>
                   
                   {/* Card Footer - Take Quiz Button */}
@@ -246,7 +257,7 @@ const Quizes = () => {
                       onClick={() => handleStart(quiz)} 
                       className="qz-start-btn"
                     >
-                      Take Quiz
+                      Take Quiz <FaArrowRight className="qz-btn-icon" />
                     </button>
                   </div>
                 </div>

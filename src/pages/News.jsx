@@ -117,10 +117,12 @@ const News = () => {
       <>
         <Header />
         <div className="news-wrapper">
-          <PageHeader 
-            title="Education News & Updates"
-            description="Stay informed with the latest education news, examination updates, and policy changes from Malawi."
-          />
+          <div className="page-masthead">
+            <PageHeader 
+              title="Education News & Updates"
+              description="Stay informed with the latest education news, examination updates, and policy changes from Malawi."
+            />
+          </div>
           <div className="error-container">
             <div className="error-icon">⚠️</div>
             <h3>Unable to Load News</h3>
@@ -144,14 +146,17 @@ const News = () => {
     <>
       <Header />
       <div className="news-wrapper">
-        <PageHeader 
-          title="Education News & Updates"
-          description="Stay informed with the latest education news, examination updates, and policy changes across Malawi."
-          badge={{
-            text: `${totalItems} Articles`,
-            color: "accent"
-          }}
-        />
+        {/* ===== HERO / MASTHEAD (FIXED) ===== */}
+        <div className="page-masthead">
+          <PageHeader 
+            title="Education News & Updates"
+            description="Stay informed with the latest education news, examination updates, and policy changes across Malawi."
+            badge={{
+              text: `${totalItems} Articles`,
+              color: "accent"
+            }}
+          />
+        </div>
 
         <main className="news-main-content">
           {/* Results Summary - Only Sort Option */}

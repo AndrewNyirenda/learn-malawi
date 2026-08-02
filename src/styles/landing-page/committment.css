@@ -4,13 +4,27 @@
   padding: var(--section-padding-y) var(--section-padding-x);
   background: var(--gradient-navy-panel);
   overflow-x: hidden;
+  position: relative;
+}
+
+/* subtle decorative dot pattern overlay */
+.commitment-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--pattern-dot-grid) 0 0 / var(--pattern-dot-grid-size);
+  opacity: 0.06;
+  pointer-events: none;
 }
 
 .commitment-inner {
   max-width: 1100px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
+/* ── header ── */
 .commitment-header {
   text-align: center;
   max-width: min(680px, 95vw);
@@ -33,29 +47,29 @@
 .commitment-eyebrow::before,
 .commitment-eyebrow::after {
   content: "";
-  width: 24px;
-  height: 1px;
+  width: 28px;
+  height: 1.5px;
   background: var(--color-gold-light);
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 .commitment-header h2 {
   font-family: var(--font-display);
   font-size: var(--text-2xl);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--color-cream);
   margin-bottom: var(--space-4);
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
 }
-
 .commitment-header h2::after {
   content: "";
   display: block;
-  width: 56px;
-  height: 3px;
-  margin: 1.1rem auto 0;
+  width: 60px;
+  height: 2.5px;
+  margin: 1.2rem auto 0;
   background: var(--gradient-gold-rule);
+  border-radius: var(--radius-sm);
 }
 
 .commitment-header p {
@@ -65,30 +79,69 @@
   font-family: var(--font-body);
 }
 
+/* ── trust grid ── */
 .trust-grid {
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
 }
 
+@media (min-width: 768px) {
+  .trust-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+}
+
+/* ── principle card ── */
 .trust-principle {
+  position: relative;
   display: grid;
   grid-template-columns: clamp(52px, 8vw, 72px) 1fr;
   gap: clamp(1.25rem, 3vw, 2rem);
   align-items: start;
-  padding: clamp(1.75rem, 3vw, 2.25rem) 0;
-  border-top: var(--border-hairline-light);
+  padding: clamp(1.75rem, 3vw, 2.25rem) clamp(1.5rem, 2.5vw, 2rem);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.3, 1),
+              box-shadow 0.4s ease,
+              border-color 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
-.trust-principle:last-child {
-  border-bottom: var(--border-hairline-light);
+/* ── gold line removed ── */
+/* .trust-principle::before was removed per user request */
+
+.trust-principle:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+  border-color: rgba(184, 145, 47, 0.25);
 }
 
+/* ── roman numeral ── */
 .trust-numeral {
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
-  font-weight: 600;
+  font-size: clamp(2rem, 4.5vw, 2.8rem);
+  font-weight: 700;
   color: var(--color-gold);
   line-height: 1;
+  letter-spacing: var(--tracking-tight);
+  opacity: 0.8;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.trust-principle:hover .trust-numeral {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+/* ── body ── */
+.trust-principle-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
 .trust-principle-body h3 {
@@ -99,7 +152,8 @@
   font-size: 1.2rem;
   font-weight: 600;
   color: var(--color-cream);
-  margin: 0 0 0.6rem;
+  margin: 0;
+  transition: color 0.3s ease;
 }
 
 .trust-principle-body h3 svg {
@@ -107,6 +161,12 @@
   height: 18px;
   color: var(--color-gold-light);
   flex-shrink: 0;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.trust-principle:hover .trust-principle-body h3 svg {
+  transform: scale(1.1);
+  color: var(--color-gold);
 }
 
 .trust-principle-body p {
@@ -117,17 +177,44 @@
   margin: 0;
 }
 
+/* ── remove old borders ── */
+.trust-principle {
+  border-top: none;
+  border-bottom: none;
+}
+.trust-principle:last-child {
+  border-bottom: none;
+}
+
 @media (min-width: 768px) {
-  .trust-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: clamp(2rem, 4vw, 3.5rem);
-  }
   .trust-principle:nth-child(1),
-  .trust-principle:nth-child(2) { border-top: none; }
+  .trust-principle:nth-child(2) {
+    border-top: none;
+  }
+}
+
+/* ── responsive tweaks ── */
+@media (max-width: 640px) {
+  .trust-principle {
+    padding: var(--space-4) var(--space-3);
+    gap: var(--space-3);
+  }
+  .trust-principle-body h3 {
+    font-size: 1.05rem;
+  }
 }
 
 @media (prefers-contrast: high) {
   .commitment-section { background: #000; }
   .trust-numeral, .trust-principle-body h3 { color: #fff; }
+  .trust-principle { border: 2px solid #fff; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trust-principle,
+  .trust-numeral,
+  .trust-principle-body h3 svg {
+    transition: none;
+    transform: none;
+  }
 }

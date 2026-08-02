@@ -1,4 +1,6 @@
-/* styles/header.css */
+/* ============================================================
+   HEADER — Solid Navy (Matches Footer Aesthetic)
+   ============================================================ */
 
 .HeaderWrapper {
   position: sticky;
@@ -10,23 +12,32 @@
   gap: clamp(1rem, 3vw, 2.5rem);
   padding: 0 clamp(1.25rem, 3vw, 2.5rem);
   height: 78px;
-  background: var(--color-paper-bright);
-  border-bottom: var(--border-hairline);
-  box-shadow: 0 1px 0 var(--color-gold), var(--shadow-sm);
+  background: var(--color-navy-deep);
+  border-bottom: 3px solid var(--color-gold);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
   font-family: var(--font-body);
 }
 
+/* ---- Logo (Significantly Increased) ---- */
+.LogoWrapper {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 .LogoWrapper img#Logo {
-  height: 46px;
+  height: 68px;
   width: auto;
   display: block;
-  transition: opacity var(--duration-fast) ease;
+  transition: opacity var(--duration-fast) ease, transform 0.3s ease;
 }
 
 .LogoWrapper a:hover img#Logo {
   opacity: 0.85;
+  transform: scale(1.02);
 }
 
+/* ---- Desktop Navigation ---- */
 .Menu {
   display: flex;
   align-items: center;
@@ -37,121 +48,119 @@
   position: relative;
   font-size: 0.92rem;
   font-weight: 500;
-  letter-spacing: 0.01em;
-  color: var(--color-slate);
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
-  padding: 0.4rem 0.1rem;
+  padding: 0.5rem 0.1rem;
   white-space: nowrap;
   transition: color var(--duration-fast) ease;
 }
 
+/* ---- Enhanced Gold Underline ---- */
 .nav-link::after {
   content: "";
   position: absolute;
   left: 0;
   bottom: -2px;
   width: 0;
-  height: 2px;
-  background: var(--color-gold);
-  transition: width var(--duration-fast) ease;
+  height: 3px;
+  background: var(--color-gold-bright);
+  border-radius: var(--radius-sm);
+  transition: width var(--duration-base) var(--ease-standard);
+  opacity: 1;
+  box-shadow: 0 0 8px rgba(253, 212, 26, 0.2);
 }
 
 .nav-link:hover {
-  color: var(--color-navy-deep);
+  color: #ffffff;
 }
 .nav-link:hover::after {
   width: 100%;
 }
 
 .nav-link.active {
-  color: var(--color-navy-deep);
-  font-weight: 700;
+  color: #ffffff;
+  font-weight: 600;
 }
 .nav-link.active::after {
   width: 100%;
-  background: var(--gradient-gold-rule);
+  background: var(--color-gold-bright);
+  box-shadow: 0 0 16px rgba(253, 212, 26, 0.4);
 }
 
-.SearchIconWrapper {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.search-icon {
-  font-size: 1.05rem;
-  color: var(--color-navy-deep);
-  cursor: pointer;
-  padding: var(--space-2);
-  border-radius: var(--radius-full);
-  transition: background var(--duration-fast) ease;
-  flex-shrink: 0;
-}
-
-.search-icon:hover {
-  background: var(--color-hairline);
-}
-
-.search-input {
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  padding: var(--space-2) 0.9rem;
-  border: var(--border-hairline);
-  border-bottom: 2px solid var(--color-gold);
-  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-  background: var(--color-surface);
-  color: var(--color-navy-deep);
-  width: clamp(160px, 20vw, 240px);
-  outline: none;
-  transition: border-color var(--duration-fast) ease;
-}
-
-.search-input:focus {
-  border-color: var(--color-blue);
-  border-bottom-color: var(--color-gold-light);
-}
-
-.search-input::placeholder {
-  color: #9aa7b8;
-}
-
+/* ---- Mobile Top Bar ---- */
 .mobile-top-bar {
   display: none;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .mobile-actions {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-3);
 }
 
 .hamburger {
-  font-size: 1.3rem;
-  color: var(--color-navy-deep);
+  font-size: 1.4rem;
+  color: #ffffff;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0.4rem;
+  border-radius: var(--radius-sm);
+  transition: background var(--duration-fast) ease, transform 0.2s ease;
 }
+
+.hamburger:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: scale(1.05);
+}
+
+/* ---- Backdrop ---- */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  top: 66px;
+  background: rgba(8, 27, 56, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: var(--z-backdrop);
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
 
 @media (max-width: 768px) {
   .HeaderWrapper {
     height: 66px;
     padding: 0 1.1rem;
+    border-bottom: 2px solid var(--color-gold);
+    background: var(--color-navy-deep);
   }
 
   .mobile-top-bar {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
+  }
+
+  /* Hide desktop logo */
+  .HeaderWrapper > .LogoWrapper {
+    display: none;
   }
 
   .LogoWrapper img#Logo {
-    height: 36px;
+    height: 56px;
   }
 
+  /* Mobile Menu - KEEPS THE GRADIENT */
   .Menu {
     position: fixed;
     top: 66px;
@@ -159,15 +168,15 @@
     height: calc(100vh - 66px);
     width: min(78vw, 320px);
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 0;
-    background: var(--gradient-navy-panel);
-    padding: var(--space-5) 0;
+    background: linear-gradient(180deg, var(--color-navy-deep) 0%, var(--color-navy-deepest) 100%);
+    padding: var(--space-4) 0 var(--space-6);
     transform: translateX(100%);
     transition: transform var(--duration-base) var(--ease-standard);
     z-index: var(--z-mobile-menu);
     overflow-y: auto;
-    box-shadow: var(--shadow-panel);
+    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.4);
   }
 
   .Menu.open {
@@ -176,10 +185,13 @@
 
   .Menu .nav-link {
     width: 100%;
-    padding: 0.95rem 1.5rem;
-    color: rgba(255, 255, 255, 0.82);
+    padding: 0.85rem 1.5rem;
+    color: rgba(255, 255, 255, 0.8);
     font-size: 1rem;
+    font-weight: 500;
     border-left: 3px solid transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all var(--duration-fast) ease;
   }
 
   .Menu .nav-link::after {
@@ -189,39 +201,23 @@
   .Menu .nav-link:hover,
   .Menu .nav-link:focus-visible {
     background: rgba(212, 175, 90, 0.08);
-    color: #fff;
-  }
-
-  .Menu .nav-link.active {
-    color: #fff;
-    background: rgba(212, 175, 90, 0.12);
+    color: #ffffff;
     border-left-color: var(--color-gold);
   }
 
-  .mobile-top-bar .SearchIconWrapper {
-    position: relative;
+  .Menu .nav-link.active {
+    color: #ffffff;
+    font-weight: 600;
+    background: rgba(212, 175, 90, 0.12);
+    border-left-color: var(--color-gold-bright);
   }
 
-  .mobile-top-bar .SearchIconWrapper.active .search-input {
-    position: absolute;
-    top: calc(100% + 10px);
-    right: 0;
-    width: 60vw;
-    max-width: 260px;
-    z-index: var(--z-search-dropdown);
-  }
-
-  .search-icon {
-    color: var(--color-navy-deep);
+  .Menu .nav-link:last-child {
+    border-bottom: none;
   }
 
   .backdrop {
-    position: fixed;
-    inset: 0;
     top: 66px;
-    background: rgba(8, 27, 56, 0.45);
-    backdrop-filter: blur(2px);
-    z-index: var(--z-backdrop);
   }
 }
 
@@ -231,21 +227,30 @@
   }
 }
 
+/* ============================================================
+   ACCESSIBILITY & REDUCED MOTION
+   ============================================================ */
+
 @media (prefers-reduced-motion: reduce) {
   .Menu,
   .nav-link::after,
-  .search-icon,
-  .LogoWrapper a:hover img#Logo {
+  .LogoWrapper a:hover img#Logo,
+  .hamburger,
+  .backdrop {
     transition: none;
+    animation: none;
+    transform: none !important;
   }
 }
 
 @media (prefers-contrast: high) {
   .HeaderWrapper {
-    border-bottom: 2px solid #000;
+    border-bottom: 3px solid #fff;
   }
-  .nav-link,
+  .nav-link {
+    color: #fff;
+  }
   .nav-link.active {
-    color: #000;
+    color: #fff;
   }
 }

@@ -1,5 +1,5 @@
 // components/landing-page/Services.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   FaArrowRight,
   FaBook,
@@ -15,43 +15,65 @@ import "../../styles/landing-page/services.css";
 const Services = () => {
   const navigate = useNavigate();
   const [activeCard, setActiveCard] = useState(null);
+  const [visible, setVisible] = useState(false);
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   const servicesData = [
     {
-      title: "Primary and Secondary School Books",
-      description: "Curriculum-aligned textbooks and structured learning materials.",
+      title: "Study Notes",
+      description: "Curriculum-aligned textbooks and structured learning materials for MSCE and JCE.",
       icon: <FaBook />,
-      path: "/study-notes"
+      path: "/study-notes",
+      color: "#3b82f6", // Sky blue
     },
     {
-      title: "Exam Past Papers",
-      description: "Comprehensive MSCE and JCE past examination papers.",
+      title: "Past Papers",
+      description: "Comprehensive MSCE and JCE past examination papers with marking schemes.",
       icon: <FaFileAlt />,
-      path: "/past-papers"
+      path: "/past-papers",
+      color: "#102f57",
     },
     {
-      title: "Digital Learning",
-      description: "High-quality video tutorials for MSCE and JCE learners.",
+      title: "Video Tutorials",
+      description: "High-quality video tutorials designed to simplify complex concepts.",
       icon: <FaPlay />,
-      path: "/tutorials"
+      path: "/tutorials",
+      color: "#dc2626", // Red
     },
     {
-      title: "Interactive Practice Quizzes",
-      description: "Curriculum-based quizzes designed to reinforce understanding.",
+      title: "Practice Quizzes",
+      description: "Curriculum-based interactive quizzes to reinforce understanding.",
       icon: <FaQuestionCircle />,
-      path: "/quizzes"
+      path: "/quizes",
+      color: "#b8912f",
     },
     {
-      title: "Education News and Updates",
-      description: "Examination updates, policy announcements, and scholarships.",
+      title: "News & Updates",
+      description: "Examination updates, policy announcements, and scholarship opportunities.",
       icon: <FaNewspaper />,
-      path: "/news"
+      path: "/news",
+      color: "#22c55e", // Green
     },
     {
-      title: "Career Guidance Resources",
-      description: "Career pathways and skills development resources for learners.",
+      title: "Career Resources",
+      description: "Career pathways and skills development resources for future success.",
       icon: <FaDownload />,
-      path: "/resources"
+      path: "/career-resources",
+      color: "#96741f",
     }
   ];
 
@@ -60,7 +82,7 @@ const Services = () => {
     setTimeout(() => {
       setActiveCard(null);
       navigate(path);
-    }, 150);
+    }, 200);
   };
 
   const handleKeyDown = (e, path, index) => {
@@ -71,7 +93,10 @@ const Services = () => {
   };
 
   return (
-    <section className="services-section" aria-labelledby="services-title">
+    <section ref={sectionRef} className="services-section" aria-labelledby="services-title">
+      <div className="services-orb services-orb-1" />
+      <div className="services-orb services-orb-2" />
+
       <header className="services-header">
         <span className="services-eyebrow">What We Offer</span>
         <h2 id="services-title">Core Services</h2>
@@ -81,25 +106,31 @@ const Services = () => {
         </p>
       </header>
 
-      <div className="services-grid">
+      <div className={`services-grid ${visible ? "visible" : ""}`}>
         {servicesData.map((service, index) => (
           <article
             key={service.title}
-            className={`service-card-minimal ${activeCard === index ? "active" : ""}`}
+            className={`service-card ${activeCard === index ? "active" : ""}`}
             onClick={() => handleCardClick(service.path, index)}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => handleKeyDown(e, service.path, index)}
             aria-label={`Access ${service.title}: ${service.description}`}
+            style={{ animationDelay: `${index * 100}ms` }}
           >
-            <div className="service-icon" aria-hidden="true">
-              {service.icon}
+            <div className="service-card-inner">
+              <div className="service-icon-wrapper">
+                <div className="service-icon" style={{ backgroundColor: service.color }}>
+                  {service.icon}
+                </div>
+              </div>
+              <h3>{service.title}</h3>
+              <p>{service.description}</p>
+              <span className="service-link">
+                Explore <FaArrowRight />
+              </span>
+              <div className="service-accent" style={{ backgroundColor: service.color }} />
             </div>
-            <h3>{service.title}</h3>
-            <p>{service.description}</p>
-            <span className="service-link">
-              Access service <FaArrowRight />
-            </span>
           </article>
         ))}
       </div>

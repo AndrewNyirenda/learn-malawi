@@ -92,10 +92,13 @@ const Contact = () => {
     <>
       <Header />
       <div className="lm-contact-wrapper">
-        <PageHeader 
-          title="Contact Learn Malawi"
-          description="Reach our team for support or inquiries. We're committed to assisting your educational journey."
-        />
+        {/* ===== HERO — NOW WRAPPED ===== */}
+        <div className="page-masthead">
+          <PageHeader 
+            title="Contact Learn Malawi"
+            description="Reach our team for support or inquiries. We're committed to assisting your educational journey."
+          />
+        </div>
 
         <section className="lm-contact-info-section">
           <div className="lm-contact-info-grid">

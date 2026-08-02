@@ -36,7 +36,11 @@ const Footer = () => {
         {/* Logo + tagline */}
         <div className="footer-section footer-logo">
           <Link to="/" aria-label="Go to homepage">
-            <img src={Logo} alt="Learn Malawi Logo" />
+            <img
+              src={Logo}
+              alt="Learn Malawi Logo"
+              className="footer-logo-image"   // isolated class
+            />
           </Link>
           <p className="footer-tagline">
             Free educational resources for every Malawian learner —
@@ -67,8 +71,8 @@ const Footer = () => {
           </p>
           <p>
             <FaWhatsapp className="footer-icon" />
-            
-              <a href={`https://wa.me/${contactDetails.whatsapp.replace(/\s/g, "")}`}
+            <a
+              href={`https://wa.me/${contactDetails.whatsapp.replace(/\s/g, "")}`}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -82,24 +86,24 @@ const Footer = () => {
           <div className="footer-social">
             <h3>Follow Us</h3>
             <div className="social-icons">
-              
-                <a href="https://x.com/LearnMalawi/"
+              <a
+                href="https://x.com/LearnMalawi/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Twitter"
               >
                 <FaTwitter />
               </a>
-              
-                <a href="https://www.instagram.com/LearnMalawi"
+              <a
+                href="https://www.instagram.com/LearnMalawi"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
               >
                 <FaInstagram />
               </a>
-              
-                <a href="https://www.facebook.com/LearnMalawi"
+              <a
+                href="https://www.facebook.com/LearnMalawi"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
@@ -112,7 +116,7 @@ const Footer = () => {
       </div>
 
       <div className="footer-bottom">
-        <p>© {new Date().getFullYear()} Learn Malawi. All Rights Reserved.</p>
+        <p>© {new Date().getFullYear()} Learn Smart. All Rights Reserved.</p>
         <p className="footer-bottom-note">Built for learners, everywhere in Malawi.</p>
       </div>
     </footer>

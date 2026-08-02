@@ -11,8 +11,8 @@ const HeroSection = () => {
     <section className="hero-section">
       <div className="hero-container">
         <div className="hero-content">
-          <span className="hero-eyebrow">A National Learning Initiative</span>
-          <h1 className="hero-title">Learn Malawi</h1>
+          <span className="hero-eyebrow">A Free Learning Resources Initiative</span>
+          <h1 className="hero-title">Learn Smart</h1>
           <p className="hero-subtitle">Free Educational Resources</p>
 
           <p className="hero-description">

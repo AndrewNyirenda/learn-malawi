@@ -1,16 +1,12 @@
 import { NavLink, Link } from "react-router-dom";
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import logo from "../images/Logo.png";
 import "../styles/header.css";
-import { FaBars, FaTimes, FaSearch } from "react-icons/fa";
-import { SearchContext } from "../components/SearchContext";
+import { FaBars, FaTimes } from "react-icons/fa";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [showSearch, setShowSearch] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-
-  const { query, setQuery, setShowResults } = useContext(SearchContext);
 
   // Check if mobile on mount and resize
   useEffect(() => {
@@ -45,26 +41,9 @@ const Header = () => {
     setIsOpen(false);
   };
 
-  const handleSearch = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      setShowResults(true);
-      if (isMobile) {
-        setShowSearch(false);
-      }
-    }
-  };
-
-  const toggleSearch = () => {
-    setShowSearch((prev) => !prev);
-    if (isMobile && !showSearch) {
-      setIsOpen(false);
-    }
-  };
-
   return (
     <header className="HeaderWrapper">
-      {/* Desktop Logo - Clickable */}
+      {/* Desktop Logo */}
       {!isMobile && (
         <div className="LogoWrapper">
           <Link to="/" onClick={closeMenu}>
@@ -75,7 +54,6 @@ const Header = () => {
 
       {/* Mobile Top Bar */}
       <div className="mobile-top-bar">
-        {/* Mobile Logo - Clickable */}
         <div className="LogoWrapper">
           <Link to="/" onClick={closeMenu}>
             <img src={logo} alt="Learn Malawi logo" id="Logo" />
@@ -83,24 +61,6 @@ const Header = () => {
         </div>
 
         <div className="mobile-actions">
-          <div className={`SearchIconWrapper ${showSearch ? "active" : ""}`}>
-            {showSearch && (
-              <input
-                type="text"
-                placeholder="Search resources..."
-                className="search-input"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onKeyDown={handleSearch}
-                autoFocus
-              />
-            )}
-            <FaSearch
-              className="search-icon"
-              onClick={toggleSearch}
-            />
-          </div>
-
           <div className="hamburger" onClick={toggleMenu}>
             {isOpen ? <FaTimes /> : <FaBars />}
           </div>
@@ -192,26 +152,6 @@ const Header = () => {
           Contact
         </NavLink>
       </div>
-
-      {/* Desktop Search */}
-      {!isMobile && (
-        <div className={`SearchIconWrapper ${showSearch ? "active" : ""}`}>
-          {showSearch && (
-            <input
-              type="text"
-              placeholder="Search resources..."
-              className="search-input"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={handleSearch}
-            />
-          )}
-          <FaSearch
-            className="search-icon"
-            onClick={() => setShowSearch((prev) => !prev)}
-          />
-        </div>
-      )}
 
       {/* Backdrop for mobile menu */}
       {isOpen && isMobile && (
