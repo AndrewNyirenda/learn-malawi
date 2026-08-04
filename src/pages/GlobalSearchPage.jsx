@@ -1,3 +1,4 @@
+// pages/GlobalSearchPage.jsx
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useStudyNotes } from "../contexts/StudyNotesContext";
@@ -13,56 +14,39 @@ import {
   FaTimes,
   FaHome,
   FaChevronRight,
-  FaInfoCircle,
 } from "react-icons/fa";
-
-const TYPE_OPTIONS = [
-  { value: "all", label: "All Types" },
-  { value: "study-notes", label: "Study Notes" },
-  { value: "past-papers", label: "Past Papers" },
-  { value: "career-resources", label: "Career Resources" },
-  { value: "news", label: "News" },
-];
-
-const SORT_OPTIONS = [
-  { value: "relevance", label: "Relevance" },
-  { value: "newest", label: "Newest First" },
-  { value: "oldest", label: "Oldest First" },
-];
 
 // ─── Masthead (matches other pages) ──────────────────────────────
 const Masthead = ({ query, total, onSearch, onClear, searchValue, setSearchValue }) => (
-  <div className="page-masthead">
-    <div className="masthead-inner">
-      <nav className="breadcrumb" aria-label="Breadcrumb">
+  <div className="search-page-masthead">
+    <div className="search-masthead-inner">
+      <nav className="search-breadcrumb" aria-label="Breadcrumb">
         <Link to="/"><FaHome /> Home</Link>
         <FaChevronRight />
-        <span className="breadcrumb-current">Search</span>
+        <span className="search-breadcrumb-current">Search</span>
       </nav>
 
-      <div className="masthead-eyebrow">
-        <span className="masthead-eyebrow-icon">
+      <div className="search-masthead-eyebrow">
+        <span className="search-masthead-eyebrow-icon">
           <FaSearch />
         </span>
         Global Search
       </div>
 
-      <h1 className="masthead-title">
-        Search <span className="masthead-title-accent">Results</span>
+      <h1 className="search-masthead-title">
+        Search <span className="search-masthead-title-accent">Results</span>
       </h1>
 
-      <p className="masthead-desc">
+      <p className="search-masthead-desc">
         {total === 0 && !query.trim()
           ? "Search across all content — study notes, past papers, career resources, and news."
           : `${total} result${total !== 1 ? "s" : ""} found for "${query}"`}
       </p>
 
-      <div className="masthead-meta">
-        <span className="masthead-meta-item">All Content</span>
-        <span className="masthead-meta-dot" />
-        <span className="masthead-meta-item">Fast Results</span>
-        <span className="masthead-meta-dot" />
-        <span className="masthead-meta-item">Free Access</span>
+      <div className="search-masthead-meta">
+        <span className="search-masthead-meta-item">All Content</span>
+        <span className="search-masthead-meta-item">Fast Results</span>
+        <span className="search-masthead-meta-item">Free Access</span>
       </div>
 
       {/* Search form inside hero */}
@@ -96,21 +80,17 @@ const GlobalSearchPage = () => {
   const navigate = useNavigate();
   const params = new URLSearchParams(location.search);
   const queryParam = params.get("q") || "";
-  const typeParam = params.get("type") || "all";
-  const sortParam = params.get("sort") || "relevance";
 
   const [query, setQuery] = useState(queryParam);
-  const [selectedType, setSelectedType] = useState(typeParam);
-  const [sortBy, setSortBy] = useState(sortParam);
   const [loading, setLoading] = useState(true);
   const [results, setResults] = useState({ studyNotes: [], pastPapers: [], careerResources: [], news: [] });
   const [total, setTotal] = useState(0);
 
   // Contexts
-  const { books, fetchBooks, loading: loadingBooks } = useStudyNotes();
-  const { pastPapers, fetchPastPapers, loading: loadingPapers } = usePastPapers();
-  const { careerResources, fetchCareerResources, loading: loadingCareer } = useCareerResources();
-  const { news, fetchNews, loading: loadingNews } = useNews();
+  const { books, fetchBooks } = useStudyNotes();
+  const { pastPapers, fetchPastPapers } = usePastPapers();
+  const { careerResources, fetchCareerResources } = useCareerResources();
+  const { news, fetchNews } = useNews();
 
   // Fetch all data when query changes
   useEffect(() => {
@@ -159,40 +139,22 @@ const GlobalSearchPage = () => {
     loadData();
   }, [query]);
 
-  // Combine and filter by type
-  const filteredResults = useMemo(() => {
+  // Combine all results (no filtering/sorting)
+  const combinedResults = useMemo(() => {
     let combined = [];
-    if (selectedType === "all" || selectedType === "study-notes") {
-      combined = combined.concat(results.studyNotes.map(item => ({ ...item, _type: "study-notes" })));
-    }
-    if (selectedType === "all" || selectedType === "past-papers") {
-      combined = combined.concat(results.pastPapers.map(item => ({ ...item, _type: "past-papers" })));
-    }
-    if (selectedType === "all" || selectedType === "career-resources") {
-      combined = combined.concat(results.careerResources.map(item => ({ ...item, _type: "career-resources" })));
-    }
-    if (selectedType === "all" || selectedType === "news") {
-      combined = combined.concat(results.news.map(item => ({ ...item, _type: "news" })));
-    }
-
-    // Sort
-    if (sortBy === "newest") {
-      combined.sort((a, b) => new Date(b.createdAt || b.publishedAt) - new Date(a.createdAt || a.publishedAt));
-    } else if (sortBy === "oldest") {
-      combined.sort((a, b) => new Date(a.createdAt || a.publishedAt) - new Date(b.createdAt || b.publishedAt));
-    }
-
+    combined = combined.concat(results.studyNotes.map(item => ({ ...item, _type: "study-notes" })));
+    combined = combined.concat(results.pastPapers.map(item => ({ ...item, _type: "past-papers" })));
+    combined = combined.concat(results.careerResources.map(item => ({ ...item, _type: "career-resources" })));
+    combined = combined.concat(results.news.map(item => ({ ...item, _type: "news" })));
     return combined;
-  }, [results, selectedType, sortBy]);
+  }, [results]);
 
-  // Update URL when filters change
+  // Update URL when query changes
   useEffect(() => {
     const searchParams = new URLSearchParams();
     if (query) searchParams.set("q", query);
-    if (selectedType && selectedType !== "all") searchParams.set("type", selectedType);
-    if (sortBy && sortBy !== "relevance") searchParams.set("sort", sortBy);
     navigate(`/search?${searchParams.toString()}`, { replace: true });
-  }, [query, selectedType, sortBy]);
+  }, [query]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -224,19 +186,19 @@ const GlobalSearchPage = () => {
       return (
         <article
           key={item.id}
-          className="news-card search-news-card"
+          className="search-news-card"
           onClick={() => navigate(`/news/${item.id}`)}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => e.key === "Enter" && navigate(`/news/${item.id}`)}
         >
-          <div className="news-card-image">
+          <div className="search-news-image">
             <img src={item.imageUrl || "/api/placeholder/400/240"} alt={item.title} />
           </div>
-          <div className="news-card-content">
-            <h3 className="news-card-title">{item.title}</h3>
-            <p className="news-card-excerpt">{item.description?.substring(0, 140)}...</p>
-            <time className="news-card-date">{new Date(item.publishedAt || item.createdAt).toLocaleDateString()}</time>
+          <div className="search-news-content">
+            <h3 className="search-news-title">{item.title}</h3>
+            <p className="search-news-excerpt">{item.description?.substring(0, 140)}...</p>
+            <time className="search-news-date">{new Date(item.publishedAt || item.createdAt).toLocaleDateString()}</time>
           </div>
         </article>
       );
@@ -247,8 +209,7 @@ const GlobalSearchPage = () => {
   return (
     <>
       <Header />
-      <div className="search-page-wrapper">
-        {/* Hero */}
+      <div className="search-container">
         <Masthead
           query={query}
           total={total}
@@ -258,53 +219,29 @@ const GlobalSearchPage = () => {
           setSearchValue={setQuery}
         />
 
-        {/* Toolbar */}
-        <div className="toolbar-panel">
-          <div className="toolbar-row">
-            <div className="filter-group">
-              <select
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
-                className="filter-select"
-              >
-                {TYPE_OPTIONS.map(opt => (
-                  <option key={opt.value} value={opt.value}>{opt.label}</option>
-                ))}
-              </select>
-            </div>
-            <div className="filter-group">
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="filter-select"
-              >
-                {SORT_OPTIONS.map(opt => (
-                  <option key={opt.value} value={opt.value}>{opt.label}</option>
-                ))}
-              </select>
-            </div>
-            {total > 0 && (
-              <span className="results-count">{total} results</span>
-            )}
+        {/* Results count – moved here */}
+        {total > 0 && (
+          <div className="search-results-count-wrapper">
+            <span className="search-results-count">{total} results</span>
           </div>
-        </div>
+        )}
 
         {/* Results */}
         <section className="search-results-section">
           {loading ? (
-            <div className="loading-container">
-              <div className="loading-spinner" />
+            <div className="search-loading-container">
+              <div className="search-loading-spinner" />
               <p>Searching...</p>
             </div>
-          ) : filteredResults.length === 0 ? (
-            <div className="empty">
-              <FaSearch size={48} className="empty-icon" />
+          ) : combinedResults.length === 0 ? (
+            <div className="search-empty">
+              <FaSearch size={48} className="search-empty-icon" />
               <h3>No results found</h3>
-              <p>Try adjusting your search or filters.</p>
+              <p>Try adjusting your search.</p>
             </div>
           ) : (
             <div className="search-results-grid">
-              {filteredResults.map(item => renderCard(item))}
+              {combinedResults.map(item => renderCard(item))}
             </div>
           )}
         </section>
