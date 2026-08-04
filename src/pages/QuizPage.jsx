@@ -4,7 +4,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useQuizzes } from '../contexts/QuizzesContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import PageHeader from '../components/page-header';
 import "../styles/quizpage.css";
 import { FaHome, FaChevronRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
@@ -157,8 +156,8 @@ const QuizPage = () => {
     return (
       <>
         <Header />
-        <div className="loading-container">
-          <div className="loading-spinner"></div>
+        <div className="quizpage-loading-container">
+          <div className="quizpage-loading-spinner"></div>
           <p>Loading quiz...</p>
         </div>
         <Footer />
@@ -170,10 +169,10 @@ const QuizPage = () => {
     return (
       <>
         <Header />
-        <div className="error-container">
+        <div className="quizpage-error-container">
           <h3>Quiz not found</h3>
           <p>The quiz you're looking for doesn't exist or has been removed.</p>
-          <button onClick={handleBackToList} className="back-btn">
+          <button onClick={handleBackToList} className="quizpage-back-btn">
             Back to Quiz List
           </button>
         </div>
@@ -185,63 +184,64 @@ const QuizPage = () => {
   return (
     <>
       <Header />
-      <div className="quiz-page-wrapper">
+      <div className="quizpage-wrapper">
         {/* ── Masthead ── */}
-        <div className="page-masthead">
-          <nav className="breadcrumb" aria-label="Breadcrumb">
+        <div className="quizpage-masthead">
+          <nav className="quizpage-breadcrumb" aria-label="Breadcrumb">
             <Link to="/"><FaHome /> Home</Link>
             <FaChevronRight />
             <Link to="/quizes">Quizzes</Link>
             <FaChevronRight />
-            <span className="breadcrumb-current">{quiz.title}</span>
+            <span className="quizpage-breadcrumb-current">{quiz.title}</span>
           </nav>
-          <PageHeader
-            title={quiz.title}
-            description={`${quiz.level === 'primary' ? 'Primary' : 'Secondary'} · ${quiz.subject} · Class ${quiz.class} · ${quiz.difficulty?.charAt(0).toUpperCase() + quiz.difficulty?.slice(1)} difficulty`}
-          />
-          <div className="quiz-badges">
-            <span className="level-badge">{quiz.level === 'primary' ? 'Primary' : 'Secondary'}</span>
-            <span className={`difficulty-badge ${quiz.difficulty}`}>
+          
+          <h1 className="quizpage-title">{quiz.title}</h1>
+          
+          <div className="quizpage-badges">
+            <span className="quizpage-badge quizpage-level-badge">
+              {quiz.level === 'primary' ? 'Primary' : 'Secondary'}
+            </span>
+            <span className={`quizpage-badge quizpage-difficulty-badge ${quiz.difficulty}`}>
               {quiz.difficulty?.charAt(0).toUpperCase() + quiz.difficulty?.slice(1)}
             </span>
-            <span className="subject-badge">{quiz.subject}</span>
-            <span className="class-badge">{quiz.class}</span>
+            <span className="quizpage-badge quizpage-subject-badge">{quiz.subject}</span>
+            <span className="quizpage-badge quizpage-class-badge">{quiz.class}</span>
           </div>
         </div>
 
         {/* ── Instruction Card ── */}
-        <div className="quiz-instructions-container">
-          <div className="instructions-card">
-            <div className="instructions-card-accent"></div>
+        <div className="quizpage-instructions-container">
+          <div className="quizpage-instructions-card">
+            
             <h2>Quiz Instructions</h2>
             
-            <div className="instructions-grid">
-              <div className="instruction-item">
-                <div className="instruction-icon">📝</div>
+            <div className="quizpage-instructions-grid">
+              <div className="quizpage-instruction-item">
+                <div className="quizpage-instruction-icon">📝</div>
                 <h3>Questions</h3>
                 <p>{quiz.questions?.length || 0} carefully crafted questions</p>
               </div>
               
-              <div className="instruction-item">
-                <div className="instruction-icon">⏱️</div>
+              <div className="quizpage-instruction-item">
+                <div className="quizpage-instruction-icon">⏱️</div>
                 <h3>Time</h3>
                 <p>Each question has its own time limit</p>
               </div>
               
-              <div className="instruction-item">
-                <div className="instruction-icon">🎯</div>
+              <div className="quizpage-instruction-item">
+                <div className="quizpage-instruction-icon">🎯</div>
                 <h3>Passing Score</h3>
                 <p>70% or higher to pass</p>
               </div>
               
-              <div className="instruction-item">
-                <div className="instruction-icon">📊</div>
+              <div className="quizpage-instruction-item">
+                <div className="quizpage-instruction-icon">📊</div>
                 <h3>Scoring</h3>
                 <p>Instant feedback after each question</p>
               </div>
             </div>
             
-            <div className="instructions-details">
+            <div className="quizpage-instructions-details">
               <h3>How to Take This Quiz:</h3>
               <ul>
                 <li>Each question has a specific time limit based on difficulty</li>
@@ -253,8 +253,8 @@ const QuizPage = () => {
               </ul>
             </div>
             
-            <div className="start-quiz-section">
-              <button onClick={handleStartQuiz} className="start-quiz-button">
+            <div className="quizpage-start-quiz-section">
+              <button onClick={handleStartQuiz} className="quizpage-start-quiz-button">
                 Start Quiz Now
               </button>
             </div>
@@ -264,95 +264,89 @@ const QuizPage = () => {
       
       {/* ── Quiz Modal ── */}
       {showQuizModal && (
-        <div className="quiz-modal-overlay" onClick={handleCloseModal}>
-          <div className="quiz-modal-container" onClick={(e) => e.stopPropagation()}>
-            <div className="quiz-modal-header">
+        <div className="quizpage-modal-overlay" onClick={handleCloseModal}>
+          <div className="quizpage-modal-container" onClick={(e) => e.stopPropagation()}>
+            <div className="quizpage-modal-header">
               <h3>{quiz.title}</h3>
-              <button onClick={handleCloseModal} className="close-modal-btn">
+              <button onClick={handleCloseModal} className="quizpage-close-modal-btn">
                 ×
               </button>
             </div>
             
             {!isFinished && currentQuestion ? (
-              <div className="quiz-content">
-                {/* Timer and Progress */}
-                <div className="quiz-progress">
-                  <div className="timer-display">
-                    <span className="time-left">{formatTime(timeLeft)}</span>
-                    <span className="time-label">Time Remaining</span>
+              <div className="quizpage-modal-content">
+                <div className="quizpage-modal-progress">
+                  <div className="quizpage-timer-display">
+                    <span className="quizpage-time-left">{formatTime(timeLeft)}</span>
+                    <span className="quizpage-time-label">Time Remaining</span>
                   </div>
-                  <div className="question-counter">
+                  <div className="quizpage-question-counter">
                     Question {currentQuestionIndex + 1} of {quiz.questions.length}
                   </div>
                 </div>
                 
-                {/* Question */}
-                <div className="question-container">
-                  <div className="question-text">{currentQuestion.question}</div>
+                <div className="quizpage-question-container">
+                  <div className="quizpage-question-text">{currentQuestion.question}</div>
                   
-                  {/* Options */}
-                  <div className="options-grid">
+                  <div className="quizpage-options-grid">
                     {currentQuestion.options?.map((option, index) => (
                       <button
                         key={index}
-                        className={`option-button ${selectedOption === option ? "selected" : ""}`}
+                        className={`quizpage-option-button ${selectedOption === option ? "quizpage-selected" : ""}`}
                         onClick={() => handleOptionSelect(option)}
                         disabled={selectedOption !== null}
                       >
-                        <span className="option-letter">{String.fromCharCode(65 + index)}</span>
-                        <span className="option-text">{option}</span>
+                        <span className="quizpage-option-letter">{String.fromCharCode(65 + index)}</span>
+                        <span className="quizpage-option-text">{option}</span>
                       </button>
                     ))}
                   </div>
                 </div>
                 
-                {/* Navigation */}
-                <div className="quiz-navigation">
+                <div className="quizpage-modal-navigation">
                   {selectedOption !== null && (
-                    <button onClick={handleNextQuestion} className="next-question-btn">
+                    <button onClick={handleNextQuestion} className="quizpage-next-question-btn">
                       {currentQuestionIndex + 1 === quiz.questions.length ? "Finish Quiz" : "Next Question →"}
                     </button>
                   )}
                 </div>
               </div>
             ) : (
-              /* Results */
-              <div className="quiz-results">
-                <div className={`result-header ${passed ? "passed" : "failed"}`}>
+              <div className="quizpage-modal-results">
+                <div className={`quizpage-result-header ${passed ? "quizpage-passed" : "quizpage-failed"}`}>
                   <h2>Quiz {passed ? "Passed! 🎉" : "Failed! 📝"}</h2>
                 </div>
                 
-                <div className="score-summary">
-                  <div className="score-circle">
-                    <div className="score-percent">{Math.round((score / quiz.questions.length) * 100)}%</div>
-                    <div className="score-details">
+                <div className="quizpage-score-summary">
+                  <div className="quizpage-score-circle">
+                    <div className="quizpage-score-percent">{Math.round((score / quiz.questions.length) * 100)}%</div>
+                    <div className="quizpage-score-details">
                       {score} / {quiz.questions.length} correct
                     </div>
                   </div>
                   
-                  <div className="result-details">
-                    <div className="detail-item">
-                      <span className="detail-label">Time Taken:</span>
-                      <span className="detail-value">{formatTime(timeTaken)}</span>
+                  <div className="quizpage-result-details">
+                    <div className="quizpage-detail-item">
+                      <span className="quizpage-detail-label">Time Taken:</span>
+                      <span className="quizpage-detail-value">{formatTime(timeTaken)}</span>
                     </div>
-                    <div className="detail-item">
-                      <span className="detail-label">Passing Score:</span>
-                      <span className="detail-value">{passingThreshold} out of {quiz.questions.length}</span>
+                    <div className="quizpage-detail-item">
+                      <span className="quizpage-detail-label">Passing Score:</span>
+                      <span className="quizpage-detail-value">{passingThreshold} out of {quiz.questions.length}</span>
                     </div>
-                    <div className="detail-item">
-                      <span className="detail-label">Your Score:</span>
-                      <span className={`detail-value ${passed ? "passed" : "failed"}`}>
+                    <div className="quizpage-detail-item">
+                      <span className="quizpage-detail-label">Your Score:</span>
+                      <span className={`quizpage-detail-value ${passed ? "quizpage-passed" : "quizpage-failed"}`}>
                         {score} out of {quiz.questions.length}
                       </span>
                     </div>
                   </div>
                 </div>
                 
-                {/* Review wrong answers if failed */}
                 {!passed && (
-                  <div className="answers-review">
+                  <div className="quizpage-answers-review">
                     <h3>Review Your Answers</h3>
-                    <div className="review-list">
+                    <div className="quizpage-review-list">
                       {quiz.questions.map((q, index) => {
                         const userAnswer = userAnswers.find(ans => ans.questionIndex === index);
                         const isCorrect = userAnswer?.isCorrect || false;
@@ -360,18 +354,18 @@ const QuizPage = () => {
                         if (isCorrect) return null;
                         
                         return (
-                          <div key={index} className="review-item">
-                            <div className="review-question">
+                          <div key={index} className="quizpage-review-item">
+                            <div className="quizpage-review-question">
                               <strong>Q{index + 1}:</strong> {q.question}
                             </div>
-                            <div className="review-answers">
-                              <div className="your-answer">
+                            <div className="quizpage-review-answers">
+                              <div className="quizpage-your-answer">
                                 <span>Your answer:</span>
-                                <span className="incorrect">{userAnswer?.selectedOption || "No answer"}</span>
+                                <span className="quizpage-incorrect">{userAnswer?.selectedOption || "No answer"}</span>
                               </div>
-                              <div className="correct-answer">
+                              <div className="quizpage-correct-answer">
                                 <span>Correct answer:</span>
-                                <span className="correct">{q.answer}</span>
+                                <span className="quizpage-correct">{q.answer}</span>
                               </div>
                             </div>
                           </div>
@@ -381,14 +375,14 @@ const QuizPage = () => {
                   </div>
                 )}
                 
-                <div className="result-actions">
-                  <button onClick={handleCloseModal} className="close-quiz-btn">
+                <div className="quizpage-result-actions">
+                  <button onClick={handleCloseModal} className="quizpage-close-quiz-btn">
                     Close Quiz
                   </button>
                   <button onClick={() => {
                     handleCloseModal();
                     handleStartQuiz();
-                  }} className="retry-quiz-btn">
+                  }} className="quizpage-retry-quiz-btn">
                     Retry Quiz
                   </button>
                 </div>

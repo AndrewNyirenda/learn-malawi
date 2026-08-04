@@ -1,3 +1,4 @@
+// pages/Quizes.jsx
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useQuizzes } from '../contexts/QuizzesContext';
@@ -8,37 +9,35 @@ import Header from '../components/Header';
 import Filter from '../components/Filter';
 import { FaClock, FaQuestionCircle, FaArrowRight, FaHome, FaChevronRight, FaBrain } from 'react-icons/fa';
 
-// ─── Masthead (matches PastPapers / Tutorials) ──────────────────
+// ─── Masthead (matches other pages) ──────────────────────────────
 const Masthead = () => (
-  <div className="page-masthead">
-    <div className="masthead-inner">
-      <nav className="breadcrumb" aria-label="Breadcrumb">
+  <div className="quizes-page-masthead">
+    <div className="quizes-masthead-inner">
+      <nav className="quizes-breadcrumb" aria-label="Breadcrumb">
         <Link to="/"><FaHome /> Home</Link>
         <FaChevronRight />
-        <span className="breadcrumb-current">Quizzes</span>
+        <span className="quizes-breadcrumb-current">Quizzes</span>
       </nav>
 
-      <div className="masthead-eyebrow">
-        <span className="masthead-eyebrow-icon">
+      <div className="quizes-masthead-eyebrow">
+        <span className="quizes-masthead-eyebrow-icon">
           <FaBrain />
         </span>
         Interactive Learning
       </div>
 
-      <h1 className="masthead-title">
-        Interactive <span className="masthead-title-accent">Quizzes</span>
+      <h1 className="quizes-masthead-title">
+        Interactive <span className="quizes-masthead-title-accent">Quizzes</span>
       </h1>
 
-      <p className="masthead-desc">
+      <p className="quizes-masthead-desc">
         Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz.
       </p>
 
-      <div className="masthead-meta">
-        <span className="masthead-meta-item">Primary &amp; Secondary</span>
-        <span className="masthead-meta-dot" />
-        <span className="masthead-meta-item">Multiple Subjects</span>
-        <span className="masthead-meta-dot" />
-        <span className="masthead-meta-item">Instant Feedback</span>
+      <div className="quizes-masthead-meta">
+        <span className="quizes-masthead-meta-item">Primary &amp; Secondary</span>
+        <span className="quizes-masthead-meta-item">Multiple Subjects</span>
+        <span className="quizes-masthead-meta-item">Instant Feedback</span>
       </div>
     </div>
   </div>
@@ -133,8 +132,8 @@ const Quizes = () => {
         <Header />
         <div className="quizes-container">
           <Masthead />
-          <div className="state-box">
-            <span className="spinner"></span>
+          <div className="quizes-state-box">
+            <span className="quizes-spinner"></span>
             <p>Loading quizzes...</p>
           </div>
         </div>
@@ -149,7 +148,7 @@ const Quizes = () => {
         <Header />
         <div className="quizes-container">
           <Masthead />
-          <div className="state-box">
+          <div className="quizes-state-box">
             <h3>Error Loading Quizzes</h3>
             <p>{error}</p>
             <button 
@@ -173,10 +172,10 @@ const Quizes = () => {
       <div className="quizes-container">
         <Masthead />
 
-        {/* ===== TOOLBAR (level switch + filters combined) ===== */}
-        <div className="toolbar-panel">
-          <div className="toolbar-row">
-            <div className="level-switch">
+        {/* ===== TOOLBAR ===== */}
+        <div className="quizes-toolbar-panel">
+          <div className="quizes-toolbar-row">
+            <div className="quizes-level-switch" data-level={level}>
               <button
                 className={level === "primary" ? "active" : ""}
                 onClick={() => setLevel("primary")}
@@ -191,9 +190,11 @@ const Quizes = () => {
               </button>
             </div>
 
-            <div className="filter-group">
+            <div className="quizes-filter-group">
+              <label className="quizes-filter-label" htmlFor="quizes-subject">Subject:</label>
               <Filter
-                id="subject"
+                id="quizes-subject"
+                className="quizes-filter-select"
                 value={subjectFilter}
                 onChange={setSubjectFilter}
                 options={subjectOptions}
@@ -203,9 +204,11 @@ const Quizes = () => {
               />
             </div>
 
-            <div className="filter-group">
+            <div className="quizes-filter-group">
+              <label className="quizes-filter-label" htmlFor="quizes-class">Class:</label>
               <Filter
-                id="class"
+                id="quizes-class"
+                className="quizes-filter-select"
                 value={classFilter}
                 onChange={setClassFilter}
                 options={classOptions}
@@ -215,9 +218,11 @@ const Quizes = () => {
               />
             </div>
 
-            <div className="filter-group">
+            <div className="quizes-filter-group">
+              <label className="quizes-filter-label" htmlFor="quizes-difficulty">Difficulty:</label>
               <Filter
-                id="difficulty"
+                id="quizes-difficulty"
+                className="quizes-filter-select"
                 value={difficultyFilter}
                 onChange={setDifficultyFilter}
                 options={difficultyOptions}
@@ -229,56 +234,55 @@ const Quizes = () => {
           </div>
         </div>
         
-        <section className="quiz-section">
-          <div className="quiz-grid">
+        <section className="quizes-quiz-section">
+          <div className="quizes-quiz-grid">
             {contextQuizzes?.length === 0 ? (
-              <div className="empty">
+              <div className="quizes-empty">
                 <FaQuestionCircle size={64} color="#94a3b8" />
                 <h3>No Quizzes Available</h3>
                 <p>No quizzes found for the selected filters. Please try different subject, class, or difficulty.</p>
               </div>
             ) : (
               contextQuizzes?.map((quiz) => (
-                <div key={quiz.id} className="qz-card">
-                  <div className="qz-card-accent"></div>
+                <div key={quiz.id} className="quizes-card">
+                  <div className="quizes-card-accent"></div>
 
-                  <div className="qz-card-header">
+                  <div className="quizes-card-header">
                     <h3>{quiz.title}</h3>
-                    <div className="qz-badges">
-                      <span className="qz-level-badge">
+                    <div className="quizes-card-badges">
+                      <span className="quizes-level-badge">
                         {quiz.level === 'primary' ? 'Primary' : 'Secondary'}
                       </span>
-                      <span className={`qz-difficulty-badge ${quiz.difficulty?.toLowerCase()}`}>
+                      <span className={`quizes-difficulty-badge ${quiz.difficulty?.toLowerCase()}`}>
                         {quiz.difficulty?.charAt(0).toUpperCase() + quiz.difficulty?.slice(1)}
                       </span>
                     </div>
                   </div>
 
-                  {/* Medallion badge */}
-                  <div className="qz-card-medallion" aria-hidden="true">
+                  <div className="quizes-card-medallion" aria-hidden="true">
                     <FaQuestionCircle />
                   </div>
 
-                  <div className="qz-card-body">
-                    <div className="qz-meta">
-                      <div className="qz-meta-item">
-                        <span className="qz-meta-icon"><FaQuestionCircle /></span>
-                        <span className="qz-meta-value">{quiz.questions?.length || 0} Questions</span>
+                  <div className="quizes-card-body">
+                    <div className="quizes-card-meta">
+                      <div className="quizes-meta-item">
+                        <span className="quizes-meta-icon"><FaQuestionCircle /></span>
+                        <span className="quizes-meta-value">{quiz.questions?.length || 0} Questions</span>
                       </div>
-                      <div className="qz-meta-item">
-                        <span className="qz-meta-icon"><FaClock /></span>
-                        <span className="qz-meta-value">{formatTime(calculateTotalTime(quiz.questions))}</span>
+                      <div className="quizes-meta-item">
+                        <span className="quizes-meta-icon"><FaClock /></span>
+                        <span className="quizes-meta-value">{formatTime(calculateTotalTime(quiz.questions))}</span>
                       </div>
                     </div>
-                    <div className="qz-meta-tags">
-                      <span className="qz-subject-tag">{quiz.subject || 'General'}</span>
-                      <span className="qz-class-tag">Class {quiz.class || 'N/A'}</span>
+                    <div className="quizes-card-tags">
+                      <span className="quizes-subject-tag">{quiz.subject || 'General'}</span>
+                      <span className="quizes-class-tag">Class {quiz.class || 'N/A'}</span>
                     </div>
                   </div>
 
-                  <div className="qz-card-footer">
-                    <button onClick={() => handleStart(quiz)} className="qz-start-btn">
-                      Take Quiz <FaArrowRight className="qz-btn-icon" />
+                  <div className="quizes-card-footer">
+                    <button onClick={() => handleStart(quiz)} className="quizes-start-btn">
+                      Take Quiz <FaArrowRight className="quizes-btn-icon" />
                     </button>
                   </div>
                 </div>
@@ -287,10 +291,7 @@ const Quizes = () => {
           </div>
         </section>
         
-        <div className="quiz-status">
-          Showing {contextQuizzes?.length || 0} {contextQuizzes?.length === 1 ? "quiz" : "quizzes"}
-          {loading && " · loading"}
-        </div>
+        {/* Status line removed */}
       </div>
       <Footer />
     </>
