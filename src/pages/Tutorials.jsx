@@ -1,20 +1,46 @@
-// pages/Tutorials.jsx
 import React, { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
 import { useTutorials } from "../contexts/TutorialsContext";
 import "../styles/tutorials.css";
 import Footer from "../components/Footer.jsx";
 import Header from "../components/Header";
-import PageHeader from "../components/page-header";
 import Pagination from "../components/Pagination";
 import Filter from "../components/Filter";
+import { FaHome, FaChevronRight, FaVideo } from "react-icons/fa";
 
-// ─── Masthead ──────────────────────────────────────────────────────
+// ─── Masthead (matching PastPapers / StudyNotes) ──────────────────
 const Masthead = () => (
   <div className="page-masthead">
-    <PageHeader
-      title="Educational Tutorials"
-      description="Access comprehensive video tutorials covering various subjects for both Primary and Secondary levels."
-    />
+    <div className="masthead-inner">
+      <nav className="breadcrumb" aria-label="Breadcrumb">
+        <Link to="/"><FaHome /> Home</Link>
+        <FaChevronRight />
+        <span className="breadcrumb-current">Tutorials</span>
+      </nav>
+
+      <div className="masthead-eyebrow">
+        <span className="masthead-eyebrow-icon">
+          <FaVideo />
+        </span>
+        Video Resources
+      </div>
+
+      <h1 className="masthead-title">
+        Educational <span className="masthead-title-accent">Tutorials</span>
+      </h1>
+
+      <p className="masthead-desc">
+        Access comprehensive video tutorials covering various subjects for both Primary and Secondary levels.
+      </p>
+
+      <div className="masthead-meta">
+        <span className="masthead-meta-item">Primary &amp; Secondary</span>
+        <span className="masthead-meta-dot" />
+        <span className="masthead-meta-item">Subject‑based</span>
+        <span className="masthead-meta-dot" />
+        <span className="masthead-meta-item">Free Access</span>
+      </div>
+    </div>
   </div>
 );
 

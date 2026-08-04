@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
   FaExternalLinkAlt,
   FaBullseye,
@@ -14,13 +15,14 @@ import {
   FaUserTie,
   FaLightbulb,
   FaChartLine,
-  FaHandshake
+  FaHandshake,
+  FaHome,
+  FaChevronRight,
 } from 'react-icons/fa';
 import { useCareerResources } from '../contexts/CareerResourcesContext';
 import '../styles/careerResources.css';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import PageHeader from '../components/page-header';
 
 // Import images from figures folder
 import OprahImage from '../images/figures/oprah.webp';
@@ -28,6 +30,43 @@ import ElonImage from '../images/figures/elon.jpg';
 import MalalaImage from '../images/figures/Malala.webp';
 import SteveImage from '../images/figures/steve.jpg';
 
+// ─── Masthead (matches PastPapers / Tutorials) ──────────────────
+const Masthead = () => (
+  <div className="page-masthead">
+    <div className="masthead-inner">
+      <nav className="breadcrumb" aria-label="Breadcrumb">
+        <Link to="/"><FaHome /> Home</Link>
+        <FaChevronRight />
+        <span className="breadcrumb-current">Career Resources</span>
+      </nav>
+
+      <div className="masthead-eyebrow">
+        <span className="masthead-eyebrow-icon">
+          <FaCompass />
+        </span>
+        Career Development
+      </div>
+
+      <h1 className="masthead-title">
+        Career <span className="masthead-title-accent">Guidance</span> Resources
+      </h1>
+
+      <p className="masthead-desc">
+        Comprehensive career development resources designed to help Malawian students explore opportunities, develop skills, and plan successful career pathways aligned with national development goals.
+      </p>
+
+      <div className="masthead-meta">
+        <span className="masthead-meta-item">Career Planning</span>
+        <span className="masthead-meta-dot" />
+        <span className="masthead-meta-item">Free Access</span>
+        <span className="masthead-meta-dot" />
+        <span className="masthead-meta-item">Updated Regularly</span>
+      </div>
+    </div>
+  </div>
+);
+
+// ─── Main component ────────────────────────────────────────────────
 const CareerResources = () => {
   const {
     careerResources,
@@ -78,6 +117,7 @@ const CareerResources = () => {
       <>
         <Header />
         <div className="cr-wrapper">
+          <Masthead />
           <div className="cr-loading-container">
             <div className="cr-loading-spinner"></div>
             <p>Loading career resources...</p>
@@ -93,6 +133,7 @@ const CareerResources = () => {
       <>
         <Header />
         <div className="cr-wrapper">
+          <Masthead />
           <div className="cr-error-container">
             <h3>Error Loading Resources</h3>
             <p>{error}</p>
@@ -113,13 +154,7 @@ const CareerResources = () => {
     <>
       <Header />
       <div className="cr-wrapper">
-        {/* ===== HERO / MASTHEAD ===== */}
-        <div className="page-masthead">
-          <PageHeader 
-            title="Career Guidance Resources"
-            description="Comprehensive career development resources designed to help Malawian students explore opportunities, develop skills, and plan successful career pathways aligned with national development goals."
-          />
-        </div>
+        <Masthead />
 
         {/* ===== RESOURCES GRID ===== */}
         <section className="cr-resources-section">
