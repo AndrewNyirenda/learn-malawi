@@ -6,11 +6,17 @@ import "../styles/pastPapers.css";
 import Footer from "../components/Footer.jsx";
 import { usePastPapers } from "../contexts/PastPapersContext";
 import Header from "../components/Header";
-import PageHeader from "../components/page-header";
 import Pagination from "../components/Pagination";
 import Filter from "../components/Filter";
-import { FaSearch, FaTimes, FaHome, FaChevronRight } from "react-icons/fa";
+import {
+  FaSearch,
+  FaTimes,
+  FaHome,
+  FaChevronRight,
+  FaFileAlt,
+} from "react-icons/fa";
 
+// ─── Skeleton ────────────────────────────────────────────────────────
 const SkeletonGrid = ({ count = 12 }) => (
   <div className="materials-grid">
     {Array.from({ length: count }).map((_, i) => (
@@ -32,22 +38,44 @@ const useDebouncedValue = (value, delay = 250) => {
   return debounced;
 };
 
-// ─── Masthead ──────────────────────────────────────────────────────
+// ─── Masthead (matches StudyNotes premium style) ──────────────────
 const Masthead = () => (
   <div className="page-masthead">
-    <nav className="breadcrumb" aria-label="Breadcrumb">
-      <Link to="/"><FaHome /> Home</Link>
-      <FaChevronRight />
-      <span className="breadcrumb-current">Past Papers</span>
-    </nav>
-    <PageHeader
-      title="Past Papers & Reviews"
-      description="Access a curated collection of past papers and reviews to support your primary and secondary school studies."
-    />
+    <div className="masthead-inner">
+      <nav className="breadcrumb" aria-label="Breadcrumb">
+        <Link to="/"><FaHome /> Home</Link>
+        <FaChevronRight />
+        <span className="breadcrumb-current">Past Papers</span>
+      </nav>
+
+      <div className="masthead-eyebrow">
+        <span className="masthead-eyebrow-icon">
+          <FaFileAlt />
+        </span>
+        Exam Resources
+      </div>
+
+      <h1 className="masthead-title">
+        Past Papers &amp; <span className="masthead-title-accent">Reviews</span>
+      </h1>
+
+      <p className="masthead-desc">
+        Access a curated collection of past papers and reviews to support your
+        primary and secondary school studies.
+      </p>
+
+      <div className="masthead-meta">
+        <span className="masthead-meta-item">Primary &amp; Secondary</span>
+        <span className="masthead-meta-dot" />
+        <span className="masthead-meta-item">Updated Regularly</span>
+        <span className="masthead-meta-dot" />
+        <span className="masthead-meta-item">Free to Download</span>
+      </div>
+    </div>
   </div>
 );
 
-// ─── Toolbar (matches Quizes exactly) ─────────────────────────────
+// ─── Toolbar ──────────────────────────────────────────────────────
 const Toolbar = ({
   level,
   setLevel,
@@ -68,24 +96,22 @@ const Toolbar = ({
   years,
   setCurrentPage,
 }) => {
-  // Build options for Filter components
   const categoryOptions = [
     { value: "all", label: "All Categories" },
-    ...(categories || []).map(c => ({ value: c.category, label: c.category }))
+    ...(categories || []).map((c) => ({ value: c.category, label: c.category })),
   ];
   const classOptions = [
     { value: "all", label: "All Classes" },
-    ...(classes || []).map(c => ({ value: c.class, label: c.class }))
+    ...(classes || []).map((c) => ({ value: c.class, label: c.class })),
   ];
   const yearOptions = [
     { value: "all", label: "All Years" },
-    ...(years || []).map(y => ({ value: y.year, label: y.year }))
+    ...(years || []).map((y) => ({ value: y.year, label: y.year })),
   ];
 
   return (
     <div className="toolbar-panel">
       <div className="toolbar-row">
-        {/* Level switch – matches Quizes */}
         <div className="level-switch">
           <button
             className={level === "primary" ? "active" : ""}
@@ -101,7 +127,6 @@ const Toolbar = ({
           </button>
         </div>
 
-        {/* Category filter */}
         <div className="filter-group">
           <Filter
             id="category"
@@ -113,7 +138,6 @@ const Toolbar = ({
           />
         </div>
 
-        {/* Class filter */}
         <div className="filter-group">
           <Filter
             id="class"
@@ -125,7 +149,6 @@ const Toolbar = ({
           />
         </div>
 
-        {/* Year filter */}
         <div className="filter-group">
           <Filter
             id="year"
@@ -137,7 +160,6 @@ const Toolbar = ({
           />
         </div>
 
-        {/* Search field – moved to the end, styled like a filter */}
         <div className="search-field">
           <FaSearch className="search-icon-leading" />
           <input
@@ -149,18 +171,16 @@ const Toolbar = ({
             aria-label="Search past papers by title"
           />
           {searchInput && (
-            <button
-              className="search-clear"
-              onClick={onSearchClear}
-              aria-label="Clear search"
-            >
+            <button className="search-clear" onClick={onSearchClear} aria-label="Clear search">
               <FaTimes />
             </button>
           )}
         </div>
 
         {hasActiveFilters && (
-          <button className="toolbar-clear" onClick={clearAll}>Clear</button>
+          <button className="toolbar-clear" onClick={clearAll}>
+            Clear
+          </button>
         )}
       </div>
 
@@ -265,7 +285,6 @@ const PastPapers = () => {
     setCurrentPage(1);
   }, [level]);
 
-  // ─── Stable handlers ─────────────────────────────────────────────
   const handleSearchChange = useCallback((e) => {
     setSearchInput(e.target.value);
   }, []);
@@ -291,14 +310,14 @@ const PastPapers = () => {
     setCurrentPage(1);
   }, []);
 
-  // ─── Filtered papers ─────────────────────────────────────────────
   const visiblePapers = useMemo(() => {
     if (!searchQuery.trim()) return pastPapers;
     const q = searchQuery.trim().toLowerCase();
     return pastPapers.filter((p) => p.title?.toLowerCase().includes(q));
   }, [pastPapers, searchQuery]);
 
-  const isSearchFiltering = searchQuery.trim() !== "" && visiblePapers.length === 0 && pastPapers.length > 0;
+  const isSearchFiltering =
+    searchQuery.trim() !== "" && visiblePapers.length === 0 && pastPapers.length > 0;
   const hasActiveFilters =
     category !== "all" || classFilter !== "all" || yearFilter !== "all" || searchInput.trim() !== "";
 
@@ -317,7 +336,6 @@ const PastPapers = () => {
     document.body.removeChild(link);
   };
 
-  // ─── Loading & Error states ──────────────────────────────────────
   if (loading && pastPapers.length === 0) {
     return (
       <>
@@ -370,7 +388,6 @@ const PastPapers = () => {
     );
   }
 
-  // ─── Main render ──────────────────────────────────────────────────
   return (
     <>
       <Header />

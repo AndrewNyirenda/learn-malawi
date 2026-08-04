@@ -38,7 +38,7 @@ const useDebouncedValue = (value, delay = 250) => {
   return debounced;
 };
 
-// ─── Masthead (new premium hero) ──────────────────────────────────
+// ─── Masthead (gold eyebrow, blue accent) ──────────────────────────
 const Masthead = () => (
   <div className="page-masthead">
     <div className="masthead-inner">
@@ -48,6 +48,7 @@ const Masthead = () => (
         <span className="breadcrumb-current">Study Notes</span>
       </nav>
 
+      {/* Gold eyebrow */}
       <div className="masthead-eyebrow">
         <span className="masthead-eyebrow-icon">
           <FaBookOpen />
@@ -56,7 +57,7 @@ const Masthead = () => (
       </div>
 
       <h1 className="masthead-title">
-        Study Notes &amp; <span className="masthead-title-accent">References</span>
+        Study Notes &amp; <span className="masthead-title-accent">Resources</span>
       </h1>
 
       <p className="masthead-desc">
@@ -76,7 +77,7 @@ const Masthead = () => (
   </div>
 );
 
-// ─── Toolbar (unchanged) ──────────────────────────────────────────
+// ─── Toolbar ──────────────────────────────────────────────────────
 const Toolbar = ({
   level,
   setLevel,
