@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+// pages/CareerResources.jsx
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
   FaExternalLinkAlt,
@@ -32,35 +33,33 @@ import SteveImage from '../images/figures/steve.jpg';
 
 // ─── Masthead (matches PastPapers / Tutorials) ──────────────────
 const Masthead = () => (
-  <div className="page-masthead">
-    <div className="masthead-inner">
-      <nav className="breadcrumb" aria-label="Breadcrumb">
+  <div className="career-resources-page-masthead">
+    <div className="career-resources-masthead-inner">
+      <nav className="career-resources-breadcrumb" aria-label="Breadcrumb">
         <Link to="/"><FaHome /> Home</Link>
         <FaChevronRight />
-        <span className="breadcrumb-current">Career Resources</span>
+        <span className="career-resources-breadcrumb-current">Career Resources</span>
       </nav>
 
-      <div className="masthead-eyebrow">
-        <span className="masthead-eyebrow-icon">
+      <div className="career-resources-masthead-eyebrow">
+        <span className="career-resources-masthead-eyebrow-icon">
           <FaCompass />
         </span>
         Career Development
       </div>
 
-      <h1 className="masthead-title">
-        Career <span className="masthead-title-accent">Guidance</span> Resources
+      <h1 className="career-resources-masthead-title">
+        Career <span className="career-resources-masthead-title-accent">Guidance</span> Resources
       </h1>
 
-      <p className="masthead-desc">
+      <p className="career-resources-masthead-desc">
         Comprehensive career development resources designed to help Malawian students explore opportunities, develop skills, and plan successful career pathways aligned with national development goals.
       </p>
 
-      <div className="masthead-meta">
-        <span className="masthead-meta-item">Career Planning</span>
-        <span className="masthead-meta-dot" />
-        <span className="masthead-meta-item">Free Access</span>
-        <span className="masthead-meta-dot" />
-        <span className="masthead-meta-item">Updated Regularly</span>
+      <div className="career-resources-masthead-meta">
+        <span className="career-resources-masthead-meta-item">Career Planning</span>
+        <span className="career-resources-masthead-meta-item">Free Access</span>
+        <span className="career-resources-masthead-meta-item">Updated Regularly</span>
       </div>
     </div>
   </div>
@@ -76,17 +75,98 @@ const CareerResources = () => {
     clearError,
   } = useCareerResources();
 
-  // Scroll to top when component mounts
+  // ── Carousel state ──
+  const [figureIndex, setFigureIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 640);
+  const autoPlayRef = useRef(null);
+  const figures = [
+    {
+      id: 'oprah',
+      name: 'Oprah Winfrey',
+      description: 'From a troubled childhood to becoming a media mogul and philanthropist, Oprah\'s journey demonstrates the power of resilience and self-belief.',
+      tag: 'Media & Philanthropy',
+      image: OprahImage,
+      icon: FaUserTie,
+    },
+    {
+      id: 'elon',
+      name: 'Elon Musk',
+      description: 'Founder of Tesla and SpaceX, Elon Musk continues to push technological boundaries through relentless innovation and perseverance.',
+      tag: 'Technology & Innovation',
+      image: ElonImage,
+      icon: FaLightbulb,
+    },
+    {
+      id: 'malala',
+      name: 'Malala Yousafzai',
+      description: 'Nobel Peace Prize winner and advocate for girls\' education, Malala\'s courage and determination have inspired millions worldwide.',
+      tag: 'Education & Activism',
+      image: MalalaImage,
+      icon: FaGraduationCap,
+    },
+    {
+      id: 'steve',
+      name: 'Steve Jobs',
+      description: 'Co-founder of Apple Inc., Steve Jobs revolutionized personal technology through his commitment to innovation and excellence.',
+      tag: 'Technology & Design',
+      image: SteveImage,
+      icon: FaChartLine,
+    },
+  ];
+
+  // ── Detect mobile ──
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 640);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // ── Auto‑play carousel ──
+  useEffect(() => {
+    if (isMobile) {
+      autoPlayRef.current = setInterval(() => {
+        setFigureIndex((prev) => (prev + 1) % figures.length);
+      }, 5000);
+    } else {
+      clearInterval(autoPlayRef.current);
+    }
+    return () => clearInterval(autoPlayRef.current);
+  }, [isMobile, figures.length]);
+
+  // ── Reset index when switching to desktop ──
+  useEffect(() => {
+    if (!isMobile) {
+      setFigureIndex(0);
+    }
+  }, [isMobile]);
+
+  // ── Pause on hover ──
+  const handleMouseEnter = () => {
+    if (isMobile) {
+      clearInterval(autoPlayRef.current);
+    }
+  };
+  const handleMouseLeave = () => {
+    if (isMobile) {
+      clearInterval(autoPlayRef.current);
+      autoPlayRef.current = setInterval(() => {
+        setFigureIndex((prev) => (prev + 1) % figures.length);
+      }, 5000);
+    }
+  };
+
+  // ── Scroll to top ──
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  
-  // Fetch resources on mount
+
+  // ── Fetch resources ──
   useEffect(() => {
     const loadResources = async () => {
       await fetchCareerResources();
     };
-
     loadResources();
   }, []);
 
@@ -107,7 +187,6 @@ const CareerResources = () => {
       'FaHandshake': FaHandshake,
       'default': FaLink,
     };
-    
     const IconComponent = iconMap[iconName] || iconMap.default;
     return <IconComponent />;
   };
@@ -116,10 +195,10 @@ const CareerResources = () => {
     return (
       <>
         <Header />
-        <div className="cr-wrapper">
+        <div className="career-resources-container">
           <Masthead />
-          <div className="cr-loading-container">
-            <div className="cr-loading-spinner"></div>
+          <div className="career-resources-loading-container">
+            <div className="career-resources-loading-spinner"></div>
             <p>Loading career resources...</p>
           </div>
         </div>
@@ -132,14 +211,14 @@ const CareerResources = () => {
     return (
       <>
         <Header />
-        <div className="cr-wrapper">
+        <div className="career-resources-container">
           <Masthead />
-          <div className="cr-error-container">
+          <div className="career-resources-error-container">
             <h3>Error Loading Resources</h3>
             <p>{error}</p>
-            <button 
-              onClick={() => { clearError(); fetchCareerResources(); }} 
-              className="cr-retry-btn"
+            <button
+              onClick={() => { clearError(); fetchCareerResources(); }}
+              className="career-resources-retry-btn"
             >
               Retry
             </button>
@@ -153,37 +232,34 @@ const CareerResources = () => {
   return (
     <>
       <Header />
-      <div className="cr-wrapper">
+      <div className="career-resources-container">
         <Masthead />
 
         {/* ===== RESOURCES GRID ===== */}
-        <section className="cr-resources-section">
-          <div className="cr-resources-grid">
+        <section className="career-resources-resources-section">
+          <div className="career-resources-resources-grid">
             {careerResources.length > 0 ? (
               careerResources.map((resource) => (
-                <div key={resource.id} className="cr-resource-card">
-                  <div className="cr-resource-icon">
+                <div key={resource.id} className="career-resources-resource-card">
+                  <div className="career-resources-resource-icon">
                     {getIcon(resource.icon)}
                   </div>
-                  
-                  <h3 className="cr-resource-title">{resource.title}</h3>
-                  
-                  <p className="cr-resource-description">{resource.description}</p>
-                  
+                  <h3 className="career-resources-resource-title">{resource.title}</h3>
+                  <p className="career-resources-resource-description">{resource.description}</p>
                   <a
                     href={resource.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="cr-resource-link"
+                    className="career-resources-resource-link"
                   >
-                    <FaExternalLinkAlt className="cr-link-icon" />
+                    <FaExternalLinkAlt className="career-resources-link-icon" />
                     Access Resource
                   </a>
                 </div>
               ))
             ) : (
-              <div className="cr-no-resources">
-                <div className="cr-no-resources-icon">
+              <div className="career-resources-no-resources">
+                <div className="career-resources-no-resources-icon">
                   <FaFileAlt />
                 </div>
                 <h3>No career resources available yet</h3>
@@ -194,143 +270,117 @@ const CareerResources = () => {
         </section>
 
         {/* ===== MOTIVATIONAL FIGURES ===== */}
-        <section className="cr-motivation-section">
-          <div className="cr-section-header">
+        <section className="career-resources-motivation-section">
+          <div className="career-resources-section-header">
             <h2>Inspirational Figures</h2>
-            <div className="cr-section-divider"></div>
-            <p className="cr-section-subtitle">Global leaders who exemplify perseverance and achievement</p>
+            <div className="career-resources-section-divider"></div>
+            <p className="career-resources-section-subtitle">Global leaders who exemplify perseverance and achievement</p>
           </div>
 
-          <div className="cr-figures-grid">
-            {/* Oprah Winfrey */}
-            <div className="cr-figure-card">
-              <div className="cr-figure-image-container">
-                <img 
-                  src={OprahImage} 
-                  alt="Oprah Winfrey" 
-                  className="cr-figure-image"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.parentElement.innerHTML = '<div className="cr-figure-icon"><FaUserTie /></div>';
-                  }}
-                />
+          <div className="career-resources-figures-wrapper">
+            {isMobile ? (
+              <div
+                className="career-resources-figures-carousel"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              >
+                <div
+                  className="career-resources-figures-track"
+                  style={{ transform: `translateX(-${figureIndex * 100}%)` }}
+                >
+                  {figures.map((figure) => (
+                    <div key={figure.id} className="career-resources-figure-card">
+                      <div className="career-resources-figure-image-container">
+                        <img
+                          src={figure.image}
+                          alt={figure.name}
+                          className="career-resources-figure-image"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.parentElement.innerHTML =
+                              `<div className="career-resources-figure-icon"><${figure.icon.name} /></div>`;
+                          }}
+                        />
+                      </div>
+                      <h3 className="career-resources-figure-title">{figure.name}</h3>
+                      <p className="career-resources-figure-description">{figure.description}</p>
+                      <div className="career-resources-figure-tag">{figure.tag}</div>
+                    </div>
+                  ))}
+                </div>
+                <div className="career-resources-carousel-dots">
+                  {figures.map((_, idx) => (
+                    <button
+                      key={idx}
+                      className={`career-resources-dot ${idx === figureIndex ? 'active' : ''}`}
+                      onClick={() => setFigureIndex(idx)}
+                      aria-label={`Go to slide ${idx + 1}`}
+                    />
+                  ))}
+                </div>
               </div>
-              <h3 className="cr-figure-title">Oprah Winfrey</h3>
-              <p className="cr-figure-description">
-                From a troubled childhood to becoming a media mogul and philanthropist, 
-                Oprah's journey demonstrates the power of resilience and self-belief.
-              </p>
-              <div className="cr-figure-tag">Media &amp; Philanthropy</div>
-            </div>
-            
-            {/* Elon Musk */}
-            <div className="cr-figure-card">
-              <div className="cr-figure-image-container">
-                <img 
-                  src={ElonImage} 
-                  alt="Elon Musk" 
-                  className="cr-figure-image"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.parentElement.innerHTML = '<div className="cr-figure-icon"><FaLightbulb /></div>';
-                  }}
-                />
+            ) : (
+              <div className="career-resources-figures-grid">
+                {figures.map((figure) => (
+                  <div key={figure.id} className="career-resources-figure-card">
+                    <div className="career-resources-figure-image-container">
+                      <img
+                        src={figure.image}
+                        alt={figure.name}
+                        className="career-resources-figure-image"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.parentElement.innerHTML =
+                            `<div className="career-resources-figure-icon"><${figure.icon.name} /></div>`;
+                        }}
+                      />
+                    </div>
+                    <h3 className="career-resources-figure-title">{figure.name}</h3>
+                    <p className="career-resources-figure-description">{figure.description}</p>
+                    <div className="career-resources-figure-tag">{figure.tag}</div>
+                  </div>
+                ))}
               </div>
-              <h3 className="cr-figure-title">Elon Musk</h3>
-              <p className="cr-figure-description">
-                Founder of Tesla and SpaceX, Elon Musk continues to push technological boundaries 
-                through relentless innovation and perseverance.
-              </p>
-              <div className="cr-figure-tag">Technology &amp; Innovation</div>
-            </div>
-            
-            {/* Malala Yousafzai */}
-            <div className="cr-figure-card">
-              <div className="cr-figure-image-container">
-                <img 
-                  src={MalalaImage} 
-                  alt="Malala Yousafzai" 
-                  className="cr-figure-image"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.parentElement.innerHTML = '<div className="cr-figure-icon"><FaGraduationCap /></div>';
-                  }}
-                />
-              </div>
-              <h3 className="cr-figure-title">Malala Yousafzai</h3>
-              <p className="cr-figure-description">
-                Nobel Peace Prize winner and advocate for girls' education, Malala's courage 
-                and determination have inspired millions worldwide.
-              </p>
-              <div className="cr-figure-tag">Education &amp; Activism</div>
-            </div>
-            
-            {/* Steve Jobs */}
-            <div className="cr-figure-card">
-              <div className="cr-figure-image-container">
-                <img 
-                  src={SteveImage} 
-                  alt="Steve Jobs" 
-                  className="cr-figure-image"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.parentElement.innerHTML = '<div className="cr-figure-icon"><FaChartLine /></div>';
-                  }}
-                />
-              </div>
-              <h3 className="cr-figure-title">Steve Jobs</h3>
-              <p className="cr-figure-description">
-                Co-founder of Apple Inc., Steve Jobs revolutionized personal technology 
-                through his commitment to innovation and excellence.
-              </p>
-              <div className="cr-figure-tag">Technology &amp; Design</div>
-            </div>
+            )}
           </div>
         </section>
 
         {/* ===== CAREER PLANNING TIPS ===== */}
-        <section className="cr-tips-section">
-          <div className="cr-section-header">
+        <section className="career-resources-tips-section">
+          <div className="career-resources-section-header">
             <h2>Career Planning Strategies</h2>
-            <div className="cr-section-divider"></div>
-            <p className="cr-section-subtitle">Practical steps for career development</p>
+            <div className="career-resources-section-divider"></div>
+            <p className="career-resources-section-subtitle">Practical steps for career development</p>
           </div>
 
-          <div className="cr-tips-container">
-            <div className="cr-tip-card">
-              <div className="cr-tip-number">01</div>
-              <h3 className="cr-tip-title">Self-Assessment</h3>
-              <p className="cr-tip-description">Identify your strengths, interests, values, and skills to align with suitable career paths.</p>
+          <div className="career-resources-tips-container">
+            <div className="career-resources-tip-card">
+              <div className="career-resources-tip-number">01</div>
+              <h3 className="career-resources-tip-title">Self-Assessment</h3>
+              <p className="career-resources-tip-description">Identify your strengths, interests, values, and skills to align with suitable career paths.</p>
             </div>
-            
-            <div className="cr-tip-card">
-              <div className="cr-tip-number">02</div>
-              <h3 className="cr-tip-title">Research Careers</h3>
-              <p className="cr-tip-description">Explore different professions, job requirements, and growth opportunities in various sectors.</p>
+            <div className="career-resources-tip-card">
+              <div className="career-resources-tip-number">02</div>
+              <h3 className="career-resources-tip-title">Research Careers</h3>
+              <p className="career-resources-tip-description">Explore different professions, job requirements, and growth opportunities in various sectors.</p>
             </div>
-            
-            <div className="cr-tip-card">
-              <div className="cr-tip-number">03</div>
-              <h3 className="cr-tip-title">Skill Development</h3>
-              <p className="cr-tip-description">Acquire relevant skills through education, training, and practical experience.</p>
+            <div className="career-resources-tip-card">
+              <div className="career-resources-tip-number">03</div>
+              <h3 className="career-resources-tip-title">Skill Development</h3>
+              <p className="career-resources-tip-description">Acquire relevant skills through education, training, and practical experience.</p>
             </div>
-            
-            <div className="cr-tip-card">
-              <div className="cr-tip-number">04</div>
-              <h3 className="cr-tip-title">Networking</h3>
-              <p className="cr-tip-description">Build professional connections through mentors, internships, and industry events.</p>
+            <div className="career-resources-tip-card">
+              <div className="career-resources-tip-number">04</div>
+              <h3 className="career-resources-tip-title">Networking</h3>
+              <p className="career-resources-tip-description">Build professional connections through mentors, internships, and industry events.</p>
             </div>
           </div>
         </section>
 
-        {/* ===== CONNECTION STATUS ===== */}
-        <div className="cr-connection-status">
-          <small>
-            Displaying {careerResources.length} career resources from national database
-          </small>
-        </div>
+        
+
       </div>
-      
+
       <Footer />
     </>
   );
