@@ -1,14 +1,50 @@
-// pages/Quizes.jsx
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useQuizzes } from '../contexts/QuizzesContext';
 import { useNavigate } from "react-router-dom";
 import "../styles/quizes.css";
 import Footer from "../components/Footer.jsx";
 import Header from '../components/Header';
-import PageHeader from '../components/page-header';
 import Filter from '../components/Filter';
-import { FaClock, FaQuestionCircle, FaArrowRight } from 'react-icons/fa';
+import { FaClock, FaQuestionCircle, FaArrowRight, FaHome, FaChevronRight, FaBrain } from 'react-icons/fa';
 
+// ─── Masthead (matches PastPapers / Tutorials) ──────────────────
+const Masthead = () => (
+  <div className="page-masthead">
+    <div className="masthead-inner">
+      <nav className="breadcrumb" aria-label="Breadcrumb">
+        <Link to="/"><FaHome /> Home</Link>
+        <FaChevronRight />
+        <span className="breadcrumb-current">Quizzes</span>
+      </nav>
+
+      <div className="masthead-eyebrow">
+        <span className="masthead-eyebrow-icon">
+          <FaBrain />
+        </span>
+        Interactive Learning
+      </div>
+
+      <h1 className="masthead-title">
+        Interactive <span className="masthead-title-accent">Quizzes</span>
+      </h1>
+
+      <p className="masthead-desc">
+        Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz.
+      </p>
+
+      <div className="masthead-meta">
+        <span className="masthead-meta-item">Primary &amp; Secondary</span>
+        <span className="masthead-meta-dot" />
+        <span className="masthead-meta-item">Multiple Subjects</span>
+        <span className="masthead-meta-dot" />
+        <span className="masthead-meta-item">Instant Feedback</span>
+      </div>
+    </div>
+  </div>
+);
+
+// ─── Main component ────────────────────────────────────────────────
 const Quizes = () => {
   const [level, setLevel] = useState("primary");
   const [subjectFilter, setSubjectFilter] = useState("all");
@@ -96,12 +132,7 @@ const Quizes = () => {
       <>
         <Header />
         <div className="quizes-container">
-          <div className="page-masthead">
-            <PageHeader 
-              title="Interactive Quizzes"
-              description="Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz."
-            />
-          </div>
+          <Masthead />
           <div className="state-box">
             <span className="spinner"></span>
             <p>Loading quizzes...</p>
@@ -117,12 +148,7 @@ const Quizes = () => {
       <>
         <Header />
         <div className="quizes-container">
-          <div className="page-masthead">
-            <PageHeader 
-              title="Interactive Quizzes"
-              description="Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz."
-            />
-          </div>
+          <Masthead />
           <div className="state-box">
             <h3>Error Loading Quizzes</h3>
             <p>{error}</p>
@@ -145,13 +171,7 @@ const Quizes = () => {
     <>
       <Header />
       <div className="quizes-container">
-        {/* ===== HERO ===== */}
-        <div className="page-masthead">
-          <PageHeader 
-            title="Interactive Quizzes"
-            description="Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz."
-          />
-        </div>
+        <Masthead />
 
         {/* ===== TOOLBAR (level switch + filters combined) ===== */}
         <div className="toolbar-panel">
