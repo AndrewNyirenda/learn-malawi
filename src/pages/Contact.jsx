@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useContact } from '../contexts/ContactContext';
 import "../styles/Contact.css";
 import Footer from "../components/Footer.jsx";
 import Header from '../components/Header';
-import PageHeader from '../components/page-header'; 
 import { 
   FaPaperPlane, 
   FaMapMarkerAlt, 
@@ -11,9 +11,49 @@ import {
   FaEnvelope,
   FaPhone,
   FaClock,
-  FaArrowRight
+  FaArrowRight,
+  FaHome,
+  FaChevronRight,
+  FaInfoCircle
 } from "react-icons/fa";
 
+// ─── Masthead (matches other pages) ──────────────────────────────
+const Masthead = () => (
+  <div className="page-masthead">
+    <div className="masthead-inner">
+      <nav className="breadcrumb" aria-label="Breadcrumb">
+        <Link to="/"><FaHome /> Home</Link>
+        <FaChevronRight />
+        <span className="breadcrumb-current">Contact</span>
+      </nav>
+
+      <div className="masthead-eyebrow">
+        <span className="masthead-eyebrow-icon">
+          <FaInfoCircle />
+        </span>
+        Get in Touch
+      </div>
+
+      <h1 className="masthead-title">
+        Contact <span className="masthead-title-accent">Learn Malawi</span>
+      </h1>
+
+      <p className="masthead-desc">
+        Reach our team for support or inquiries. We're committed to assisting your educational journey.
+      </p>
+
+      <div className="masthead-meta">
+        <span className="masthead-meta-item">24hr Response</span>
+        <span className="masthead-meta-dot" />
+        <span className="masthead-meta-item">Free Support</span>
+        <span className="masthead-meta-dot" />
+        <span className="masthead-meta-item">We're Here to Help</span>
+      </div>
+    </div>
+  </div>
+);
+
+// ─── Main component ────────────────────────────────────────────────
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -92,13 +132,7 @@ const Contact = () => {
     <>
       <Header />
       <div className="lm-contact-wrapper">
-        {/* ===== HERO — NOW WRAPPED ===== */}
-        <div className="page-masthead">
-          <PageHeader 
-            title="Contact Learn Malawi"
-            description="Reach our team for support or inquiries. We're committed to assisting your educational journey."
-          />
-        </div>
+        <Masthead />
 
         <section className="lm-contact-info-section">
           <div className="lm-contact-info-grid">

@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 import "../styles/abouts.css";
 import {
   FaUsers,
@@ -12,14 +13,53 @@ import {
   FaLinkedinIn,
   FaTwitter,
   FaEnvelope,
+  FaHome,
+  FaChevronRight,
+  FaInfoCircle,
 } from "react-icons/fa";
 import inno from "../images/inno.jpg";
 import willard from "../images/willard.JPG";
 import andrew from "../images/andrew.jpg";
 import Footer from "../components/Footer.jsx";
 import Header from "../components/Header.jsx";
-import PageHeader from "../components/page-header";
 
+// ─── Masthead (matches other pages) ──────────────────────────────
+const Masthead = () => (
+  <div className="page-masthead">
+    <div className="masthead-inner">
+      <nav className="breadcrumb" aria-label="Breadcrumb">
+        <Link to="/"><FaHome /> Home</Link>
+        <FaChevronRight />
+        <span className="breadcrumb-current">About</span>
+      </nav>
+
+      <div className="masthead-eyebrow">
+        <span className="masthead-eyebrow-icon">
+          <FaInfoCircle />
+        </span>
+        Our Story
+      </div>
+
+      <h1 className="masthead-title">
+        About <span className="masthead-title-accent">Learn Malawi</span>
+      </h1>
+
+      <p className="masthead-desc">
+        Free, quality digital education for every Malawian secondary student.
+      </p>
+
+      <div className="masthead-meta">
+        <span className="masthead-meta-item">Mission Driven</span>
+        <span className="masthead-meta-dot" />
+        <span className="masthead-meta-item">Free Access</span>
+        <span className="masthead-meta-dot" />
+        <span className="masthead-meta-item">Built for Malawi</span>
+      </div>
+    </div>
+  </div>
+);
+
+// ─── Main component ────────────────────────────────────────────────
 const About = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -111,13 +151,7 @@ const About = () => {
       <Header />
       <div className="about-wrapper">
         {/* ===== HERO ===== */}
-        <div className="page-masthead">
-          <PageHeader
-            title="About Learn Malawi"
-            description="Free, quality digital education for every Malawian secondary student."
-          />
-          <div className="about-hero-gold-line"></div>
-        </div>
+        <Masthead />
 
         {/* ===== STORY ===== */}
         <section className="about-story-section">

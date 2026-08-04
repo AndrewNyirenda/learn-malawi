@@ -2,7 +2,7 @@
 import React from "react";
 import { FaEye, FaDownload, FaFilePdf, FaFileAlt, FaSearch } from "react-icons/fa";
 import "../styles/resource-card.css";
-import bookPng from "../images/book.png";
+import bookPng from "../images/pdf02.png";
 
 const ResourceCard = ({
   title,

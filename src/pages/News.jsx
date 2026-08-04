@@ -1,12 +1,50 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { FaHome, FaChevronRight, FaNewspaper } from "react-icons/fa";
 import "../styles/news.css";
 import Footer from "../components/Footer.jsx";
-import { useNavigate } from "react-router-dom";
 import { useNews } from "../contexts/NewsContext";
 import Header from '../components/Header';
-import PageHeader from '../components/page-header';
 import Pagination from '../components/Pagination';
 
+// ─── Masthead (matches other pages) ──────────────────────────────
+const Masthead = ({ totalItems }) => (
+  <div className="page-masthead">
+    <div className="masthead-inner">
+      <nav className="breadcrumb" aria-label="Breadcrumb">
+        <Link to="/"><FaHome /> Home</Link>
+        <FaChevronRight />
+        <span className="breadcrumb-current">News</span>
+      </nav>
+
+      <div className="masthead-eyebrow">
+        <span className="masthead-eyebrow-icon">
+          <FaNewspaper />
+        </span>
+        Latest Updates
+      </div>
+
+      <h1 className="masthead-title">
+        Education <span className="masthead-title-accent">News</span> &amp; Updates
+      </h1>
+
+      <p className="masthead-desc">
+        Stay informed with the latest education news, examination updates, and policy changes across Malawi.
+      </p>
+
+      <div className="masthead-meta">
+        <span className="masthead-meta-item">{totalItems} Articles</span>
+        <span className="masthead-meta-dot" />
+        <span className="masthead-meta-item">Updated Daily</span>
+        <span className="masthead-meta-dot" />
+        <span className="masthead-meta-item">Free Access</span>
+      </div>
+    </div>
+  </div>
+);
+
+// ─── Main component ────────────────────────────────────────────────
 const News = () => {
   const [dateSort, setDateSort] = useState("newest");
   const [currentPage, setCurrentPage] = useState(1);
@@ -102,6 +140,7 @@ const News = () => {
       <>
         <Header />
         <div className="news-wrapper">
+          <Masthead totalItems={totalItems} />
           <div className="loading-container">
             <div className="loading-spinner"></div>
             <p>Loading news articles...</p>
@@ -117,12 +156,7 @@ const News = () => {
       <>
         <Header />
         <div className="news-wrapper">
-          <div className="page-masthead">
-            <PageHeader 
-              title="Education News & Updates"
-              description="Stay informed with the latest education news, examination updates, and policy changes from Malawi."
-            />
-          </div>
+          <Masthead totalItems={totalItems} />
           <div className="error-container">
             <div className="error-icon">⚠️</div>
             <h3>Unable to Load News</h3>
@@ -146,17 +180,7 @@ const News = () => {
     <>
       <Header />
       <div className="news-wrapper">
-        {/* ===== HERO / MASTHEAD (FIXED) ===== */}
-        <div className="page-masthead">
-          <PageHeader 
-            title="Education News & Updates"
-            description="Stay informed with the latest education news, examination updates, and policy changes across Malawi."
-            badge={{
-              text: `${totalItems} Articles`,
-              color: "accent"
-            }}
-          />
-        </div>
+        <Masthead totalItems={totalItems} />
 
         <main className="news-main-content">
           {/* Results Summary - Only Sort Option */}

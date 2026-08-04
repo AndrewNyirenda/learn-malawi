@@ -76,8 +76,6 @@
   }
 }
 
-
-
 .card-quick-view {
   position: absolute;
   inset: 0;
@@ -123,7 +121,7 @@
   min-height: 2.1em;
 }
 
-/* ===== META — pill badges (matches tutorial cards) ===== */
+/* ===== META — pill badges ===== */
 
 .card-meta {
   display: flex;
@@ -202,8 +200,6 @@
   transform: translateY(-1px) !important;
 }
 
-
-
 .download-btn {
   background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-navy-deep) 100%);
   color: var(--color-surface);
@@ -227,6 +223,50 @@
 .action-btn:focus-visible {
   outline: 2px solid var(--color-gold);
   outline-offset: 2px;
+}
+
+/* ============================================================
+   MOBILE – Reduce title, buttons, and meta on smartphones
+   ============================================================ */
+
+@media (max-width: 640px) {
+  .resource-title {
+    font-size: 0.6rem;
+    min-height: 1.6em;
+  }
+
+  .card-meta .meta-item {
+    font-size: 0.48rem;
+    padding: 0.1rem 0.35rem;
+    max-width: 60px;
+  }
+
+  /* ── Buttons ── */
+  .action-btn {
+    font-size: 0.45rem;          /* even smaller */
+    padding: 0.15rem 0.15rem;    /* minimal padding */
+    gap: 0;                      /* remove gap since icon is hidden */
+    border-radius: var(--radius-sm);
+    min-height: 1.6rem;          /* keep tappable */
+  }
+
+  /* Hide the icon entirely on mobile */
+  .action-btn .btn-icon {
+    display: none;
+  }
+
+  /* Optional: adjust button text spacing */
+  .action-btn span {
+    line-height: 1.2;
+  }
+
+  .card-body {
+    padding: var(--space-2) var(--space-2) var(--space-1);
+  }
+
+  .card-actions {
+    gap: 0.15rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

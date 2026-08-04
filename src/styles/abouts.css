@@ -1,5 +1,5 @@
 /* ============================================================
-   ABOUT — Super Premium (Fully Scoped — No Conflicts)
+   ABOUT — Premium Styles (hero matches other pages)
    ============================================================ */
 
 .about-wrapper {
@@ -10,32 +10,166 @@
   min-height: 60vh;
 }
 
-/* ---- Hero ---- */
+/* ---- Hero / Masthead (navy gradient, same as other pages) ---- */
 .about-wrapper .page-masthead {
   position: relative;
   margin: 0 calc(-1 * var(--section-padding-x)) 0;
-  padding: clamp(2.25rem, 5vw, 3.5rem) var(--section-padding-x) clamp(4.5rem, 9vw, 6.5rem);
-  background:
-    var(--pattern-dot-grid) 0 0 / var(--pattern-dot-grid-size),
-    linear-gradient(160deg, #ffffff 0%, #f2f5f9 100%);
+  padding: 0.5rem var(--section-padding-x) clamp(4rem, 7vw, 6rem);
+  background: var(--gradient-navy-panel);
   overflow: hidden;
   isolation: isolate;
-  border-bottom: 1px solid var(--color-hairline);
 }
+
+.about-wrapper .page-masthead::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: 0.5;
+  z-index: 0;
+}
+
 .about-wrapper .page-masthead::after {
-  display: none;
+  display: none; /* remove old gold bottom line */
 }
+
 .about-wrapper .page-masthead > * {
   position: relative;
   z-index: 1;
 }
 
+.masthead-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 760px;
+  margin: 0;
+  padding: 0;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--color-text-on-dark-muted);
+  margin-bottom: var(--space-2);
+}
+.breadcrumb a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--color-text-on-dark-muted);
+  text-decoration: none;
+  transition: color var(--duration-fast) ease;
+}
+.breadcrumb a:hover {
+  color: var(--color-gold-light);
+}
+.breadcrumb svg {
+  font-size: 0.6rem;
+  opacity: 0.7;
+}
+.breadcrumb-current {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Eyebrow */
+.masthead-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-accent);
+  font-size: var(--text-eyebrow);
+  font-weight: 600;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-gold-light);
+  margin-bottom: var(--space-2);
+}
+.masthead-eyebrow-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(184, 145, 47, 0.14);
+  border: 1px solid rgba(184, 145, 47, 0.35);
+  color: var(--color-gold-bright);
+  font-size: 0.65rem;
+}
+
+/* Title */
+.masthead-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 3.4vw, 2.5rem);
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.12;
+  color: #ffffff;
+  margin: 0 0 var(--space-3);
+  max-width: 20ch;
+}
+.masthead-title-accent {
+  background: linear-gradient(100deg, var(--color-blue) 10%, var(--color-blue-light) 60%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Description */
+.masthead-desc {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.7;
+  color: var(--color-text-on-dark);
+  max-width: 56ch;
+  margin: 0 0 var(--space-5);
+  letter-spacing: 0.01em;
+  opacity: 0.92;
+}
+
+/* Meta pills */
+.masthead-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem 1.2rem;
+  align-items: center;
+}
+.masthead-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-accent);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(4px);
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all var(--duration-fast) ease;
+}
+.masthead-meta-item:hover {
+  background: rgba(255, 255, 255, 0.16);
+  transform: translateY(-1px);
+}
+.masthead-meta-dot {
+  display: none;
+}
+
+/* ---- Remove the old .about-hero-gold-line (no longer needed) ---- */
 .about-hero-gold-line {
-  width: 80px;
-  height: 3px;
-  margin-top: var(--space-4);
-  background: linear-gradient(90deg, var(--color-gold), var(--color-gold-light));
-  border-radius: var(--radius-sm);
+  display: none;
 }
 
 /* ---- Story Section ---- */
@@ -202,7 +336,7 @@
   margin: 0;
 }
 
-/* ---- Section Headers (FIXED: Flex Row) ---- */
+/* ---- Section Headers (Flex Row) ---- */
 .about-section-header {
   text-align: center;
   margin-bottom: var(--space-6);
@@ -506,11 +640,24 @@
     padding: 0 var(--space-3) clamp(3rem, 6vw, 5rem);
   }
   .about-wrapper .page-masthead {
-    padding: 2rem var(--space-3) 3.25rem;
+    padding: 0.5rem var(--space-3) 4rem !important;
   }
-  .about-hero-gold-line {
-    width: 60px;
-    margin-top: var(--space-3);
+  .masthead-inner {
+    max-width: 100%;
+  }
+  .masthead-title {
+    font-size: clamp(1.3rem, 5vw, 1.7rem);
+    max-width: 100%;
+  }
+  .masthead-desc {
+    max-width: 100%;
+    font-size: 0.85rem;
+  }
+  .masthead-meta {
+    gap: 0.4rem;
+  }
+  .masthead-meta-item {
+    font-size: 0.68rem;
   }
 
   .about-story-left h2 {

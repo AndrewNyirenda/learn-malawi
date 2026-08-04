@@ -38,7 +38,7 @@ const useDebouncedValue = (value, delay = 250) => {
   return debounced;
 };
 
-// ─── Masthead (matches StudyNotes premium style) ──────────────────
+// ─── Masthead ──────────────────────────────────────────────────────
 const Masthead = () => (
   <div className="page-masthead">
     <div className="masthead-inner">
@@ -66,16 +66,14 @@ const Masthead = () => (
 
       <div className="masthead-meta">
         <span className="masthead-meta-item">Primary &amp; Secondary</span>
-        <span className="masthead-meta-dot" />
         <span className="masthead-meta-item">Updated Regularly</span>
-        <span className="masthead-meta-dot" />
         <span className="masthead-meta-item">Free to Download</span>
       </div>
     </div>
   </div>
 );
 
-// ─── Toolbar ──────────────────────────────────────────────────────
+// ─── Toolbar with prefixed filter classes ──────────────────────────
 const Toolbar = ({
   level,
   setLevel,
@@ -112,7 +110,7 @@ const Toolbar = ({
   return (
     <div className="toolbar-panel">
       <div className="toolbar-row">
-        <div className="level-switch">
+        <div className="level-switch" data-level={level}>
           <button
             className={level === "primary" ? "active" : ""}
             onClick={() => setLevel("primary")}
@@ -127,9 +125,11 @@ const Toolbar = ({
           </button>
         </div>
 
-        <div className="filter-group">
+        <div className="past-papers-filter-group">
+          <label className="past-papers-filter-label" htmlFor="category-filter">Category:</label>
           <Filter
-            id="category"
+            id="category-filter"
+            className="past-papers-filter-select"
             value={category}
             onChange={setCategory}
             options={categoryOptions}
@@ -138,9 +138,11 @@ const Toolbar = ({
           />
         </div>
 
-        <div className="filter-group">
+        <div className="past-papers-filter-group">
+          <label className="past-papers-filter-label" htmlFor="class-filter">Class:</label>
           <Filter
-            id="class"
+            id="class-filter"
+            className="past-papers-filter-select"
             value={classFilter}
             onChange={setClassFilter}
             options={classOptions}
@@ -149,9 +151,11 @@ const Toolbar = ({
           />
         </div>
 
-        <div className="filter-group">
+        <div className="past-papers-filter-group">
+          <label className="past-papers-filter-label" htmlFor="year-filter">Year:</label>
           <Filter
-            id="year"
+            id="year-filter"
+            className="past-papers-filter-select"
             value={yearFilter}
             onChange={setYearFilter}
             options={yearOptions}

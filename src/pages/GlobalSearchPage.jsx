@@ -1,4 +1,3 @@
-// pages/GlobalSearchPage.jsx
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useStudyNotes } from "../contexts/StudyNotesContext";
@@ -7,10 +6,15 @@ import { useCareerResources } from "../contexts/CareerResourcesContext";
 import { useNews } from "../contexts/NewsContext";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import PageHeader from "../components/page-header";
 import ResourceCard from "./ResourceCard";
 import "../styles/globalSearch.css";
-import { FaSearch, FaTimes, FaHome, FaChevronRight } from "react-icons/fa";
+import {
+  FaSearch,
+  FaTimes,
+  FaHome,
+  FaChevronRight,
+  FaInfoCircle,
+} from "react-icons/fa";
 
 const TYPE_OPTIONS = [
   { value: "all", label: "All Types" },
@@ -26,6 +30,67 @@ const SORT_OPTIONS = [
   { value: "oldest", label: "Oldest First" },
 ];
 
+// ─── Masthead (matches other pages) ──────────────────────────────
+const Masthead = ({ query, total, onSearch, onClear, searchValue, setSearchValue }) => (
+  <div className="page-masthead">
+    <div className="masthead-inner">
+      <nav className="breadcrumb" aria-label="Breadcrumb">
+        <Link to="/"><FaHome /> Home</Link>
+        <FaChevronRight />
+        <span className="breadcrumb-current">Search</span>
+      </nav>
+
+      <div className="masthead-eyebrow">
+        <span className="masthead-eyebrow-icon">
+          <FaSearch />
+        </span>
+        Global Search
+      </div>
+
+      <h1 className="masthead-title">
+        Search <span className="masthead-title-accent">Results</span>
+      </h1>
+
+      <p className="masthead-desc">
+        {total === 0 && !query.trim()
+          ? "Search across all content — study notes, past papers, career resources, and news."
+          : `${total} result${total !== 1 ? "s" : ""} found for "${query}"`}
+      </p>
+
+      <div className="masthead-meta">
+        <span className="masthead-meta-item">All Content</span>
+        <span className="masthead-meta-dot" />
+        <span className="masthead-meta-item">Fast Results</span>
+        <span className="masthead-meta-dot" />
+        <span className="masthead-meta-item">Free Access</span>
+      </div>
+
+      {/* Search form inside hero */}
+      <div className="search-hero-form">
+        <form onSubmit={onSearch} className="search-form">
+          <div className="search-field">
+            <FaSearch className="search-icon-leading" />
+            <input
+              type="text"
+              placeholder="Search across all content..."
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              aria-label="Search"
+            />
+            {searchValue && (
+              <button type="button" className="search-clear" onClick={onClear}>
+                <FaTimes />
+              </button>
+            )}
+          </div>
+          <button type="submit" className="search-submit-btn">Search</button>
+        </form>
+      </div>
+    </div>
+  </div>
+);
+
+// ─── Main component ────────────────────────────────────────────────
 const GlobalSearchPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -184,37 +249,14 @@ const GlobalSearchPage = () => {
       <Header />
       <div className="search-page-wrapper">
         {/* Hero */}
-        <div className="page-masthead">
-          <nav className="breadcrumb" aria-label="Breadcrumb">
-            <Link to="/"><FaHome /> Home</Link>
-            <FaChevronRight />
-            <span className="breadcrumb-current">Search</span>
-          </nav>
-          <PageHeader
-            title="Search Results"
-            description={`${total} results found for "${query}"`}
-          />
-          <div className="search-hero-form">
-            <form onSubmit={handleSearch} className="search-form">
-              <div className="search-field">
-                <FaSearch className="search-icon-leading" />
-                <input
-                  type="text"
-                  placeholder="Search across all content..."
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  aria-label="Search"
-                />
-                {query && (
-                  <button type="button" className="search-clear" onClick={clearSearch}>
-                    <FaTimes />
-                  </button>
-                )}
-              </div>
-              <button type="submit" className="search-submit-btn">Search</button>
-            </form>
-          </div>
-        </div>
+        <Masthead
+          query={query}
+          total={total}
+          onSearch={handleSearch}
+          onClear={clearSearch}
+          searchValue={query}
+          setSearchValue={setQuery}
+        />
 
         {/* Toolbar */}
         <div className="toolbar-panel">
