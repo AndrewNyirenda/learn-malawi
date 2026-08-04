@@ -1,3 +1,4 @@
+// pages/News.jsx
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -10,35 +11,33 @@ import Pagination from '../components/Pagination';
 
 // ─── Masthead (matches other pages) ──────────────────────────────
 const Masthead = ({ totalItems }) => (
-  <div className="page-masthead">
-    <div className="masthead-inner">
-      <nav className="breadcrumb" aria-label="Breadcrumb">
+  <div className="news-page-masthead">
+    <div className="news-masthead-inner">
+      <nav className="news-breadcrumb" aria-label="Breadcrumb">
         <Link to="/"><FaHome /> Home</Link>
         <FaChevronRight />
-        <span className="breadcrumb-current">News</span>
+        <span className="news-breadcrumb-current">News</span>
       </nav>
 
-      <div className="masthead-eyebrow">
-        <span className="masthead-eyebrow-icon">
+      <div className="news-masthead-eyebrow">
+        <span className="news-masthead-eyebrow-icon">
           <FaNewspaper />
         </span>
         Latest Updates
       </div>
 
-      <h1 className="masthead-title">
-        Education <span className="masthead-title-accent">News</span> &amp; Updates
+      <h1 className="news-masthead-title">
+        Education <span className="news-masthead-title-accent">News</span> &amp; Updates
       </h1>
 
-      <p className="masthead-desc">
+      <p className="news-masthead-desc">
         Stay informed with the latest education news, examination updates, and policy changes across Malawi.
       </p>
 
-      <div className="masthead-meta">
-        <span className="masthead-meta-item">{totalItems} Articles</span>
-        <span className="masthead-meta-dot" />
-        <span className="masthead-meta-item">Updated Daily</span>
-        <span className="masthead-meta-dot" />
-        <span className="masthead-meta-item">Free Access</span>
+      <div className="news-masthead-meta">
+        <span className="news-masthead-meta-item">{totalItems} Articles</span>
+        <span className="news-masthead-meta-item">Updated Daily</span>
+        <span className="news-masthead-meta-item">Free Access</span>
       </div>
     </div>
   </div>
@@ -139,10 +138,10 @@ const News = () => {
     return (
       <>
         <Header />
-        <div className="news-wrapper">
+        <div className="news-container">
           <Masthead totalItems={totalItems} />
-          <div className="loading-container">
-            <div className="loading-spinner"></div>
+          <div className="news-loading-container">
+            <div className="news-loading-spinner"></div>
             <p>Loading news articles...</p>
           </div>
         </div> 
@@ -155,17 +154,17 @@ const News = () => {
     return (
       <>
         <Header />
-        <div className="news-wrapper">
+        <div className="news-container">
           <Masthead totalItems={totalItems} />
-          <div className="error-container">
-            <div className="error-icon">⚠️</div>
+          <div className="news-error-container">
+            <div className="news-error-icon">⚠️</div>
             <h3>Unable to Load News</h3>
             <p>{error}</p>
-            <div className="error-actions">
-              <button onClick={() => { clearError(); fetchNews(); }} className="retry-btn">
+            <div className="news-error-actions">
+              <button onClick={() => { clearError(); fetchNews(); }} className="news-retry-btn">
                 Try Again
               </button>
-              <button onClick={() => navigate('/')} className="error-secondary-btn">
+              <button onClick={() => navigate('/')} className="news-error-secondary-btn">
                 Return Home
               </button>
             </div>
@@ -179,23 +178,23 @@ const News = () => {
   return (
     <>
       <Header />
-      <div className="news-wrapper">
+      <div className="news-container">
         <Masthead totalItems={totalItems} />
 
         <main className="news-main-content">
-          {/* Results Summary - Only Sort Option */}
-          <div className="results-summary">
-            <div className="results-stats">
-              <span className="results-count">
+          {/* Results Summary */}
+          <div className="news-results-summary">
+            <div className="news-results-stats">
+              <span className="news-results-count">
                 Showing <strong>{filteredNews.length}</strong> of <strong>{totalItems}</strong> articles
               </span>
             </div>
-            <div className="results-sort">
+            <div className="news-results-sort">
               <span>Sorted by: </span>
               <select 
                 value={dateSort} 
                 onChange={(e) => setDateSort(e.target.value)}
-                className="inline-sort-select"
+                className="news-inline-sort-select"
               >
                 {sortOptions.map(option => (
                   <option key={option.value} value={option.value}>{option.label}</option>
@@ -242,11 +241,11 @@ const News = () => {
                 ))}
               </div>
             ) : (
-              <div className="no-results-state">
-                <div className="no-results-illustration">
+              <div className="news-no-results">
+                <div className="news-no-results-illustration">
                   📰
                 </div>
-                <div className="no-results-content">
+                <div className="news-no-results-content">
                   <h3>No articles found</h3>
                   <p>
                     No news articles are currently available. Please check back soon for updates.
