@@ -1,33 +1,19 @@
 // pages/ResourceCard.jsx
 import React from "react";
-import { FaEye, FaDownload, FaFilePdf, FaFileAlt, FaSearch } from "react-icons/fa";
+import { FaFilePdf, FaFileAlt } from "react-icons/fa";
 import "../styles/resource-card.css";
-import bookPng from "../images/pdf02.png";
+import bookPng from "../images/book.png";
 
 const ResourceCard = ({
   title,
   thumbnail,
-  downloadLink,
-  downloadName,
-  onView,
-  onDownload,
   category,
   class: resourceClass,
   year,
   type = "PDF",
   customImage = null,
-  free = true
+  onClick, // 👈 new prop
 }) => {
-  const handleView = (e) => {
-    e.preventDefault();
-    if (onView) onView();
-  };
-
-  const handleDownload = (e) => {
-    e.preventDefault();
-    if (onDownload) onDownload();
-  };
-
   const getImageSrc = () => {
     if (thumbnail) return thumbnail;
     if (customImage) return customImage;
@@ -46,11 +32,16 @@ const ResourceCard = ({
   const metaItems = [category, resourceClass, year].filter(Boolean);
 
   return (
-    <div className="resource-card">
+    <div 
+      className="resource-card clickable" 
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => e.key === "Enter" && onClick?.()}
+    >
       <div className="card-accent" />
 
       <div className="card-image-container">
-        
         {imageSrc ? (
           <img src={imageSrc} alt={title || "Resource cover"} className="resource-image" />
         ) : (
@@ -58,9 +49,6 @@ const ResourceCard = ({
             {type?.toLowerCase() === "pdf" ? <FaFilePdf /> : <FaFileAlt />}
           </span>
         )}
-        <div className="card-quick-view" aria-hidden="true">
-          <FaSearch style={{ color: "#fff", fontSize: "1.1rem" }} />
-        </div>
       </div>
 
       <div className="card-body">
@@ -85,34 +73,6 @@ const ResourceCard = ({
             )}
           </div>
         )}
-
-        <div className="card-actions">
-          {onView && (
-            <button className="action-btn view-btn" onClick={handleView} aria-label="Preview resource">
-              <FaEye className="btn-icon" />
-              <span>Read</span>
-            </button>
-          )}
-
-          {onDownload && (
-            <button className="action-btn download-btn" onClick={handleDownload} aria-label="Download resource">
-              <FaDownload className="btn-icon" />
-              <span>Download</span>
-            </button>
-          )}
-
-          {!onView && !onDownload && downloadLink && (
-            <a
-              href={downloadLink}
-              download={downloadName}
-              className="action-btn download-btn full-width"
-              aria-label="Download resource"
-            >
-              <FaDownload className="btn-icon" />
-              <span>Download</span>
-            </a>
-          )}
-        </div>
       </div>
     </div>
   );

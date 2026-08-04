@@ -1,50 +1,70 @@
+// pages/Tutorials.jsx
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useTutorials } from "../contexts/TutorialsContext";
 import "../styles/tutorials.css";
+import "../styles/modal.css"; // shared modal styles
 import Footer from "../components/Footer.jsx";
 import Header from "../components/Header";
 import Pagination from "../components/Pagination";
 import Filter from "../components/Filter";
-import { FaHome, FaChevronRight, FaVideo } from "react-icons/fa";
+import {
+  FaHome,
+  FaChevronRight,
+  FaVideo,
+  FaEye,
+  FaDownload,
+  FaTimes,
+} from "react-icons/fa";
 
-// ─── Masthead (matching PastPapers / StudyNotes) ──────────────────
+// ─── Skeleton (matching PastPapers) ────────────────────────────────
+const SkeletonGrid = ({ count = 12 }) => (
+  <div className="tutorials-materials-grid">
+    {Array.from({ length: count }).map((_, i) => (
+      <div className="tutorials-skeleton-card" key={i}>
+        <div className="tutorials-skeleton-cover" />
+        <div className="tutorials-skeleton-line" />
+        <div className="tutorials-skeleton-line short" />
+      </div>
+    ))}
+  </div>
+);
+
+// ─── Masthead (identical to PastPapers, with FaVideo) ─────────────
 const Masthead = () => (
-  <div className="page-masthead">
-    <div className="masthead-inner">
-      <nav className="breadcrumb" aria-label="Breadcrumb">
+  <div className="tutorials-page-masthead">
+    <div className="tutorials-masthead-inner">
+      <nav className="tutorials-breadcrumb" aria-label="Breadcrumb">
         <Link to="/"><FaHome /> Home</Link>
         <FaChevronRight />
-        <span className="breadcrumb-current">Tutorials</span>
+        <span className="tutorials-breadcrumb-current">Tutorials</span>
       </nav>
 
-      <div className="masthead-eyebrow">
-        <span className="masthead-eyebrow-icon">
+      <div className="tutorials-masthead-eyebrow">
+        <span className="tutorials-masthead-eyebrow-icon">
           <FaVideo />
         </span>
         Video Resources
       </div>
 
-      <h1 className="masthead-title">
-        Educational <span className="masthead-title-accent">Tutorials</span>
+      <h1 className="tutorials-masthead-title">
+        Educational <span className="tutorials-masthead-title-accent">Tutorials</span>
       </h1>
 
-      <p className="masthead-desc">
+      <p className="tutorials-masthead-desc">
         Access comprehensive video tutorials covering various subjects for both Primary and Secondary levels.
       </p>
 
-      <div className="masthead-meta">
-        <span className="masthead-meta-item">Primary &amp; Secondary</span>
-        <span className="masthead-meta-dot" />
-        <span className="masthead-meta-item">Subject‑based</span>
-        <span className="masthead-meta-dot" />
-        <span className="masthead-meta-item">Free Access</span>
+      <div className="tutorials-masthead-meta">
+        <span className="tutorials-masthead-meta-item">Primary &amp; Secondary</span>
+        <span className="tutorials-masthead-meta-item">Subject‑based</span>
+        <span className="tutorials-masthead-meta-item">Free Access</span>
       </div>
     </div>
   </div>
 );
 
-// ─── Toolbar (matches Quizes exactly) ─────────────────────────────
+// ─── Toolbar with prefixed classes ──────────────────────────────────
 const Toolbar = ({
   level,
   setLevel,
@@ -55,10 +75,9 @@ const Toolbar = ({
   subjects,
   classes,
 }) => {
-  // Build options for Filter components
   const subjectOptions = [
     { value: "all", label: "All Subjects" },
-    ...(subjects || []).map(s => ({ value: s, label: s }))
+    ...(subjects || []).map((s) => ({ value: s, label: s })),
   ];
   const classOptions = [
     { value: "all", label: "All Classes" },
@@ -68,14 +87,13 @@ const Toolbar = ({
         const bNum = parseInt(b.replace(/\D/g, ""));
         return aNum - bNum;
       })
-      .map(c => ({ value: c, label: c }))
+      .map((c) => ({ value: c, label: c })),
   ];
 
   return (
-    <div className="toolbar-panel">
-      <div className="toolbar-row">
-        {/* Level switch – matches Quizes */}
-        <div className="level-switch">
+    <div className="tutorials-toolbar-panel">
+      <div className="tutorials-toolbar-row">
+        <div className="tutorials-level-switch" data-level={level}>
           <button
             className={level === "primary" ? "active" : ""}
             onClick={() => setLevel("primary")}
@@ -90,10 +108,11 @@ const Toolbar = ({
           </button>
         </div>
 
-        {/* Subject filter */}
-        <div className="filter-group">
+        <div className="tutorials-filter-group">
+          <label className="tutorials-filter-label" htmlFor="tutorials-subject">Subject:</label>
           <Filter
-            id="subject"
+            id="tutorials-subject"
+            className="tutorials-filter-select"
             value={subjectFilter}
             onChange={setSubjectFilter}
             options={subjectOptions}
@@ -102,10 +121,11 @@ const Toolbar = ({
           />
         </div>
 
-        {/* Class filter */}
-        <div className="filter-group">
+        <div className="tutorials-filter-group">
+          <label className="tutorials-filter-label" htmlFor="tutorials-class">Class:</label>
           <Filter
-            id="class"
+            id="tutorials-class"
+            className="tutorials-filter-select"
             value={classFilter}
             onChange={setClassFilter}
             options={classOptions}
@@ -127,6 +147,9 @@ const Tutorials = () => {
   const [totalItems, setTotalItems] = useState(0);
   const itemsPerPage = 12;
   const [videoErrors, setVideoErrors] = useState({});
+
+  // Modal state
+  const [selectedTutorial, setSelectedTutorial] = useState(null);
 
   const {
     tutorials,
@@ -153,14 +176,10 @@ const Tutorials = () => {
       };
 
       const result = await fetchTutorials(currentPage, itemsPerPage, filters);
-
-      if (result?.total) {
-        setTotalItems(result.total);
-      }
+      if (result?.total) setTotalItems(result.total);
 
       await Promise.all([fetchSubjects(level), fetchClasses(level)]);
     };
-
     loadData();
   }, [level, subjectFilter, classFilter, currentPage]);
 
@@ -201,7 +220,6 @@ const Tutorials = () => {
     return url?.includes("youtube.com") || url?.includes("youtu.be");
   };
 
-  // ─── Handlers ────────────────────────────────────────────────────
   const handleSetLevel = useCallback((newLevel) => {
     setLevel(newLevel);
     setCurrentPage(1);
@@ -217,17 +235,33 @@ const Tutorials = () => {
     setCurrentPage(1);
   }, []);
 
+  // ── Card click → open modal ──
+  const handleCardClick = (tutorial) => {
+    setSelectedTutorial(tutorial);
+  };
+
+  const closeModal = () => {
+    setSelectedTutorial(null);
+  };
+
   if (loading && tutorials.length === 0) {
     return (
       <>
         <Header />
-        <main className="tutorials-page">
+        <div className="tutorials-container">
           <Masthead />
-          <div className="state-box">
-            <span className="spinner" />
-            <p>Loading tutorials...</p>
-          </div>
-        </main>
+          <Toolbar
+            level={level}
+            setLevel={handleSetLevel}
+            subjectFilter={subjectFilter}
+            setSubjectFilter={handleSubjectChange}
+            classFilter={classFilter}
+            setClassFilter={handleClassChange}
+            subjects={subjects}
+            classes={classes}
+          />
+          <SkeletonGrid count={itemsPerPage} />
+        </div>
         <Footer />
       </>
     );
@@ -237,9 +271,9 @@ const Tutorials = () => {
     return (
       <>
         <Header />
-        <main className="tutorials-page">
+        <div className="tutorials-container">
           <Masthead />
-          <div className="state-box">
+          <div className="tutorials-state-box">
             <h3>Error Loading Tutorials</h3>
             <p>{error}</p>
             <button
@@ -251,7 +285,7 @@ const Tutorials = () => {
               Retry
             </button>
           </div>
-        </main>
+        </div>
         <Footer />
       </>
     );
@@ -260,9 +294,8 @@ const Tutorials = () => {
   return (
     <>
       <Header />
-      <main className="tutorials-page">
+      <div className="tutorials-container">
         <Masthead />
-
         <Toolbar
           level={level}
           setLevel={handleSetLevel}
@@ -274,9 +307,9 @@ const Tutorials = () => {
           classes={classes}
         />
 
-        <section className="materials">
+        <section className="tutorials-materials">
           {tutorials.length > 0 ? (
-            <div className="materials-grid">
+            <div className="tutorials-materials-grid">
               {tutorials.map((tut, index) => {
                 const isYouTube = isYouTubeUrl(tut.videoUrl);
                 const embedUrl = getYouTubeEmbedUrl(tut.videoUrl);
@@ -288,13 +321,18 @@ const Tutorials = () => {
 
                 return (
                   <div
-                    className="tutorial-card"
+                    className="tutorials-card clickable"
                     key={tut.id}
+                    onClick={() => handleCardClick(tut)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => e.key === "Enter" && handleCardClick(tut)}
                     style={{ animationDelay: `${index * 0.05}s` }}
                   >
-                    <div className="card-media">
+                    <div className="tutorials-card-accent" />
+                    <div className="tutorials-card-media">
                       {videoErrors[tut.id] ? (
-                        <div className="media-error">
+                        <div className="tutorials-media-error">
                           <span>Video unavailable</span>
                         </div>
                       ) : isYouTube ? (
@@ -302,7 +340,7 @@ const Tutorials = () => {
                           <img
                             src={thumbnail}
                             alt={tut.title}
-                            className="card-thumbnail"
+                            className="tutorials-card-thumbnail"
                             loading="lazy"
                           />
                           <iframe
@@ -310,48 +348,53 @@ const Tutorials = () => {
                             title={tut.title}
                             allowFullScreen
                             frameBorder="0"
-                            className="video-iframe"
+                            className="tutorials-video-iframe"
                             onError={() => handleVideoError(tut.id)}
-                          ></iframe>
+                          />
                         </>
                       ) : tut.videoUrl?.endsWith(".mp4") ? (
-                        <video controls className="video-player">
+                        <video controls className="tutorials-video-player">
                           <source src={tut.videoUrl} type="video/mp4" />
                         </video>
                       ) : (
-                        <div className="media-error">
+                        <div className="tutorials-media-error">
                           <span>Format not supported</span>
                         </div>
                       )}
                     </div>
 
-                    <div className="card-content">
-                      <h3 className="card-title">{tut.title}</h3>
-                      <div className="card-meta">
-                        <span className="badge subject">{tut.subject}</span>
-                        <span className="badge class">Class {tut.class}</span>
+                    <div className="tutorials-card-body">
+                      <div className="tutorials-title-container">
+                        <h3 className="tutorials-card-title">{tut.title}</h3>
+                      </div>
+                      <div className="tutorials-card-meta">
+                        {tut.subject && (
+                          <span className="tutorials-meta-item tutorials-meta-subject">
+                            {tut.subject}
+                          </span>
+                        )}
+                        {tut.class && (
+                          <span className="tutorials-meta-item tutorials-meta-class">
+                            Class {tut.class}
+                          </span>
+                        )}
                       </div>
                       {tut.description && (
-                        <p className="card-description">{tut.description}</p>
+                        <p className="tutorials-card-description">
+                          {tut.description}
+                        </p>
                       )}
-                    </div>
-
-                    <div className="card-footer">
-                      <a
-                        href={tut.videoUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="action-link primary"
-                      >
-                        Open Video
-                      </a>
                     </div>
                   </div>
                 );
               })}
             </div>
           ) : (
-            <div className="empty">
+            <div className="tutorials-empty">
+              <svg width="56" height="56" viewBox="0 0 24 24" fill="#94a3b8">
+                <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 16H5V5h14v14z" />
+                <path d="M7 9h10v2H7zm0 4h8v2H7z" />
+              </svg>
               <h3>No Tutorials Available</h3>
               <p>
                 No tutorials found for the selected filters. Please try a
@@ -367,15 +410,68 @@ const Tutorials = () => {
             onPageChange={setCurrentPage}
             totalItems={totalItems}
             itemsPerPage={itemsPerPage}
+            showPrevNext
+            disabled={loading}
           />
         )}
 
-        <div className="status">
+        <div className="tutorials-status" role="status" aria-live="polite">
           Showing {tutorials.length}{" "}
           {tutorials.length === 1 ? "tutorial" : "tutorials"}
           {loading && " · loading"}
         </div>
-      </main>
+      </div>
+
+      {/* ─── Modal (same as PastPapers) ──────────────────────────── */}
+      {selectedTutorial && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={closeModal}>
+              <FaTimes />
+            </button>
+
+            <div className="modal-image">
+              {selectedTutorial.videoUrl && isYouTubeUrl(selectedTutorial.videoUrl) ? (
+                <img
+                  src={`https://img.youtube.com/vi/${extractYouTubeId(
+                    selectedTutorial.videoUrl
+                  )}/hqdefault.jpg`}
+                  alt={selectedTutorial.title}
+                />
+              ) : (
+                <FaVideo className="modal-fallback-icon" />
+              )}
+            </div>
+
+            <h2 className="modal-title">{selectedTutorial.title}</h2>
+
+            <div className="modal-meta">
+              {selectedTutorial.subject && (
+                <span className="modal-meta-item">{selectedTutorial.subject}</span>
+              )}
+              {selectedTutorial.class && (
+                <span className="modal-meta-item">Class {selectedTutorial.class}</span>
+              )}
+            </div>
+
+            {selectedTutorial.description && (
+              <p className="modal-description">{selectedTutorial.description}</p>
+            )}
+
+            <div className="modal-actions">
+              <a
+                href={selectedTutorial.videoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="modal-btn modal-view"
+              >
+                <FaEye /> Watch
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </>
   );

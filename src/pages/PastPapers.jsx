@@ -3,6 +3,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
 import ResourceCard from "./ResourceCard";
 import "../styles/pastPapers.css";
+import "../styles/modal.css"; // we'll create this
 import Footer from "../components/Footer.jsx";
 import { usePastPapers } from "../contexts/PastPapersContext";
 import Header from "../components/Header";
@@ -14,6 +15,8 @@ import {
   FaHome,
   FaChevronRight,
   FaFileAlt,
+  FaEye,
+  FaDownload,
 } from "react-icons/fa";
 
 // ─── Skeleton ────────────────────────────────────────────────────────
@@ -73,7 +76,7 @@ const Masthead = () => (
   </div>
 );
 
-// ─── Toolbar with prefixed filter classes ──────────────────────────
+// ─── Toolbar ──────────────────────────────────────────────────────
 const Toolbar = ({
   level,
   setLevel,
@@ -240,6 +243,9 @@ const PastPapers = () => {
   const [totalItems, setTotalItems] = useState(0);
   const itemsPerPage = 12;
 
+  // ── Modal state ──
+  const [selectedResource, setSelectedResource] = useState(null);
+
   const {
     pastPapers,
     categories,
@@ -325,6 +331,7 @@ const PastPapers = () => {
   const hasActiveFilters =
     category !== "all" || classFilter !== "all" || yearFilter !== "all" || searchInput.trim() !== "";
 
+  // ── Handlers for view/download ──
   const handleViewResource = async (resource) => {
     const { viewUrl } = await getViewUrl(resource.id);
     window.open(viewUrl, "_blank");
@@ -338,6 +345,15 @@ const PastPapers = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  // ── Card click → open modal ──
+  const handleCardClick = (resource) => {
+    setSelectedResource(resource);
+  };
+
+  const closeModal = () => {
+    setSelectedResource(null);
   };
 
   if (loading && pastPapers.length === 0) {
@@ -430,8 +446,7 @@ const PastPapers = () => {
                   category={resource.category}
                   class={resource.class}
                   year={resource.year}
-                  onView={() => handleViewResource(resource)}
-                  onDownload={() => handleDownloadResource(resource)}
+                  onClick={() => handleCardClick(resource)}
                 />
               ))
             ) : isSearchFiltering ? (
@@ -475,6 +490,55 @@ const PastPapers = () => {
           {loading && " · loading"}
         </div>
       </div>
+
+      {/* ─── Modal ────────────────────────────────────────── */}
+      {selectedResource && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={closeModal}>
+              <FaTimes />
+            </button>
+
+            <div className="modal-image">
+              {selectedResource.thumbnailUrl ? (
+                <img src={selectedResource.thumbnailUrl} alt={selectedResource.title} />
+              ) : (
+                <FaFileAlt className="modal-fallback-icon" />
+              )}
+            </div>
+
+            <h2 className="modal-title">{selectedResource.title}</h2>
+
+            <div className="modal-meta">
+              {selectedResource.category && (
+                <span className="modal-meta-item">{selectedResource.category}</span>
+              )}
+              {selectedResource.class && (
+                <span className="modal-meta-item">{selectedResource.class}</span>
+              )}
+              {selectedResource.year && (
+                <span className="modal-meta-item">{selectedResource.year}</span>
+              )}
+            </div>
+
+            <div className="modal-actions">
+              <button
+                className="modal-btn modal-view"
+                onClick={() => handleViewResource(selectedResource)}
+              >
+                <FaEye /> View
+              </button>
+              <button
+                className="modal-btn modal-download"
+                onClick={() => handleDownloadResource(selectedResource)}
+              >
+                <FaDownload /> Download
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </>
   );

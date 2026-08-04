@@ -3,6 +3,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
 import ResourceCard from "./ResourceCard";
 import "../styles/studyNotes.css";
+import "../styles/modal.css"; // optional – we'll keep modal consistent
 import Footer from "../components/Footer.jsx";
 import { useStudyNotes } from "../contexts/StudyNotesContext";
 import Header from "../components/Header";
@@ -14,16 +15,18 @@ import {
   FaHome,
   FaChevronRight,
   FaBookOpen,
+  FaEye,
+  FaDownload,
 } from "react-icons/fa";
 
 // ─── Skeleton ────────────────────────────────────────────────────────
 const SkeletonGrid = ({ count = 12 }) => (
-  <div className="materials-grid">
+  <div className="study-notes-materials-grid">
     {Array.from({ length: count }).map((_, i) => (
-      <div className="skeleton-card" key={i}>
-        <div className="skeleton-cover" />
-        <div className="skeleton-line" />
-        <div className="skeleton-line short" />
+      <div className="study-notes-skeleton-card" key={i}>
+        <div className="study-notes-skeleton-cover" />
+        <div className="study-notes-skeleton-line" />
+        <div className="study-notes-skeleton-line short" />
       </div>
     ))}
   </div>
@@ -38,46 +41,43 @@ const useDebouncedValue = (value, delay = 250) => {
   return debounced;
 };
 
-// ─── Masthead (gold eyebrow, blue accent) ──────────────────────────
+// ─── Masthead (identical to Past Papers, with FaBookOpen) ──────
 const Masthead = () => (
-  <div className="page-masthead">
-    <div className="masthead-inner">
-      <nav className="breadcrumb" aria-label="Breadcrumb">
+  <div className="study-notes-page-masthead">
+    <div className="study-notes-masthead-inner">
+      <nav className="study-notes-breadcrumb" aria-label="Breadcrumb">
         <Link to="/"><FaHome /> Home</Link>
         <FaChevronRight />
-        <span className="breadcrumb-current">Study Notes</span>
+        <span className="study-notes-breadcrumb-current">Study Notes</span>
       </nav>
 
-      {/* Gold eyebrow */}
-      <div className="masthead-eyebrow">
-        <span className="masthead-eyebrow-icon">
+      <div className="study-notes-masthead-eyebrow">
+        <span className="study-notes-masthead-eyebrow-icon">
           <FaBookOpen />
         </span>
         Resource Library
       </div>
 
-      <h1 className="masthead-title">
-        Study Notes &amp; <span className="masthead-title-accent">Resources</span>
+      <h1 className="study-notes-masthead-title">
+        Study Notes &amp; <span className="study-notes-masthead-title-accent">Resources</span>
       </h1>
 
-      <p className="masthead-desc">
+      <p className="study-notes-masthead-desc">
         Curated academic materials for Primary and Secondary levels —
         organised by subject and class, built for focused, distraction‑free
         learning.
       </p>
 
-      <div className="masthead-meta">
-        <span className="masthead-meta-item">Primary &amp; Secondary</span>
-        <span className="masthead-meta-dot" />
-        <span className="masthead-meta-item">Updated Regularly</span>
-        <span className="masthead-meta-dot" />
-        <span className="masthead-meta-item">Free to Download</span>
+      <div className="study-notes-masthead-meta">
+        <span className="study-notes-masthead-meta-item">Primary &amp; Secondary</span>
+        <span className="study-notes-masthead-meta-item">Updated Regularly</span>
+        <span className="study-notes-masthead-meta-item">Free to Download</span>
       </div>
     </div>
   </div>
 );
 
-// ─── Toolbar ──────────────────────────────────────────────────────
+// ─── Toolbar with prefixed filter classes ──────────────────────
 const Toolbar = ({
   level,
   setLevel,
@@ -104,9 +104,9 @@ const Toolbar = ({
   ];
 
   return (
-    <div className="toolbar-panel">
-      <div className="toolbar-row">
-        <div className="level-switch">
+    <div className="study-notes-toolbar-panel">
+      <div className="study-notes-toolbar-row">
+        <div className="study-notes-level-switch" data-level={level}>
           <button
             className={level === "primary" ? "active" : ""}
             onClick={() => setLevel("primary")}
@@ -121,9 +121,11 @@ const Toolbar = ({
           </button>
         </div>
 
-        <div className="filter-group">
+        <div className="study-notes-filter-group">
+          <label className="study-notes-filter-label" htmlFor="study-notes-category">Category:</label>
           <Filter
-            id="category"
+            id="study-notes-category"
+            className="study-notes-filter-select"
             value={category}
             onChange={setCategory}
             options={categoryOptions}
@@ -132,9 +134,11 @@ const Toolbar = ({
           />
         </div>
 
-        <div className="filter-group">
+        <div className="study-notes-filter-group">
+          <label className="study-notes-filter-label" htmlFor="study-notes-class">Class:</label>
           <Filter
-            id="class"
+            id="study-notes-class"
+            className="study-notes-filter-select"
             value={classFilter}
             onChange={setClassFilter}
             options={classOptions}
@@ -143,8 +147,8 @@ const Toolbar = ({
           />
         </div>
 
-        <div className="search-field">
-          <FaSearch className="search-icon-leading" />
+        <div className="study-notes-search-field">
+          <FaSearch className="study-notes-search-icon-leading" />
           <input
             type="text"
             placeholder="Search by title…"
@@ -154,23 +158,23 @@ const Toolbar = ({
             aria-label="Search study notes by title"
           />
           {searchInput && (
-            <button className="search-clear" onClick={onSearchClear} aria-label="Clear search">
+            <button className="study-notes-search-clear" onClick={onSearchClear} aria-label="Clear search">
               <FaTimes />
             </button>
           )}
         </div>
 
         {hasActiveFilters && (
-          <button className="toolbar-clear" onClick={clearAll}>
+          <button className="study-notes-toolbar-clear" onClick={clearAll}>
             Clear
           </button>
         )}
       </div>
 
       {hasActiveFilters && (
-        <div className="active-chips">
+        <div className="study-notes-active-chips">
           {category !== "all" && (
-            <span className="chip">
+            <span className="study-notes-chip">
               {category}
               <button onClick={() => setCategory("all")} aria-label="Remove category filter">
                 <FaTimes />
@@ -178,7 +182,7 @@ const Toolbar = ({
             </span>
           )}
           {classFilter !== "all" && (
-            <span className="chip">
+            <span className="study-notes-chip">
               {classFilter}
               <button onClick={() => setClassFilter("all")} aria-label="Remove class filter">
                 <FaTimes />
@@ -186,7 +190,7 @@ const Toolbar = ({
             </span>
           )}
           {searchInput.trim() !== "" && (
-            <span className="chip">
+            <span className="study-notes-chip">
               "{searchInput.trim()}"
               <button onClick={onSearchClear} aria-label="Clear search term">
                 <FaTimes />
@@ -209,6 +213,9 @@ const StudyNotes = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const itemsPerPage = 12;
+
+  // Modal state
+  const [selectedResource, setSelectedResource] = useState(null);
 
   const {
     books,
@@ -298,11 +305,19 @@ const StudyNotes = () => {
     document.body.removeChild(link);
   };
 
+  const handleCardClick = (resource) => {
+    setSelectedResource(resource);
+  };
+
+  const closeModal = () => {
+    setSelectedResource(null);
+  };
+
   if (loading && books.length === 0) {
     return (
       <>
         <Header />
-        <main className="study-page">
+        <div className="study-notes-container">
           <Masthead />
           <Toolbar
             level={level}
@@ -321,7 +336,7 @@ const StudyNotes = () => {
             classes={classes}
           />
           <SkeletonGrid count={itemsPerPage} />
-        </main>
+        </div>
         <Footer />
       </>
     );
@@ -331,14 +346,14 @@ const StudyNotes = () => {
     return (
       <>
         <Header />
-        <main className="study-page">
+        <div className="study-notes-container">
           <Masthead />
-          <div className="state-box">
+          <div className="study-notes-state-box">
             <h3>Unable to load resources</h3>
             <p>{error}</p>
             <button onClick={() => { clearError(); fetchBooks(); }}>Try again</button>
           </div>
-        </main>
+        </div>
         <Footer />
       </>
     );
@@ -347,7 +362,7 @@ const StudyNotes = () => {
   return (
     <>
       <Header />
-      <main className="study-page">
+      <div className="study-notes-container">
         <Masthead />
         <Toolbar
           level={level}
@@ -366,10 +381,10 @@ const StudyNotes = () => {
           classes={classes}
         />
 
-        <section className="materials">
-          {visibleBooks.length > 0 ? (
-            <div className="materials-grid">
-              {visibleBooks.map((resource, index) => (
+        <section className="study-notes-materials">
+          <div className="study-notes-materials-grid">
+            {visibleBooks.length > 0 ? (
+              visibleBooks.map((resource) => (
                 <ResourceCard
                   key={resource.id}
                   title={resource.title}
@@ -378,25 +393,31 @@ const StudyNotes = () => {
                   category={resource.category}
                   class={resource.class}
                   year={resource.year}
-                  onView={() => handleViewResource(resource)}
-                  onDownload={() => handleDownloadResource(resource)}
-                  style={{ animationDelay: `${index * 0.05}s` }}
+                  onClick={() => handleCardClick(resource)}
                 />
-              ))}
-            </div>
-          ) : isSearchFiltering ? (
-            <div className="empty">
-              <h3>No matches for "{searchInput.trim()}"</h3>
-              <p>Try a different title, or clear your search to browse everything in this category.</p>
-              <button onClick={() => setSearchInput("")}>Clear search</button>
-            </div>
-          ) : (
-            <div className="empty">
-              <h3>No materials match your filters</h3>
-              <p>Try a different category or class.</p>
-              <button onClick={clearAll}>Clear filters</button>
-            </div>
-          )}
+              ))
+            ) : isSearchFiltering ? (
+              <div className="study-notes-empty">
+                <svg width="56" height="56" viewBox="0 0 24 24" fill="#94a3b8">
+                  <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 16H5V5h14v14z" />
+                  <path d="M7 9h10v2H7zm0 4h8v2H7z" />
+                </svg>
+                <h3>No matches for "{searchInput.trim()}"</h3>
+                <p>Try a different title, or clear your search to browse everything in this category.</p>
+                <button onClick={() => setSearchInput("")}>Clear search</button>
+              </div>
+            ) : (
+              <div className="study-notes-empty">
+                <svg width="56" height="56" viewBox="0 0 24 24" fill="#94a3b8">
+                  <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 16H5V5h14v14z" />
+                  <path d="M7 9h10v2H7zm0 4h8v2H7z" />
+                </svg>
+                <h3>No materials match your filters</h3>
+                <p>Try a different category or class.</p>
+                <button onClick={clearAll}>Clear filters</button>
+              </div>
+            )}
+          </div>
         </section>
 
         {totalItems > 0 && (
@@ -405,13 +426,66 @@ const StudyNotes = () => {
             onPageChange={setCurrentPage}
             totalItems={totalItems}
             itemsPerPage={itemsPerPage}
+            showPrevNext
+            disabled={loading}
           />
         )}
 
-        <div className="status" role="status" aria-live="polite">
-          Showing {visibleBooks.length} resources {loading && "· loading"}
+        <div className="study-notes-status" role="status" aria-live="polite">
+          Showing {visibleBooks.length}{" "}
+          {visibleBooks.length === 1 ? "resource" : "resources"}
+          {loading && " · loading"}
         </div>
-      </main>
+      </div>
+
+      {/* ─── Modal (identical to Past Papers) ──────────────────── */}
+      {selectedResource && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={closeModal}>
+              <FaTimes />
+            </button>
+
+            <div className="modal-image">
+              {selectedResource.thumbnailUrl ? (
+                <img src={selectedResource.thumbnailUrl} alt={selectedResource.title} />
+              ) : (
+                <FaBookOpen className="modal-fallback-icon" />
+              )}
+            </div>
+
+            <h2 className="modal-title">{selectedResource.title}</h2>
+
+            <div className="modal-meta">
+              {selectedResource.category && (
+                <span className="modal-meta-item">{selectedResource.category}</span>
+              )}
+              {selectedResource.class && (
+                <span className="modal-meta-item">{selectedResource.class}</span>
+              )}
+              {selectedResource.year && (
+                <span className="modal-meta-item">{selectedResource.year}</span>
+              )}
+            </div>
+
+            <div className="modal-actions">
+              <button
+                className="modal-btn modal-view"
+                onClick={() => handleViewResource(selectedResource)}
+              >
+                <FaEye /> View
+              </button>
+              <button
+                className="modal-btn modal-download"
+                onClick={() => handleDownloadResource(selectedResource)}
+              >
+                <FaDownload /> Download
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </>
   );

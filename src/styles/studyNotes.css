@@ -1,57 +1,63 @@
 /* ============================================================
-   STUDY NOTES — Premium Styles (blue accent, gold eyebrow)
+   STUDY NOTES — Scoped to .study-notes-container
    ============================================================ */
 
-.study-page {
+.study-notes-container {
   max-width: var(--section-max-width);
   margin: 0 auto;
   padding: 0 var(--section-padding-x) clamp(3rem, 6vw, 5rem);
   background: var(--color-paper);
   min-height: 60vh;
-  padding-top: 0 !important;
-  margin-top: 0 !important;
+  padding-top: 0;
+  margin-top: 0;
 }
 
 /* ============================================================
-   HERO / MASTHEAD — compact navy panel (increased height, no gold line)
+   HERO / MASTHEAD
    ============================================================ */
 
-.page-masthead {
+.study-notes-container .study-notes-page-masthead {
   position: relative;
   margin: 0 calc(-1 * var(--section-padding-x)) 0;
-  padding: 0.5rem var(--section-padding-x) clamp(4rem, 7vw, 6rem) !important;
+  padding: 0.5rem var(--section-padding-x) clamp(5.5rem, 9vw, 8rem);
   background: var(--gradient-navy-panel);
   overflow: hidden;
   isolation: isolate;
-  margin-top: 0 !important;
+  margin-top: 0;
 }
 
-/* subtle dot-grid texture, faint on dark bg */
-.page-masthead::before {
+.study-notes-container .study-notes-page-masthead::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
-  background-size: 22px 22px;
-  opacity: 0.5;
+  background: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.6;
   z-index: 0;
 }
 
-/* ─── Remove gold separator line ─── */
-.page-masthead::after {
-  display: none;
+.study-notes-container .study-notes-page-masthead::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 60% 90% at 12% 0%, rgba(42, 140, 251, 0.16), transparent 60%),
+    radial-gradient(ellipse 50% 70% at 100% 100%, rgba(0, 0, 0, 0.35), transparent 65%);
+  pointer-events: none;
 }
 
-.masthead-inner {
+.study-notes-container .study-notes-masthead-inner {
   position: relative;
   z-index: 2;
-  max-width: 760px;
-  margin-top: 0 !important;
-  padding-top: 0 !important;
+  max-width: 880px;
+  margin-top: 0;
+  padding-top: 0;
 }
 
-/* ---- Breadcrumb (on dark bg) ---- */
-.breadcrumb {
+/* ── breadcrumb ─────────────────────────────────────────── */
+
+.study-notes-container .study-notes-breadcrumb {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -59,157 +65,207 @@
   font-size: 0.76rem;
   font-weight: 500;
   color: var(--color-text-on-dark-muted);
-  margin-bottom: var(--space-2);
-  margin-top: 0 !important;
+  margin-bottom: var(--space-4);
+  margin-top: 0;
 }
-.breadcrumb a {
+.study-notes-container .study-notes-breadcrumb a {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
   color: var(--color-text-on-dark-muted);
   text-decoration: none;
-  transition: color var(--duration-fast) ease;
+  transition: color var(--duration-fast) var(--ease-standard);
 }
-.breadcrumb a:hover {
+.study-notes-container .study-notes-breadcrumb a:hover,
+.study-notes-container .study-notes-breadcrumb a:focus-visible {
   color: var(--color-gold-light);
 }
-.breadcrumb svg {
-  font-size: 0.6rem;
-  opacity: 0.7;
+.study-notes-container .study-notes-breadcrumb a:focus-visible {
+  outline: 1px solid var(--color-gold-bright);
+  outline-offset: 3px;
+  border-radius: 2px;
 }
-.breadcrumb-current {
+.study-notes-container .study-notes-breadcrumb svg {
+  font-size: 0.55rem;
+  opacity: 0.55;
+}
+.study-notes-container .study-notes-breadcrumb-current {
   color: #ffffff;
   font-weight: 600;
+  position: relative;
+  padding-left: 0.5rem;
+}
+.study-notes-container .study-notes-breadcrumb-current::before {
+  content: "";
+  position: absolute;
+  left: -0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--color-gold-light);
+  display: none;
 }
 
-/* ---- Eyebrow (gold) ---- */
-.masthead-eyebrow {
+/* ── eyebrow ────────────────────────────────────────────── */
+
+.study-notes-container .study-notes-masthead-eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.6rem;
   font-family: var(--font-accent);
   font-size: var(--text-eyebrow);
   font-weight: 600;
   letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
   color: var(--color-gold-light);
-  margin-bottom: var(--space-2);
-  margin-top: 0 !important;
+  margin-bottom: var(--space-3);
+  margin-top: 0;
 }
 
-.masthead-eyebrow-icon {
+.study-notes-container .study-notes-masthead-eyebrow::after {
+  content: "";
+  width: 34px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--color-gold-light), transparent);
+}
+
+.study-notes-container .study-notes-masthead-eyebrow-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background: rgba(184, 145, 47, 0.14);
-  border: 1px solid rgba(184, 145, 47, 0.35);
+  border: 1px solid rgba(184, 145, 47, 0.4);
   color: var(--color-gold-bright);
-  font-size: 0.65rem;
+  font-size: 0.62rem;
+  box-shadow: 0 0 0 4px rgba(184, 145, 47, 0.06);
 }
 
-/* ---- Title ---- */
-.masthead-title {
+/* ── title ──────────────────────────────────────────────── */
+
+.study-notes-container .study-notes-masthead-title {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(1.75rem, 3.4vw, 2.5rem);
   letter-spacing: var(--tracking-tight);
-  line-height: 1.12;
+  line-height: 1.08;
   color: #ffffff;
-  margin: 0 0 var(--space-3);
-  max-width: 20ch;
-  margin-top: 0 !important;
+  margin: 0 0 var(--space-4);
+  max-width: 18ch;
+  margin-top: 0;
+  font-size: clamp(2.5rem, 5.5vw, 4.25rem);
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
 }
 
-/* ---- Title accent (blue) ---- */
-.masthead-title-accent {
+.study-notes-container .study-notes-masthead-title-accent {
+  position: relative;
   background: linear-gradient(100deg, var(--color-blue) 10%, var(--color-blue-light) 60%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-/* ---- Description — refined, elegant ---- */
-.masthead-desc {
+/* ── description ───────────────────────────────────────── */
+
+.study-notes-container .study-notes-masthead-desc {
   font-family: var(--font-body);
   font-weight: 400;
-  font-size: clamp(1rem, 1.4vw, 1.15rem);
-  line-height: 1.7;
-  color: var(--color-text-on-dark);
-  max-width: 56ch;
-  margin: 0 0 var(--space-5);
-  letter-spacing: 0.01em;
-  opacity: 0.92;
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-on-dark-muted);
+  max-width: 52ch;
+  margin: 0 0 var(--space-6);
+  letter-spacing: 0.005em;
+  font-size: var(--text-lg);
 }
 
-/* ---- Meta strip: premium badge pills ---- */
-.masthead-meta {
+/* ── meta pills ─────────────────────────────────────────── */
+
+.study-notes-container .study-notes-masthead-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.8rem 1.2rem;
+  gap: 0.65rem;
   align-items: center;
 }
 
-.masthead-meta-item {
+.study-notes-container .study-notes-masthead-meta-item {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.45rem;
   font-family: var(--font-accent);
-  font-size: 0.7rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: var(--color-ink);
-  background: rgba(255, 255, 255, 0.10);
-  backdrop-filter: blur(4px);
-  padding: 0.4rem 1rem;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: all var(--duration-fast) ease;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+  padding: 0.55rem 1.15rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  transition: all var(--duration-fast) var(--ease-standard);
+  font-size: 0.72rem;
 }
 
-.masthead-meta-item:hover {
-  background: rgba(255, 255, 255, 0.16);
+.study-notes-container .study-notes-masthead-meta-item::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-gold-bright);
+  flex-shrink: 0;
+}
+
+.study-notes-container .study-notes-masthead-meta-item:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.28);
   transform: translateY(-1px);
 }
 
-/* decorative dot – now hidden (pill style replaces it) */
-.masthead-meta-dot {
-  display: none;
-}
-
 /* ============================================================
-   TOOLBAR (floats over the hero)
+   TOOLBAR
    ============================================================ */
 
-.toolbar-panel {
+.study-notes-container .study-notes-toolbar-panel {
   position: relative;
-  margin: clamp(-2.75rem, -5vw, -3.25rem) 0 var(--space-6);
+  z-index: 4;
+  margin: clamp(-3.5rem, -5vw, -2.75rem) 0 var(--space-7);
   background: var(--color-surface);
   border: 1px solid var(--color-hairline);
-  border-top: 3px solid var(--color-gold);
   border-radius: var(--radius-lg);
-  padding: var(--space-4) var(--space-5);
+  padding: var(--space-5);
   box-shadow: var(--shadow-lg);
 }
 
-.toolbar-row {
+.study-notes-container .study-notes-toolbar-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: var(--space-5);
+  right: var(--space-5);
+  height: 3px;
+  border-radius: 0 0 3px 3px;
+  background: var(--gradient-gold-rule);
+}
+
+.study-notes-container .study-notes-toolbar-row {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0.8rem;
+  gap: 0.85rem;
 }
 
-/* ---- Level switch ---- */
-.toolbar-row .level-switch {
+.study-notes-container .study-notes-toolbar-row .study-notes-level-switch {
   align-self: center;
   height: 46px;
   box-sizing: border-box;
 }
 
-.level-switch {
+/* ── level switch ──────────────────────────────────────── */
+
+.study-notes-container .study-notes-level-switch {
+  position: relative;
   display: inline-flex;
   background: var(--color-cream);
   border-radius: var(--radius-pill);
@@ -217,9 +273,30 @@
   gap: 3px;
   border: 1px solid var(--color-hairline);
   flex-shrink: 0;
+  isolation: isolate;
 }
 
-.level-switch button {
+.study-notes-container .study-notes-level-switch::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  border-radius: var(--radius-pill);
+  background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-navy-deep) 100%);
+  box-shadow: 0 4px 10px rgba(22, 69, 125, 0.25);
+  transition: transform var(--duration-base) var(--ease-standard);
+}
+
+.study-notes-container .study-notes-level-switch[data-level="secondary"]::before {
+  transform: translateX(100%);
+}
+
+.study-notes-container .study-notes-level-switch button {
+  position: relative;
+  z-index: 1;
   height: 100%;
   display: flex;
   align-items: center;
@@ -234,28 +311,41 @@
   background: transparent;
   color: var(--color-slate);
   cursor: pointer;
-  transition: all var(--duration-fast) ease;
+  transition: color var(--duration-fast) var(--ease-standard);
   white-space: nowrap;
 }
 
-.level-switch button.active {
-  background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-navy-deep) 100%);
+.study-notes-container .study-notes-level-switch button.active {
   color: var(--color-surface);
-  box-shadow: 0 4px 10px rgba(22, 69, 125, 0.25);
 }
-.level-switch button:not(.active):hover {
+.study-notes-container .study-notes-level-switch button:not(.active):hover {
   color: var(--color-navy);
-  background: rgba(22, 69, 125, 0.05);
+}
+.study-notes-container .study-notes-level-switch button:focus-visible {
+  outline: 2px solid var(--color-gold-bright);
+  outline-offset: 2px;
 }
 
-/* ---- Filter groups ---- */
-.filter-group {
+/* ── filter groups with labels (prefixed) ────────────────── */
+
+.study-notes-container .study-notes-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   flex: 1 1 160px;
   min-width: 150px;
 }
 
-.filter-group select,
-.filter-group .filter-select {
+.study-notes-container .study-notes-filter-label {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-navy-deep);
+  white-space: nowrap;
+}
+
+.study-notes-container .study-notes-filter-group select,
+.study-notes-container .study-notes-filter-group .filter-select {
   width: 100%;
   height: 46px;
   box-sizing: border-box;
@@ -272,19 +362,25 @@
   border-radius: var(--radius-pill);
   padding: 0 2.1rem 0 1rem;
   cursor: pointer;
-  transition: border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
+  transition: border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard);
 }
-.filter-group select:hover,
-.filter-group select:focus-visible,
-.filter-group .filter-select:hover,
-.filter-group .filter-select:focus-visible {
+
+.study-notes-container .study-notes-filter-group select:hover,
+.study-notes-container .study-notes-filter-group .filter-select:hover {
+  border-color: var(--color-gold-light);
+}
+.study-notes-container .study-notes-filter-group select:focus-visible,
+.study-notes-container .study-notes-filter-group .filter-select:focus-visible {
   border-color: var(--color-gold);
-  box-shadow: 0 0 0 4px rgba(253, 212, 26, 0.1);
+  box-shadow: 0 0 0 4px rgba(253, 212, 26, 0.12);
   outline: none;
 }
 
-/* ---- Search field ---- */
-.search-field {
+/* ── search field ───────────────────────────────────────── */
+
+.study-notes-container .study-notes-search-field {
   position: relative;
   flex: 1 1 240px;
   display: flex;
@@ -294,24 +390,25 @@
   border: 1px solid var(--color-hairline);
   border-radius: var(--radius-pill);
   padding: 0 var(--space-4);
-  transition: border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease,
-              background var(--duration-fast) ease;
+  transition: border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    background var(--duration-fast) var(--ease-standard);
 }
 
-.search-field:focus-within {
+.study-notes-container .study-notes-search-field:focus-within {
   border-color: var(--color-gold);
-  box-shadow: 0 0 0 4px rgba(253, 212, 26, 0.1);
+  box-shadow: 0 0 0 4px rgba(253, 212, 26, 0.12);
   background: var(--color-surface);
 }
 
-.search-icon-leading {
+.study-notes-container .study-notes-search-icon-leading {
   color: var(--color-slate-light);
   font-size: 0.9rem;
   margin-right: var(--space-2);
   flex-shrink: 0;
 }
 
-.search-field input {
+.study-notes-container .study-notes-search-field input {
   flex: 1;
   min-width: 0;
   padding: 0.5rem 0;
@@ -323,11 +420,11 @@
   color: var(--color-ink);
 }
 
-.search-field input::placeholder {
+.study-notes-container .study-notes-search-field input::placeholder {
   color: #9aa7b8;
 }
 
-.search-clear {
+.study-notes-container .study-notes-search-clear {
   border: none;
   background: transparent;
   color: var(--color-slate-light);
@@ -336,13 +433,16 @@
   align-items: center;
   padding: 0.25rem;
   font-size: 0.75rem;
-  transition: color var(--duration-fast) ease;
+  transition: color var(--duration-fast) var(--ease-standard);
 }
-.search-clear:hover {
+.study-notes-container .study-notes-search-clear:hover {
   color: var(--color-navy);
 }
 
-.toolbar-clear {
+.study-notes-container .study-notes-toolbar-clear {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   font-family: var(--font-body);
   font-size: 0.85rem;
   font-weight: 600;
@@ -352,26 +452,39 @@
   border-radius: var(--radius-pill);
   cursor: pointer;
   padding: 0.6rem 1.1rem;
-  transition: all var(--duration-fast) ease;
+  transition: all var(--duration-fast) var(--ease-standard);
   flex-shrink: 0;
 }
-.toolbar-clear:hover {
+.study-notes-container .study-notes-toolbar-clear:hover {
   color: var(--color-gold-dark);
   border-color: var(--color-gold);
   background: var(--color-cream);
 }
 
-/* ---- Active chips ---- */
-.active-chips {
+/* ── active chips ───────────────────────────────────────── */
+
+.study-notes-container .study-notes-active-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: var(--space-3);
-  padding-top: var(--space-3);
-  border-top: 1px dashed var(--color-hairline);
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px dashed var(--color-hairline-light);
 }
 
-.chip {
+.study-notes-container .study-notes-active-chips::before {
+  content: "Filtered by";
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-slate-light);
+  margin-right: 0.15rem;
+}
+
+.study-notes-container .study-notes-chip {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
@@ -383,9 +496,13 @@
   border: 1px solid var(--color-hairline-light);
   border-radius: var(--radius-pill);
   padding: 0.32rem 0.45rem 0.32rem 0.7rem;
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+.study-notes-container .study-notes-chip:hover {
+  border-color: var(--color-gold);
 }
 
-.chip button {
+.study-notes-container .study-notes-chip button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -397,9 +514,10 @@
   height: 16px;
   font-size: 0.52rem;
   cursor: pointer;
-  transition: background var(--duration-fast) ease, color var(--duration-fast) ease;
+  transition: background var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
 }
-.chip button:hover {
+.study-notes-container .study-notes-chip button:hover {
   background: var(--color-navy);
   color: var(--color-surface);
 }
@@ -408,26 +526,45 @@
    MATERIALS GRID
    ============================================================ */
 
-.materials-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: clamp(0.85rem, 1.6vw, 1.25rem);
+.study-notes-container .study-notes-materials {
+  position: relative;
 }
 
-/* ---- Skeleton ---- */
-.skeleton-card {
+.study-notes-container .study-notes-materials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: clamp(1.1rem, 1.6vw, 1.75rem);
+}
+
+.study-notes-container .study-notes-materials-grid > * {
+  transition: transform var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard);
+  border-radius: var(--radius-lg);
+}
+.study-notes-container .study-notes-materials-grid > *:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+.study-notes-container .study-notes-materials-grid > *:focus-within {
+  outline: 2px solid var(--color-gold-bright);
+  outline-offset: 2px;
+}
+
+/* ── skeleton ───────────────────────────────────────────── */
+
+.study-notes-container .study-notes-skeleton-card {
   background: var(--color-surface);
   border: var(--border-hairline);
   border-radius: var(--radius-lg);
   overflow: hidden;
 }
-.skeleton-cover {
+.study-notes-container .study-notes-skeleton-cover {
   aspect-ratio: 3 / 3.7;
   background: linear-gradient(100deg, var(--color-cream) 30%, #eef0ea 50%, var(--color-cream) 70%);
   background-size: 200% 100%;
   animation: shimmer 1.6s ease-in-out infinite;
 }
-.skeleton-line {
+.study-notes-container .study-notes-skeleton-line {
   height: 10px;
   margin: var(--space-3) var(--space-3) 0;
   border-radius: 3px;
@@ -435,150 +572,158 @@
   background-size: 200% 100%;
   animation: shimmer 1.6s ease-in-out infinite;
 }
-.skeleton-line.short {
+.study-notes-container .study-notes-skeleton-line.short {
   width: 55%;
   margin-bottom: var(--space-3);
 }
 
 @keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .skeleton-cover,
-  .skeleton-line {
-    animation: none;
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
   }
 }
 
-/* ---- Status ---- */
-.status {
+.study-notes-container .study-notes-status {
   font-family: var(--font-body);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--color-slate);
   text-align: center;
   margin-top: var(--space-6);
+  letter-spacing: 0.01em;
 }
 
-/* ---- Empty / Error states ---- */
-.state-box,
-.empty {
+/* ── empty / error states ───────────────────────────────── */
+
+.study-notes-container .study-notes-state-box,
+.study-notes-container .study-notes-empty {
   text-align: center;
   padding: clamp(3rem, 6vw, 5rem) var(--space-5);
   background: var(--color-surface);
-  border: 1px solid var(--color-hairline-light);
+  background-image: var(--pattern-dot-grid);
+  background-size: var(--pattern-dot-grid-size);
+  border: 1px dashed var(--color-hairline-light);
   border-radius: var(--radius-lg);
   margin-top: var(--space-4);
   box-shadow: var(--shadow-sm);
   grid-column: 1 / -1;
 }
-.empty svg {
-  fill: var(--color-gold);
-  opacity: 0.6;
-  margin-bottom: var(--space-4);
+
+.study-notes-container .study-notes-state-box::before,
+.study-notes-container .study-notes-empty::before {
+  content: "";
+  display: block;
+  width: 68px;
+  height: 68px;
+  margin: 0 auto var(--space-5);
+  border-radius: 50%;
+  background: var(--color-cream);
+  border: 1px solid var(--color-hairline-light);
 }
-.state-box h3,
-.empty h3 {
+
+.study-notes-container .study-notes-empty svg {
+  fill: var(--color-gold);
+  opacity: 0.75;
+  margin-top: calc(-1 * var(--space-5) - 34px);
+  margin-bottom: var(--space-4);
+  position: relative;
+}
+
+.study-notes-container .study-notes-state-box h3,
+.study-notes-container .study-notes-empty h3 {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 1.3rem;
+  font-size: 1.35rem;
   color: var(--color-navy-deep);
   margin-bottom: var(--space-2);
 }
-.state-box p,
-.empty p {
+.study-notes-container .study-notes-state-box p,
+.study-notes-container .study-notes-empty p {
   font-family: var(--font-body);
   color: var(--color-slate);
+  line-height: var(--leading-normal);
   max-width: 400px;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: var(--space-5);
 }
-.state-box button,
-.empty button {
+.study-notes-container .study-notes-state-box button,
+.study-notes-container .study-notes-empty button {
   font-family: var(--font-body);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 600;
-  padding: 0.65rem 1.7rem;
+  padding: 0.7rem 1.8rem;
   background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-navy-deep) 100%);
   color: var(--color-surface);
   border: none;
   border-radius: var(--radius-pill);
   cursor: pointer;
-  transition: all var(--duration-fast) ease;
+  transition: all var(--duration-fast) var(--ease-standard);
   box-shadow: 0 4px 10px rgba(22, 69, 125, 0.2);
 }
-.state-box button:hover,
-.empty button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 18px rgba(22, 69, 125, 0.3);
+.study-notes-container .study-notes-state-box button:hover,
+.study-notes-container .study-notes-empty button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(22, 69, 125, 0.28);
+}
+.study-notes-container .study-notes-state-box button:focus-visible,
+.study-notes-container .study-notes-empty button:focus-visible {
+  outline: 2px solid var(--color-gold-bright);
+  outline-offset: 3px;
 }
 
-.spinner {
-  display: inline-block;
-  width: 32px;
-  height: 32px;
-  border: 3px solid var(--color-hairline);
-  border-top-color: var(--color-gold);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin-bottom: var(--space-4);
-}
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .spinner {
-    animation: none;
-  }
-}
+/* ── pagination ─────────────────────────────────────────── */
 
-/* ---- Pagination ---- */
-.pagination {
+.study-notes-container .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
-  margin-top: var(--space-7);
+  margin-top: var(--space-8);
   font-family: var(--font-body);
 }
-.pagination button {
+.study-notes-container .pagination button {
   min-width: 2.5rem;
   height: 2.5rem;
   border: 1px solid var(--color-hairline);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   background: var(--color-surface);
   color: var(--color-ink);
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all var(--duration-fast) ease;
+  transition: all var(--duration-fast) var(--ease-standard);
 }
-.pagination button:hover:not(:disabled) {
+.study-notes-container .pagination button:hover:not(:disabled) {
   border-color: var(--color-navy);
   background: var(--color-paper);
+  transform: translateY(-1px);
 }
-.pagination button.active {
+.study-notes-container .pagination button:focus-visible {
+  outline: 2px solid var(--color-gold-bright);
+  outline-offset: 2px;
+}
+.study-notes-container .pagination button.active {
   background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-navy-deep) 100%);
   color: white;
   border-color: var(--color-navy);
-  box-shadow: 0 4px 8px rgba(22, 69, 125, 0.2);
+  box-shadow: 0 4px 8px rgba(22, 69, 125, 0.22);
 }
-.pagination button:disabled {
+.study-notes-container .pagination button:disabled {
   opacity: 0.3;
   cursor: not-allowed;
+  transform: none;
 }
-.pagination .prev-next {
+.study-notes-container .pagination .prev-next {
   font-size: 0.8rem;
   padding: 0 1rem;
 }
 
-/* ---- Staggered fade-in ---- */
-.materials-grid > * {
+.study-notes-container .study-notes-materials-grid > * {
   opacity: 0;
-  animation: cardFadeIn 0.5s ease forwards;
+  animation: cardFadeIn 0.5s var(--ease-standard) forwards;
 }
 @keyframes cardFadeIn {
   from {
@@ -591,113 +736,217 @@
   }
 }
 
+.study-notes-container .study-notes-materials-grid > *:nth-child(1) { animation-delay: 0.02s; }
+.study-notes-container .study-notes-materials-grid > *:nth-child(2) { animation-delay: 0.05s; }
+.study-notes-container .study-notes-materials-grid > *:nth-child(3) { animation-delay: 0.08s; }
+.study-notes-container .study-notes-materials-grid > *:nth-child(4) { animation-delay: 0.11s; }
+.study-notes-container .study-notes-materials-grid > *:nth-child(5) { animation-delay: 0.14s; }
+.study-notes-container .study-notes-materials-grid > *:nth-child(6) { animation-delay: 0.17s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .study-notes-container .study-notes-skeleton-cover,
+  .study-notes-container .study-notes-skeleton-line,
+  .study-notes-container .spinner,
+  .study-notes-container .study-notes-materials-grid > * {
+    animation: none !important;
+  }
+  .study-notes-container .study-notes-materials-grid > * {
+    opacity: 1;
+  }
+  .study-notes-container * {
+    transition-duration: 0.001ms !important;
+  }
+}
+
 /* ============================================================
-   RESPONSIVE: Mobile (consolidated)
+   RESPONSIVE — Mobile (gap 14px)
    ============================================================ */
 
 @media (max-width: 640px) {
-  .page-masthead {
-    padding: 0.5rem var(--section-padding-x) 4rem !important;
+  .study-notes-container .study-notes-page-masthead {
+    padding: 0.5rem var(--section-padding-x) 4.5rem;
   }
 
-  .masthead-inner {
+  .study-notes-container .study-notes-masthead-inner {
     max-width: 100%;
   }
 
-  .masthead-title {
-    font-size: clamp(1.3rem, 5vw, 1.7rem);
+  .study-notes-container .study-notes-masthead-title {
+    font-size: clamp(2.2rem, 4.5vw, 3.8rem);
     max-width: 100%;
   }
 
-  .masthead-desc {
+  .study-notes-container .study-notes-masthead-desc {
     max-width: 100%;
-    font-size: 0.85rem;
+    font-size: 0.98rem;
   }
 
-  .masthead-meta {
+  .study-notes-container .study-notes-masthead-meta {
     gap: 0.4rem;
   }
-  .masthead-meta-item {
+  .study-notes-container .study-notes-masthead-meta-item {
     font-size: 0.68rem;
+    padding: 0.4rem 0.85rem;
   }
 
-  /* ── Toolbar mobile overrides ── */
-  .toolbar-panel {
-    margin: -2rem 0 var(--space-5);
-    padding: 0.75rem 0.75rem !important;
+  /* ── Toolbar — stack everything with 14px gap ────────── */
+  .study-notes-container .study-notes-toolbar-panel {
+    margin: var(--space-4) 0 var(--space-4);
+    padding: 0.5rem 0.75rem;
     border-radius: var(--radius-md);
   }
 
-  .toolbar-row {
+  .study-notes-container .study-notes-toolbar-row {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.5rem !important;
+    gap: 14px; /* exactly 14px between items */
   }
 
-  /* Level switch */
-  .toolbar-row .level-switch {
+  .study-notes-container .study-notes-toolbar-row .study-notes-level-switch {
     align-self: stretch;
     height: auto;
     width: 100%;
     padding: 4px;
   }
-  .level-switch button {
+  .study-notes-container .study-notes-level-switch button {
     height: auto;
-    min-height: 38px !important;
-    padding: 0.4rem 0 !important;
+    min-height: 38px;
+    padding: 0.4rem 0;
     flex: 1;
     justify-content: center;
     font-size: 0.82rem;
     font-weight: 700;
   }
 
-  /* Filter groups – compact */
-  .filter-group {
+  /* ── filter groups – reset flex & remove debug styles ── */
+  .study-notes-container .study-notes-filter-group {
+    flex: none !important;          /* stop stretching */
+    width: 100%;
     min-width: 0;
-    margin: 0 !important;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.15rem;
     padding: 0 !important;
-  }
-  .filter-group select,
-  .filter-group .filter-select {
-    height: 40px !important;
-    min-height: 40px !important;
-    padding: 0.4rem 2rem 0.4rem 0.7rem !important;
-    font-size: 0.85rem !important;
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    height: auto !important;
   }
 
-  /* Search field */
-  .search-field {
+  /* ── Filter wrapper (from Filter component) ───────────── */
+  .study-notes-container .study-notes-filter-select {
+    flex: none !important;
+    width: 100%;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: none !important;
+  }
+
+  /* ── The actual <select> ────────────────────────────── */
+  .study-notes-container .study-notes-filter-select select,
+  .study-notes-container .study-notes-filter-select .filter-select {
+    width: 100%;
+    height: 44px !important;
+    min-height: 44px !important;
+    padding: 0.5rem 2.2rem 0.5rem 0.9rem;
+    font-size: 0.92rem;
+    background: var(--color-paper)
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%2316457d' d='M1 1l5 5 5-5'/%3E%3C/svg%3E")
+      no-repeat right 0.8rem center;
+    background-size: 12px 8px;
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-pill);
+    line-height: 1.3;
+    appearance: none;
+    box-sizing: border-box;
+  }
+
+  .study-notes-container .study-notes-filter-label {
+    font-size: 0.7rem;
+    color: var(--color-slate);
+  }
+
+  /* ── search field ────────────────────────────────────── */
+  .study-notes-container .study-notes-search-field {
     width: 100%;
     flex: none;
-    height: 40px !important;
-    padding: 0 var(--space-2) !important;
+    height: 44px;
+    padding: 0 var(--space-3);
   }
-  .search-field input {
-    font-size: 0.95rem;
+  .study-notes-container .study-notes-search-field input {
+    font-size: 0.92rem;
     padding: 0.3rem 0;
   }
-  .search-icon-leading {
+  .study-notes-container .study-notes-search-icon-leading {
     font-size: 0.9rem;
+    margin-right: 0.4rem;
   }
 
-  .toolbar-clear {
+  .study-notes-container .study-notes-toolbar-clear {
     align-self: stretch;
+    justify-content: center;
     text-align: center;
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 1rem;
     font-size: 0.82rem;
   }
 
-  /* Grid */
-  .materials-grid {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  .study-notes-container .study-notes-materials-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 0.75rem;
   }
 
-  /* Chips */
-  .active-chips {
-    gap: 0.35rem;
+  .study-notes-container .study-notes-active-chips {
+    gap: 0.3rem;
+    margin-top: var(--space-2);
+    padding-top: var(--space-2);
   }
-  .chip {
-    font-size: 0.78rem;
+  .study-notes-container .study-notes-active-chips::before {
+    width: 100%;
+    margin-bottom: 0.15rem;
+  }
+  .study-notes-container .study-notes-chip {
+    font-size: 0.75rem;
+  }
+}
+
+/* ============================================================
+   DESKTOP – Center hero content
+   ============================================================ */
+
+@media (min-width: 641px) {
+  .study-notes-container .study-notes-masthead-inner {
+    max-width: 100%;
+    text-align: center;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .study-notes-container .study-notes-breadcrumb {
+    text-align: left;
+    justify-content: flex-start;
+  }
+
+  .study-notes-container .study-notes-masthead-meta {
+    justify-content: center;
+  }
+
+  .study-notes-container .study-notes-masthead-eyebrow {
+    justify-content: center;
+  }
+
+  .study-notes-container .study-notes-masthead-title {
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .study-notes-container .study-notes-masthead-desc {
+    max-width: 52ch;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
