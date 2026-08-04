@@ -2,7 +2,7 @@
 
 .commitment-section {
   padding: var(--section-padding-y) var(--section-padding-x);
-  background: var(--gradient-navy-panel);
+  background: var(--color-navy-deep); /* solid navy — no gradient */
   overflow-x: hidden;
   position: relative;
 }
@@ -110,9 +110,6 @@
               border-color 0.3s ease;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
-
-/* ── gold line removed ── */
-/* .trust-principle::before was removed per user request */
 
 .trust-principle:hover {
   transform: translateY(-4px);

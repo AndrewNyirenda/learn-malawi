@@ -14,6 +14,11 @@ import {
   FaYoutube,
   FaInstagram,
   FaTwitter,
+  FaHome,
+  FaNewspaper,
+  FaUsers,
+  FaInfoCircle,
+  FaBriefcase,
 } from "react-icons/fa";
 
 const Footer = () => {
@@ -24,11 +29,20 @@ const Footer = () => {
   };
 
   const links = [
+    { name: "Home", link: "/", icon: <FaHome /> },
     { name: "Study Notes", link: "/study-notes", icon: <FaBook /> },
     { name: "Past Papers", link: "/past-papers", icon: <FaFileAlt /> },
     { name: "Video Tutorials", link: "/tutorials", icon: <FaVideo /> },
     { name: "Practice Quizzes", link: "/quizes", icon: <FaQuestionCircle /> },
+    { name: "Career Resources", link: "/career-resources", icon: <FaBriefcase /> },
+    { name: "News", link: "/news", icon: <FaNewspaper /> },
+    { name: "About", link: "/abouts", icon: <FaInfoCircle /> },
+    { name: "Contact", link: "/contact", icon: <FaUsers /> },
   ];
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <footer className="FooterWrapper">
@@ -39,7 +53,7 @@ const Footer = () => {
             <img
               src={Logo}
               alt="Learn Malawi Logo"
-              className="footer-logo-image"   // isolated class
+              className="footer-logo-image"
             />
           </Link>
           <p className="footer-tagline">
@@ -62,7 +76,7 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Contact + Social */}
+        {/* Contact + Social + Back to Top */}
         <div className="footer-section contact">
           <h3>Contact Us</h3>
           <p>
@@ -112,11 +126,17 @@ const Footer = () => {
               </a>
             </div>
           </div>
+
+          <div className="back-to-top">
+            <button onClick={scrollToTop} aria-label="Back to top">
+              Back to Top
+            </button>
+          </div>
         </div>
       </div>
 
       <div className="footer-bottom">
-        <p>© {new Date().getFullYear()} Learn Smart. All Rights Reserved.</p>
+        <p>© {new Date().getFullYear()} Learn Malawi. All Rights Reserved.</p>
         <p className="footer-bottom-note">Built for learners, everywhere in Malawi.</p>
       </div>
     </footer>

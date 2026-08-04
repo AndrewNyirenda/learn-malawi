@@ -1,5 +1,5 @@
 /* ============================================================
-   STUDY NOTES — Premium Styles
+   STUDY NOTES — Premium Styles (FORCED TOP SPACING FIX)
    ============================================================ */
 
 .study-page {
@@ -8,60 +8,62 @@
   padding: 0 var(--section-padding-x) clamp(3rem, 6vw, 5rem);
   background: var(--color-paper);
   min-height: 60vh;
+  /* Force top padding to 0 */
+  padding-top: 0 !important;
+  margin-top: 0 !important;
 }
 
-/* ---- Hero / Masthead ---- */
+/* ============================================================
+   HERO / MASTHEAD — compact navy panel (FORCED ZERO TOP SPACE)
+   ============================================================ */
+
 .page-masthead {
   position: relative;
   margin: 0 calc(-1 * var(--section-padding-x)) 0;
-  padding: clamp(2.25rem, 5vw, 3.5rem) var(--section-padding-x) clamp(4.5rem, 9vw, 6.5rem);
-  background:
-    var(--pattern-dot-grid) 0 0 / var(--pattern-dot-grid-size),
-    #f4f8fd;
+  /* Force top padding to minimum */
+  padding: 0.5rem var(--section-padding-x) clamp(3.25rem, 5.5vw, 4.25rem) !important;
+  background: var(--gradient-navy-panel);
   overflow: hidden;
   isolation: isolate;
-  border-bottom: 1px solid var(--color-hairline);
+  margin-top: 0 !important;
+}
+
+/* subtle dot-grid texture, faint on dark bg */
+.page-masthead::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: 0.5;
+  z-index: 0;
 }
 
 
+/* thin gold rule along the very bottom edge */
 .page-masthead::after {
   content: "";
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: min(360px, 70%);
+  width: min(420px, 80%);
   height: 3px;
   background: linear-gradient(90deg, transparent, var(--color-gold-bright), transparent);
   box-shadow: 0 0 20px 1px rgba(253, 212, 26, 0.35);
-}
-
-.page-masthead > * {
-  position: relative;
   z-index: 1;
 }
 
- h1 {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: var(--text-3xl);
-  letter-spacing: var(--tracking-tight);
-  color: var(--color-navy-deep);
-  line-height: 1.08;
-  margin: 0 0 var(--space-3);
-  max-width: 22ch;
+.masthead-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 760px;
+  /* Force no top margin */
+  margin-top: 0 !important;
+  padding-top: 0 !important;
 }
 
-.page-masthead p {
-  font-family: var(--font-body);
-  font-weight: 400;
-  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
-  color: var(--color-slate);
-  max-width: 580px;
-  line-height: var(--leading-relaxed);
-  margin: 0;
-}
-
+/* ---- Breadcrumb (on dark bg) ---- */
 .breadcrumb {
   display: flex;
   align-items: center;
@@ -69,25 +71,122 @@
   font-family: var(--font-body);
   font-size: 0.76rem;
   font-weight: 500;
-  color: var(--color-slate);
-  margin-bottom: var(--space-3);
+  color: var(--color-text-on-dark-muted);
+  margin-bottom: var(--space-2);
+  /* Force top margin to 0 */
+  margin-top: 0 !important;
 }
 .breadcrumb a {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  color: var(--color-slate);
+  color: var(--color-text-on-dark-muted);
   text-decoration: none;
   transition: color var(--duration-fast) ease;
 }
-.breadcrumb a:hover { color: var(--color-navy); }
-.breadcrumb svg { font-size: 0.62rem; }
-.breadcrumb-current { color: var(--color-navy-deep); font-weight: 600; }
+.breadcrumb a:hover {
+  color: var(--color-gold-light);
+}
+.breadcrumb svg {
+  font-size: 0.6rem;
+  opacity: 0.7;
+}
+.breadcrumb-current {
+  color: #ffffff;
+  font-weight: 600;
+}
 
-/* ---- Toolbar (floats over the hero) ---- */
+/* ---- Eyebrow ---- */
+.masthead-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-accent);
+  font-size: var(--text-eyebrow);
+  font-weight: 600;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-gold-light);
+  margin-bottom: var(--space-2);
+  margin-top: 0 !important;
+}
+
+.masthead-eyebrow-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(253, 212, 26, 0.14);
+  border: 1px solid rgba(253, 212, 26, 0.35);
+  color: var(--color-gold-bright);
+  font-size: 0.65rem;
+}
+
+/* ---- Title ---- */
+.masthead-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 3.4vw, 2.5rem);
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.12;
+  color: #ffffff;
+  margin: 0 0 var(--space-3);
+  max-width: 20ch;
+  /* Force top margin to 0 */
+  margin-top: 0 !important;
+}
+
+.masthead-title-accent {
+  background: linear-gradient(100deg, var(--color-gold-bright) 10%, var(--color-gold-bright-light) 60%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---- Description — neatly formatted, readable measure ---- */
+.masthead-desc {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(0.92rem, 1.2vw, 1.02rem);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-on-dark-muted);
+  max-width: 54ch;
+  margin: 0 0 var(--space-4);
+}
+
+/* ---- Meta strip: quick facts row ---- */
+.masthead-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.masthead-meta-item {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.masthead-meta-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-gold);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   TOOLBAR (floats over the hero)
+   ============================================================ */
+
 .toolbar-panel {
   position: relative;
-  margin: clamp(-3rem, -6vw, -3.75rem) 0 var(--space-6);
+  margin: clamp(-2.75rem, -5vw, -3.25rem) 0 var(--space-6);
   background: var(--color-surface);
   border: 1px solid var(--color-hairline);
   border-top: 3px solid var(--color-gold);
@@ -103,7 +202,7 @@
   gap: 0.8rem;
 }
 
-/* Level switch — desktop */
+/* ---- Level switch ---- */
 .toolbar-row .level-switch {
   align-self: center;
   height: 46px;
@@ -149,18 +248,21 @@
   background: rgba(22, 69, 125, 0.05);
 }
 
-/* Dropdown selects — desktop */
-.toolbar-row .filter-select {
-  height: 46px;
-  box-sizing: border-box;
-  padding: 0 2.1rem 0 1rem;
-  font-size: 0.85rem;
+/* ---- Filter groups ---- */
+.filter-group {
+  flex: 1 1 160px;
+  min-width: 150px;
 }
 
-.filter-select {
+.filter-group select,
+.filter-group .filter-select {
+  width: 100%;
+  height: 46px;
+  box-sizing: border-box;
   appearance: none;
   font-family: var(--font-body);
   font-weight: 500;
+  font-size: 0.85rem;
   color: var(--color-navy-deep);
   background: var(--color-paper)
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%2316457d' d='M1 1l5 5 5-5'/%3E%3C/svg%3E")
@@ -168,19 +270,20 @@
   background-size: 10px 7px;
   border: 1px solid var(--color-hairline);
   border-radius: var(--radius-pill);
+  padding: 0 2.1rem 0 1rem;
   cursor: pointer;
   transition: border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
-  flex-shrink: 0;
 }
-
-.filter-select:hover,
-.filter-select:focus-visible {
+.filter-group select:hover,
+.filter-group select:focus-visible,
+.filter-group .filter-select:hover,
+.filter-group .filter-select:focus-visible {
   border-color: var(--color-gold);
   box-shadow: 0 0 0 4px rgba(253, 212, 26, 0.1);
   outline: none;
 }
 
-/* Search field */
+/* ---- Search field ---- */
 .search-field {
   position: relative;
   flex: 1 1 240px;
@@ -235,7 +338,9 @@
   font-size: 0.75rem;
   transition: color var(--duration-fast) ease;
 }
-.search-clear:hover { color: var(--color-navy); }
+.search-clear:hover {
+  color: var(--color-navy);
+}
 
 .toolbar-clear {
   font-family: var(--font-body);
@@ -256,7 +361,7 @@
   background: var(--color-cream);
 }
 
-/* Active chips */
+/* ---- Active chips ---- */
 .active-chips {
   display: flex;
   flex-wrap: wrap;
@@ -299,13 +404,9 @@
   color: var(--color-surface);
 }
 
-.status {
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-  color: var(--color-slate);
-  text-align: center;
-  margin-top: var(--space-6);
-}
+/* ============================================================
+   MATERIALS GRID
+   ============================================================ */
 
 .materials-grid {
   display: grid;
@@ -313,8 +414,13 @@
   gap: clamp(0.85rem, 1.6vw, 1.25rem);
 }
 
-/* Skeleton */
-.skeleton-card { background: var(--color-surface); border: var(--border-hairline); border-radius: var(--radius-lg); overflow: hidden; }
+/* ---- Skeleton ---- */
+.skeleton-card {
+  background: var(--color-surface);
+  border: var(--border-hairline);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
 .skeleton-cover {
   aspect-ratio: 3 / 3.7;
   background: linear-gradient(100deg, var(--color-cream) 30%, #eef0ea 50%, var(--color-cream) 70%);
@@ -329,14 +435,32 @@
   background-size: 200% 100%;
   animation: shimmer 1.6s ease-in-out infinite;
 }
-.skeleton-line.short { width: 55%; margin-bottom: var(--space-3); }
+.skeleton-line.short {
+  width: 55%;
+  margin-bottom: var(--space-3);
+}
+
 @keyframes shimmer {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
-@media (prefers-reduced-motion: reduce) { .skeleton-cover, .skeleton-line { animation: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-cover,
+  .skeleton-line {
+    animation: none;
+  }
+}
 
-/* Empty / Error states */
+/* ---- Status ---- */
+.status {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--color-slate);
+  text-align: center;
+  margin-top: var(--space-6);
+}
+
+/* ---- Empty / Error states ---- */
 .state-box,
 .empty {
   text-align: center;
@@ -400,9 +524,18 @@
   animation: spin 0.8s linear infinite;
   margin-bottom: var(--space-4);
 }
-@keyframes spin { to { transform: rotate(360deg); } }
-@media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}
 
+/* ---- Pagination ---- */
 .pagination {
   display: flex;
   justify-content: center;
@@ -442,13 +575,50 @@
   padding: 0 1rem;
 }
 
-/* ---- Responsive: Mobile ---- */
+/* ---- Staggered fade-in ---- */
+.materials-grid > * {
+  opacity: 0;
+  animation: cardFadeIn 0.5s ease forwards;
+}
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   RESPONSIVE: Mobile
+   ============================================================ */
+
 @media (max-width: 640px) {
   .page-masthead {
-    padding: 2rem var(--section-padding-x) 3.25rem;
+    padding: 0.5rem var(--section-padding-x) 3rem !important;
   }
-  .page-masthead h1 {
+
+  .masthead-inner {
     max-width: 100%;
+  }
+
+  .masthead-title {
+    font-size: clamp(1.3rem, 5vw, 1.7rem);
+    max-width: 100%;
+  }
+
+  .masthead-desc {
+    max-width: 100%;
+    font-size: 0.85rem;
+  }
+
+  .masthead-meta {
+    gap: 0.4rem;
+  }
+  .masthead-meta-item {
+    font-size: 0.68rem;
   }
 
   .toolbar-panel {
@@ -463,7 +633,6 @@
     gap: 0.7rem;
   }
 
-  /* Search — full width, comfortably sized, no iOS zoom */
   .search-field {
     flex: none;
     width: 100%;
@@ -471,14 +640,13 @@
     padding: 0 var(--space-3);
   }
   .search-field input {
-    font-size: 1rem; /* 16px — prevents iOS auto-zoom */
+    font-size: 1rem;
     padding: 0.4rem 0;
   }
   .search-icon-leading {
     font-size: 0.95rem;
   }
 
-  /* Level switch — bigger touch targets, readable labels */
   .toolbar-row .level-switch {
     align-self: stretch;
     height: auto;
@@ -495,8 +663,11 @@
     font-weight: 700;
   }
 
-  /* Filter selects — bigger text, comfortable height */
-  .toolbar-row .filter-select {
+  .filter-group {
+    min-width: 0;
+  }
+  .filter-group select,
+  .filter-group .filter-select {
     height: auto;
     min-height: 50px;
     width: 100%;
@@ -524,12 +695,3 @@
   }
 }
 
-/* ---- Staggered fade-in ---- */
-.materials-grid > * {
-  opacity: 0;
-  animation: cardFadeIn 0.5s ease forwards;
-}
-@keyframes cardFadeIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
-}

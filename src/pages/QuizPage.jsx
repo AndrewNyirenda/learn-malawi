@@ -4,7 +4,10 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useQuizzes } from '../contexts/QuizzesContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import PageHeader from '../components/page-header';
 import "../styles/quizpage.css";
+import { FaHome, FaChevronRight } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const QuizPage = () => {
   const { id } = useParams();
@@ -25,7 +28,6 @@ const QuizPage = () => {
   
   const { fetchQuizById } = useQuizzes();
   
-   // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -105,12 +107,10 @@ const QuizPage = () => {
       timeSpent: (currentQuestion.timeLimit || 60) - timeLeft
     }]);
     
-    // Update score
     if (isCorrect) {
       setScore(score + 1);
     }
     
-    // Move to next question or finish
     if (currentQuestionIndex + 1 < quiz.questions.length) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedOption(null);
@@ -123,7 +123,6 @@ const QuizPage = () => {
     clearInterval(timer);
     setIsFinished(true);
     
-    // Save final answer if not saved
     if (selectedOption !== null && userAnswers.length <= currentQuestionIndex) {
       const isCorrect = selectedOption === currentQuestion.answer;
       setUserAnswers([...userAnswers, {
@@ -187,12 +186,20 @@ const QuizPage = () => {
     <>
       <Header />
       <div className="quiz-page-wrapper">
-        <div className="quiz-page-header">
-          <button onClick={handleBackToList} className="back-button">
-            ← Back to Quizzes
-          </button>
-          <h1>{quiz.title}</h1>
-          <div className="quiz-info-badges">
+        {/* ── Masthead ── */}
+        <div className="page-masthead">
+          <nav className="breadcrumb" aria-label="Breadcrumb">
+            <Link to="/"><FaHome /> Home</Link>
+            <FaChevronRight />
+            <Link to="/quizes">Quizzes</Link>
+            <FaChevronRight />
+            <span className="breadcrumb-current">{quiz.title}</span>
+          </nav>
+          <PageHeader
+            title={quiz.title}
+            description={`${quiz.level === 'primary' ? 'Primary' : 'Secondary'} · ${quiz.subject} · Class ${quiz.class} · ${quiz.difficulty?.charAt(0).toUpperCase() + quiz.difficulty?.slice(1)} difficulty`}
+          />
+          <div className="quiz-badges">
             <span className="level-badge">{quiz.level === 'primary' ? 'Primary' : 'Secondary'}</span>
             <span className={`difficulty-badge ${quiz.difficulty}`}>
               {quiz.difficulty?.charAt(0).toUpperCase() + quiz.difficulty?.slice(1)}
@@ -201,9 +208,11 @@ const QuizPage = () => {
             <span className="class-badge">{quiz.class}</span>
           </div>
         </div>
-        
+
+        {/* ── Instruction Card ── */}
         <div className="quiz-instructions-container">
           <div className="instructions-card">
+            <div className="instructions-card-accent"></div>
             <h2>Quiz Instructions</h2>
             
             <div className="instructions-grid">
@@ -253,7 +262,7 @@ const QuizPage = () => {
         </div>
       </div>
       
-      {/* Quiz Modal (92% width) */}
+      {/* ── Quiz Modal ── */}
       {showQuizModal && (
         <div className="quiz-modal-overlay" onClick={handleCloseModal}>
           <div className="quiz-modal-container" onClick={(e) => e.stopPropagation()}>

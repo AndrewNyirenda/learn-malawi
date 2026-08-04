@@ -1,12 +1,98 @@
 // pages/Tutorials.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useTutorials } from "../contexts/TutorialsContext";
 import "../styles/tutorials.css";
 import Footer from "../components/Footer.jsx";
 import Header from "../components/Header";
 import PageHeader from "../components/page-header";
 import Pagination from "../components/Pagination";
+import Filter from "../components/Filter";
 
+// ─── Masthead ──────────────────────────────────────────────────────
+const Masthead = () => (
+  <div className="page-masthead">
+    <PageHeader
+      title="Educational Tutorials"
+      description="Access comprehensive video tutorials covering various subjects for both Primary and Secondary levels."
+    />
+  </div>
+);
+
+// ─── Toolbar (matches Quizes exactly) ─────────────────────────────
+const Toolbar = ({
+  level,
+  setLevel,
+  subjectFilter,
+  setSubjectFilter,
+  classFilter,
+  setClassFilter,
+  subjects,
+  classes,
+}) => {
+  // Build options for Filter components
+  const subjectOptions = [
+    { value: "all", label: "All Subjects" },
+    ...(subjects || []).map(s => ({ value: s, label: s }))
+  ];
+  const classOptions = [
+    { value: "all", label: "All Classes" },
+    ...(classes || [])
+      .sort((a, b) => {
+        const aNum = parseInt(a.replace(/\D/g, ""));
+        const bNum = parseInt(b.replace(/\D/g, ""));
+        return aNum - bNum;
+      })
+      .map(c => ({ value: c, label: c }))
+  ];
+
+  return (
+    <div className="toolbar-panel">
+      <div className="toolbar-row">
+        {/* Level switch – matches Quizes */}
+        <div className="level-switch">
+          <button
+            className={level === "primary" ? "active" : ""}
+            onClick={() => setLevel("primary")}
+          >
+            Primary Level
+          </button>
+          <button
+            className={level === "secondary" ? "active" : ""}
+            onClick={() => setLevel("secondary")}
+          >
+            Secondary Level
+          </button>
+        </div>
+
+        {/* Subject filter */}
+        <div className="filter-group">
+          <Filter
+            id="subject"
+            value={subjectFilter}
+            onChange={setSubjectFilter}
+            options={subjectOptions}
+            showAllOption={false}
+            placeholder="Select subject"
+          />
+        </div>
+
+        {/* Class filter */}
+        <div className="filter-group">
+          <Filter
+            id="class"
+            value={classFilter}
+            onChange={setClassFilter}
+            options={classOptions}
+            showAllOption={false}
+            placeholder="Select class"
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─── Main component ────────────────────────────────────────────────
 const Tutorials = () => {
   const [level, setLevel] = useState("secondary");
   const [subjectFilter, setSubjectFilter] = useState("all");
@@ -58,12 +144,12 @@ const Tutorials = () => {
     setCurrentPage(1);
   }, [level]);
 
-  const handleVideoError = (tutorialId) => {
+  const handleVideoError = useCallback((tutorialId) => {
     setVideoErrors((prev) => ({
       ...prev,
       [tutorialId]: true,
     }));
-  };
+  }, []);
 
   const extractYouTubeId = (url) => {
     if (!url) return null;
@@ -89,26 +175,28 @@ const Tutorials = () => {
     return url?.includes("youtube.com") || url?.includes("youtu.be");
   };
 
-  const getSortedClasses = () => {
-    if (!classes || !Array.isArray(classes)) return [];
-    return [...classes].sort((a, b) => {
-      const aNum = parseInt(a.replace(/\D/g, ""));
-      const bNum = parseInt(b.replace(/\D/g, ""));
-      return aNum - bNum;
-    });
-  };
+  // ─── Handlers ────────────────────────────────────────────────────
+  const handleSetLevel = useCallback((newLevel) => {
+    setLevel(newLevel);
+    setCurrentPage(1);
+  }, []);
+
+  const handleSubjectChange = useCallback((value) => {
+    setSubjectFilter(value);
+    setCurrentPage(1);
+  }, []);
+
+  const handleClassChange = useCallback((value) => {
+    setClassFilter(value);
+    setCurrentPage(1);
+  }, []);
 
   if (loading && tutorials.length === 0) {
     return (
       <>
         <Header />
         <main className="tutorials-page">
-          <div className="page-masthead">
-            <PageHeader
-              title="Educational Tutorials"
-              description="Access comprehensive video tutorials covering various subjects for both Primary and Secondary levels."
-            />
-          </div>
+          <Masthead />
           <div className="state-box">
             <span className="spinner" />
             <p>Loading tutorials...</p>
@@ -124,12 +212,7 @@ const Tutorials = () => {
       <>
         <Header />
         <main className="tutorials-page">
-          <div className="page-masthead">
-            <PageHeader
-              title="Educational Tutorials"
-              description="Access comprehensive video tutorials covering various subjects for both Primary and Secondary levels."
-            />
-          </div>
+          <Masthead />
           <div className="state-box">
             <h3>Error Loading Tutorials</h3>
             <p>{error}</p>
@@ -152,69 +235,19 @@ const Tutorials = () => {
     <>
       <Header />
       <main className="tutorials-page">
-        {/* === Masthead === */}
-        <div className="page-masthead">
-          <PageHeader
-            title="Educational Tutorials"
-            description="Access comprehensive video tutorials covering various subjects for both Primary and Secondary levels."
-          />
-        </div>
+        <Masthead />
 
-        {/* === Toolbar === */}
-        <div className="toolbar-panel">
-          <div className="toolbar-row">
-            <div className="level-switch">
-              <button
-                className={level === "primary" ? "active" : ""}
-                onClick={() => setLevel("primary")}
-              >
-                Primary
-              </button>
-              <button
-                className={level === "secondary" ? "active" : ""}
-                onClick={() => setLevel("secondary")}
-              >
-                Secondary
-              </button>
-            </div>
+        <Toolbar
+          level={level}
+          setLevel={handleSetLevel}
+          subjectFilter={subjectFilter}
+          setSubjectFilter={handleSubjectChange}
+          classFilter={classFilter}
+          setClassFilter={handleClassChange}
+          subjects={subjects}
+          classes={classes}
+        />
 
-            <select
-              className="filter-select"
-              value={subjectFilter}
-              onChange={(e) => {
-                setSubjectFilter(e.target.value);
-                setCurrentPage(1);
-              }}
-              aria-label="Filter by subject"
-            >
-              <option value="all">All Subjects</option>
-              {(subjects || []).map((subject, i) => (
-                <option key={i} value={subject}>
-                  {subject}
-                </option>
-              ))}
-            </select>
-
-            <select
-              className="filter-select"
-              value={classFilter}
-              onChange={(e) => {
-                setClassFilter(e.target.value);
-                setCurrentPage(1);
-              }}
-              aria-label="Filter by class"
-            >
-              <option value="all">All Classes</option>
-              {getSortedClasses().map((cls, i) => (
-                <option key={i} value={cls}>
-                  {cls}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        {/* === Grid === */}
         <section className="materials">
           {tutorials.length > 0 ? (
             <div className="materials-grid">

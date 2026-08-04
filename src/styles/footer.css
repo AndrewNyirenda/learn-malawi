@@ -26,7 +26,6 @@
   height: 200px;
   width: auto;
   display: block;
-  /* No filter – original colours */
 }
 
 .footer-tagline {
@@ -49,6 +48,11 @@
   margin: 0 0 var(--space-5);
   padding-bottom: var(--space-3);
   border-bottom: var(--border-hairline-light);
+}
+
+/* ─── extra space above "Follow Us" ─── */
+.footer-social h3 {
+  margin-top: 2rem;          /* adds space above the "Follow Us" title */
 }
 
 .footer-section p,
@@ -93,7 +97,7 @@
 }
 
 .footer-social h3 {
-  margin-bottom: 1.1rem;
+  margin-top: 2rem;          /* ⬅️ added this line */
 }
 
 .social-icons {
@@ -128,6 +132,34 @@
   transform: scale(0.95);
 }
 
+/* ─── Back to Top (text only, underline on hover) ─── */
+.back-to-top {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.back-to-top button {
+  background: transparent;
+  border: none;
+  color: var(--color-text-on-dark-muted);
+  font-size: 0.85rem;
+  font-family: var(--font-body);
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.25rem 0;
+  transition: color var(--duration-fast) ease;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1.5px;
+}
+
+.back-to-top button:hover {
+  color: var(--color-gold-light);
+  text-decoration-color: var(--color-gold-light);
+}
+
+/* ─── Footer Bottom ─── */
 .footer-bottom {
   max-width: var(--section-max-width);
   margin: 0 auto;
@@ -146,6 +178,7 @@
   letter-spacing: 0.03em;
 }
 
+/* ─── Responsive ─── */
 @media (max-width: 900px) {
   .footer-content {
     grid-template-columns: 1fr 1fr;
@@ -182,6 +215,7 @@
   }
 }
 
+/* ─── Accessibility & Reduced Motion ─── */
 @media (prefers-contrast: high) {
   .FooterWrapper { background: #000; }
   .footer-section h3 { color: #fff; }

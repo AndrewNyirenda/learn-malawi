@@ -1,15 +1,22 @@
 // pages/StudyNotes.jsx
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
 import ResourceCard from "./ResourceCard";
 import "../styles/studyNotes.css";
 import Footer from "../components/Footer.jsx";
 import { useStudyNotes } from "../contexts/StudyNotesContext";
 import Header from "../components/Header";
-import PageHeader from "../components/page-header";
 import Pagination from "../components/Pagination";
-import { FaSearch, FaTimes, FaHome, FaChevronRight } from "react-icons/fa";
+import Filter from "../components/Filter";
+import {
+  FaSearch,
+  FaTimes,
+  FaHome,
+  FaChevronRight,
+  FaBookOpen,
+} from "react-icons/fa";
 
+// ─── Skeleton ────────────────────────────────────────────────────────
 const SkeletonGrid = ({ count = 12 }) => (
   <div className="materials-grid">
     {Array.from({ length: count }).map((_, i) => (
@@ -31,20 +38,189 @@ const useDebouncedValue = (value, delay = 250) => {
   return debounced;
 };
 
+// ─── Masthead (new premium hero) ──────────────────────────────────
+const Masthead = () => (
+  <div className="page-masthead">
+    <div className="masthead-inner">
+      <nav className="breadcrumb" aria-label="Breadcrumb">
+        <Link to="/"><FaHome /> Home</Link>
+        <FaChevronRight />
+        <span className="breadcrumb-current">Study Notes</span>
+      </nav>
+
+      <div className="masthead-eyebrow">
+        <span className="masthead-eyebrow-icon">
+          <FaBookOpen />
+        </span>
+        Resource Library
+      </div>
+
+      <h1 className="masthead-title">
+        Study Notes &amp; <span className="masthead-title-accent">References</span>
+      </h1>
+
+      <p className="masthead-desc">
+        Curated academic materials for Primary and Secondary levels —
+        organised by subject and class, built for focused, distraction‑free
+        learning.
+      </p>
+
+      <div className="masthead-meta">
+        <span className="masthead-meta-item">Primary &amp; Secondary</span>
+        <span className="masthead-meta-dot" />
+        <span className="masthead-meta-item">Updated Regularly</span>
+        <span className="masthead-meta-dot" />
+        <span className="masthead-meta-item">Free to Download</span>
+      </div>
+    </div>
+  </div>
+);
+
+// ─── Toolbar (unchanged) ──────────────────────────────────────────
+const Toolbar = ({
+  level,
+  setLevel,
+  category,
+  setCategory,
+  classFilter,
+  setClassFilter,
+  searchInput,
+  onSearchChange,
+  onSearchClear,
+  onSearchKeyDown,
+  hasActiveFilters,
+  clearAll,
+  categories,
+  classes,
+}) => {
+  const categoryOptions = [
+    { value: "all", label: "All Categories" },
+    ...(categories || []).map((c) => ({ value: c.category, label: c.category })),
+  ];
+  const classOptions = [
+    { value: "all", label: "All Classes" },
+    ...(classes || []).map((c) => ({ value: c.class, label: c.class })),
+  ];
+
+  return (
+    <div className="toolbar-panel">
+      <div className="toolbar-row">
+        <div className="level-switch">
+          <button
+            className={level === "primary" ? "active" : ""}
+            onClick={() => setLevel("primary")}
+          >
+            Primary Level
+          </button>
+          <button
+            className={level === "secondary" ? "active" : ""}
+            onClick={() => setLevel("secondary")}
+          >
+            Secondary Level
+          </button>
+        </div>
+
+        <div className="filter-group">
+          <Filter
+            id="category"
+            value={category}
+            onChange={setCategory}
+            options={categoryOptions}
+            showAllOption={false}
+            placeholder="Select category"
+          />
+        </div>
+
+        <div className="filter-group">
+          <Filter
+            id="class"
+            value={classFilter}
+            onChange={setClassFilter}
+            options={classOptions}
+            showAllOption={false}
+            placeholder="Select class"
+          />
+        </div>
+
+        <div className="search-field">
+          <FaSearch className="search-icon-leading" />
+          <input
+            type="text"
+            placeholder="Search by title…"
+            value={searchInput}
+            onChange={onSearchChange}
+            onKeyDown={onSearchKeyDown}
+            aria-label="Search study notes by title"
+          />
+          {searchInput && (
+            <button className="search-clear" onClick={onSearchClear} aria-label="Clear search">
+              <FaTimes />
+            </button>
+          )}
+        </div>
+
+        {hasActiveFilters && (
+          <button className="toolbar-clear" onClick={clearAll}>
+            Clear
+          </button>
+        )}
+      </div>
+
+      {hasActiveFilters && (
+        <div className="active-chips">
+          {category !== "all" && (
+            <span className="chip">
+              {category}
+              <button onClick={() => setCategory("all")} aria-label="Remove category filter">
+                <FaTimes />
+              </button>
+            </span>
+          )}
+          {classFilter !== "all" && (
+            <span className="chip">
+              {classFilter}
+              <button onClick={() => setClassFilter("all")} aria-label="Remove class filter">
+                <FaTimes />
+              </button>
+            </span>
+          )}
+          {searchInput.trim() !== "" && (
+            <span className="chip">
+              "{searchInput.trim()}"
+              <button onClick={onSearchClear} aria-label="Clear search term">
+                <FaTimes />
+              </button>
+            </span>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ─── Main component ────────────────────────────────────────────────
 const StudyNotes = () => {
   const [level, setLevel] = useState("secondary");
   const [category, setCategory] = useState("all");
   const [classFilter, setClassFilter] = useState("all");
   const [searchInput, setSearchInput] = useState("");
-  const searchQuery = useDebouncedValue(searchInput, 250);
+  const searchQuery = useDebouncedValue(searchInput, 150);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const itemsPerPage = 12;
 
   const {
-    books, categories, classes, loading, error,
-    fetchBooks, fetchCategories, fetchClasses,
-    getViewUrl, getDownloadUrl, clearError
+    books,
+    categories,
+    classes,
+    loading,
+    error,
+    fetchBooks,
+    fetchCategories,
+    fetchClasses,
+    getViewUrl,
+    getDownloadUrl,
+    clearError,
   } = useStudyNotes();
 
   useEffect(() => {
@@ -53,14 +229,16 @@ const StudyNotes = () => {
     fetchClasses(levelEnum);
   }, [level]);
 
-  useEffect(() => { window.scrollTo(0, 0); }, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     const loadBooks = async () => {
       const filters = {
         level,
         ...(category !== "all" && { category }),
-        ...(classFilter !== "all" && { class: classFilter })
+        ...(classFilter !== "all" && { class: classFilter }),
       };
       const result = await fetchBooks(currentPage, itemsPerPage, filters);
       if (result?.total) setTotalItems(result.total);
@@ -74,13 +252,35 @@ const StudyNotes = () => {
     setCurrentPage(1);
   }, [level]);
 
+  const handleSearchChange = useCallback((e) => {
+    setSearchInput(e.target.value);
+  }, []);
+
+  const handleSearchClear = useCallback(() => {
+    setSearchInput("");
+  }, []);
+
+  const handleSearchKeyDown = useCallback((e) => {
+    if (e.key === "Escape" && searchInput) setSearchInput("");
+  }, [searchInput]);
+
+  const clearAll = useCallback(() => {
+    setCategory("all");
+    setClassFilter("all");
+    setSearchInput("");
+    setCurrentPage(1);
+  }, []);
+
   const visibleBooks = useMemo(() => {
     if (!searchQuery.trim()) return books;
     const q = searchQuery.trim().toLowerCase();
     return books.filter((b) => b.title?.toLowerCase().includes(q));
   }, [books, searchQuery]);
 
-  const isSearchFiltering = searchQuery.trim() !== "" && visibleBooks.length === 0 && books.length > 0;
+  const isSearchFiltering =
+    searchQuery.trim() !== "" && visibleBooks.length === 0 && books.length > 0;
+  const hasActiveFilters =
+    category !== "all" || classFilter !== "all" || searchInput.trim() !== "";
 
   const handleViewResource = async (resource) => {
     const { viewUrl } = await getViewUrl(resource.id);
@@ -97,110 +297,28 @@ const StudyNotes = () => {
     document.body.removeChild(link);
   };
 
-  const hasActiveFilters = category !== "all" || classFilter !== "all" || searchInput.trim() !== "";
-
-  const clearAll = () => {
-    setCategory("all");
-    setClassFilter("all");
-    setSearchInput("");
-    setCurrentPage(1);
-  };
-
-  const handleSearchKeyDown = (e) => {
-    if (e.key === "Escape" && searchInput) setSearchInput("");
-  };
-
-  const Masthead = () => (
-    <div className="page-masthead">
-      <nav className="breadcrumb" aria-label="Breadcrumb">
-        <Link to="/"><FaHome /> Home</Link>
-        <FaChevronRight />
-        <span className="breadcrumb-current">Study Notes</span>
-      </nav>
-      <PageHeader
-        title="Study Notes & References"
-        description="Curated academic materials to support focused learning."
-      />
-    </div>
-  );
-
-  const Toolbar = () => (
-    <div className="toolbar-panel">
-      <div className="toolbar-row">
-        <div className="search-field">
-          <FaSearch className="search-icon-leading" />
-          <input
-            type="text"
-            placeholder="Search by title…"
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            onKeyDown={handleSearchKeyDown}
-            aria-label="Search study notes by title"
-          />
-          {searchInput && (
-            <button className="search-clear" onClick={() => setSearchInput("")} aria-label="Clear search">
-              <FaTimes />
-            </button>
-          )}
-        </div>
-
-        <div className="level-switch">
-          <button className={level === "primary" ? "active" : ""} onClick={() => setLevel("primary")}>Primary</button>
-          <button className={level === "secondary" ? "active" : ""} onClick={() => setLevel("secondary")}>Secondary</button>
-        </div>
-
-        <select
-          className="filter-select"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          aria-label="Filter by category"
-        >
-          <option value="all">All Categories</option>
-          {categories.map((c) => (
-            <option key={c.id} value={c.category}>{c.category}</option>
-          ))}
-        </select>
-
-        <select
-          className="filter-select"
-          value={classFilter}
-          onChange={(e) => setClassFilter(e.target.value)}
-          aria-label="Filter by class"
-        >
-          <option value="all">All Classes</option>
-          {classes.map((c, i) => (
-            <option key={i} value={c.class}>{c.class}</option>
-          ))}
-        </select>
-
-        {hasActiveFilters && (
-          <button className="toolbar-clear" onClick={clearAll}>Clear</button>
-        )}
-      </div>
-
-      {hasActiveFilters && (
-        <div className="active-chips">
-          {category !== "all" && (
-            <span className="chip">{category}<button onClick={() => setCategory("all")} aria-label="Remove category filter"><FaTimes /></button></span>
-          )}
-          {classFilter !== "all" && (
-            <span className="chip">{classFilter}<button onClick={() => setClassFilter("all")} aria-label="Remove class filter"><FaTimes /></button></span>
-          )}
-          {searchInput.trim() !== "" && (
-            <span className="chip">"{searchInput.trim()}"<button onClick={() => setSearchInput("")} aria-label="Clear search term"><FaTimes /></button></span>
-          )}
-        </div>
-      )}
-    </div>
-  );
-
   if (loading && books.length === 0) {
     return (
       <>
         <Header />
         <main className="study-page">
           <Masthead />
-          <Toolbar />
+          <Toolbar
+            level={level}
+            setLevel={setLevel}
+            category={category}
+            setCategory={setCategory}
+            classFilter={classFilter}
+            setClassFilter={setClassFilter}
+            searchInput={searchInput}
+            onSearchChange={handleSearchChange}
+            onSearchClear={handleSearchClear}
+            onSearchKeyDown={handleSearchKeyDown}
+            hasActiveFilters={hasActiveFilters}
+            clearAll={clearAll}
+            categories={categories}
+            classes={classes}
+          />
           <SkeletonGrid count={itemsPerPage} />
         </main>
         <Footer />
@@ -230,12 +348,27 @@ const StudyNotes = () => {
       <Header />
       <main className="study-page">
         <Masthead />
-        <Toolbar />
+        <Toolbar
+          level={level}
+          setLevel={setLevel}
+          category={category}
+          setCategory={setCategory}
+          classFilter={classFilter}
+          setClassFilter={setClassFilter}
+          searchInput={searchInput}
+          onSearchChange={handleSearchChange}
+          onSearchClear={handleSearchClear}
+          onSearchKeyDown={handleSearchKeyDown}
+          hasActiveFilters={hasActiveFilters}
+          clearAll={clearAll}
+          categories={categories}
+          classes={classes}
+        />
 
         <section className="materials">
           {visibleBooks.length > 0 ? (
             <div className="materials-grid">
-              {visibleBooks.map((resource, index) => (   // <-- added index
+              {visibleBooks.map((resource, index) => (
                 <ResourceCard
                   key={resource.id}
                   title={resource.title}
@@ -246,7 +379,7 @@ const StudyNotes = () => {
                   year={resource.year}
                   onView={() => handleViewResource(resource)}
                   onDownload={() => handleDownloadResource(resource)}
-                  style={{ animationDelay: `${index * 0.05}s` }}  // <-- staggered animation
+                  style={{ animationDelay: `${index * 0.05}s` }}
                 />
               ))}
             </div>

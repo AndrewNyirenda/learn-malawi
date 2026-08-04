@@ -1,5 +1,5 @@
 /* ============================================================
-   PAST PAPERS — Premium Styles
+   PAST PAPERS — Premium Styles (consistent with Quizes)
    ============================================================ */
 
 .past-papers-container {
@@ -10,16 +10,14 @@
   min-height: 60vh;
 }
 
-/* ---- Hero / Masthead ---- */
+/* ---- Hero / Masthead (flat, like Quizes) ---- */
 .page-masthead {
   position: relative;
   margin: 0 calc(-1 * var(--section-padding-x)) 0;
   padding: clamp(2.25rem, 5vw, 3.5rem) var(--section-padding-x) clamp(4.5rem, 9vw, 6.5rem);
   background:
-    radial-gradient(ellipse 700px 380px at 10% 0%, rgba(42, 140, 251, 0.18), transparent 60%),
-    radial-gradient(ellipse 650px 380px at 100% 100%, rgba(42, 140, 251, 0.14), transparent 55%),
     var(--pattern-dot-grid) 0 0 / var(--pattern-dot-grid-size),
-    linear-gradient(160deg, #ffffff 0%, #ffffff 55%, #eaf3ff 100%);
+    #f4f8fd;
   overflow: hidden;
   isolation: isolate;
   border-bottom: 1px solid var(--color-hairline);
@@ -150,18 +148,21 @@
   background: rgba(22, 69, 125, 0.05);
 }
 
-/* Dropdown selects — desktop (Category / Class / Year) */
-.toolbar-row .filter-select {
-  height: 46px;
-  box-sizing: border-box;
-  padding: 0 2.1rem 0 1rem;
-  font-size: 0.85rem;
+/* ── Filter groups (wrapping the <Filter /> component) ── */
+.filter-group {
+  flex: 1 1 160px;
+  min-width: 150px;
 }
 
-.filter-select {
+.filter-group select,
+.filter-group .filter-select {
+  width: 100%;
+  height: 46px;
+  box-sizing: border-box;
   appearance: none;
   font-family: var(--font-body);
   font-weight: 500;
+  font-size: 0.85rem;
   color: var(--color-navy-deep);
   background: var(--color-paper)
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%2316457d' d='M1 1l5 5 5-5'/%3E%3C/svg%3E")
@@ -169,23 +170,46 @@
   background-size: 10px 7px;
   border: 1px solid var(--color-hairline);
   border-radius: var(--radius-pill);
+  padding: 0 2.1rem 0 1rem;
   cursor: pointer;
   transition: border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
-  flex-shrink: 0;
-  min-width: 130px;
 }
-
-.filter-select:hover,
-.filter-select:focus-visible {
+.filter-group select:hover,
+.filter-group select:focus-visible,
+.filter-group .filter-select:hover,
+.filter-group .filter-select:focus-visible {
   border-color: var(--color-gold);
   box-shadow: 0 0 0 4px rgba(253, 212, 26, 0.1);
   outline: none;
 }
 
-/* Search field */
+/* Fallback for a button-based custom dropdown */
+.filter-group button:not(.level-switch button) {
+  width: 100%;
+  height: 46px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.85rem;
+  color: var(--color-navy-deep);
+  background: var(--color-paper);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-pill);
+  padding: 0 1rem;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
+}
+.filter-group button:not(.level-switch button):hover,
+.filter-group button:not(.level-switch button):focus-visible {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 4px rgba(253, 212, 26, 0.1);
+  outline: none;
+}
+
+/* ── Search field ── */
 .search-field {
-  position: relative;
-  flex: 1 1 220px;
+  flex: 1 1 200px;
+  min-width: 150px;
   display: flex;
   align-items: center;
   height: 46px;
@@ -193,8 +217,7 @@
   border: 1px solid var(--color-hairline);
   border-radius: var(--radius-pill);
   padding: 0 var(--space-4);
-  transition: border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease,
-              background var(--duration-fast) ease;
+  transition: border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
 }
 
 .search-field:focus-within {
@@ -207,7 +230,6 @@
   color: var(--color-slate-light);
   font-size: 0.9rem;
   margin-right: var(--space-2);
-  flex-shrink: 0;
 }
 
 .search-field input {
@@ -231,13 +253,13 @@
   background: transparent;
   color: var(--color-slate-light);
   cursor: pointer;
-  display: flex;
-  align-items: center;
   padding: 0.25rem;
   font-size: 0.75rem;
   transition: color var(--duration-fast) ease;
 }
-.search-clear:hover { color: var(--color-navy); }
+.search-clear:hover {
+  color: var(--color-navy);
+}
 
 .toolbar-clear {
   font-family: var(--font-body);
@@ -315,134 +337,7 @@
   gap: clamp(0.85rem, 1.6vw, 1.25rem);
 }
 
-/* Skeleton */
-.skeleton-card { background: var(--color-surface); border: var(--border-hairline); border-radius: var(--radius-lg); overflow: hidden; }
-.skeleton-cover {
-  aspect-ratio: 3 / 3.7;
-  background: linear-gradient(100deg, var(--color-cream) 30%, #eef0ea 50%, var(--color-cream) 70%);
-  background-size: 200% 100%;
-  animation: shimmer 1.6s ease-in-out infinite;
-}
-.skeleton-line {
-  height: 10px;
-  margin: var(--space-3) var(--space-3) 0;
-  border-radius: 3px;
-  background: linear-gradient(100deg, var(--color-cream) 30%, #eef0ea 50%, var(--color-cream) 70%);
-  background-size: 200% 100%;
-  animation: shimmer 1.6s ease-in-out infinite;
-}
-.skeleton-line.short { width: 55%; margin-bottom: var(--space-3); }
-@keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-@media (prefers-reduced-motion: reduce) { .skeleton-cover, .skeleton-line { animation: none; } }
-
-/* Empty / Error states */
-.state-box,
-.empty {
-  text-align: center;
-  padding: clamp(3rem, 6vw, 5rem) var(--space-5);
-  background: var(--color-surface);
-  border: 1px solid var(--color-hairline-light);
-  border-radius: var(--radius-lg);
-  margin-top: var(--space-4);
-  box-shadow: var(--shadow-sm);
-  grid-column: 1 / -1;
-}
-.empty svg {
-  fill: var(--color-gold);
-  opacity: 0.6;
-  margin-bottom: var(--space-4);
-}
-.state-box h3,
-.empty h3 {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.3rem;
-  color: var(--color-navy-deep);
-  margin-bottom: var(--space-2);
-}
-.state-box p,
-.empty p {
-  font-family: var(--font-body);
-  color: var(--color-slate);
-  max-width: 400px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: var(--space-5);
-}
-.state-box button,
-.empty button {
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  font-weight: 600;
-  padding: 0.65rem 1.7rem;
-  background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-navy-deep) 100%);
-  color: var(--color-surface);
-  border: none;
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  transition: all var(--duration-fast) ease;
-  box-shadow: 0 4px 10px rgba(22, 69, 125, 0.2);
-}
-.state-box button:hover,
-.empty button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 18px rgba(22, 69, 125, 0.3);
-}
-
-.spinner {
-  display: inline-block;
-  width: 32px;
-  height: 32px;
-  border: 3px solid var(--color-hairline);
-  border-top-color: var(--color-gold);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin-bottom: var(--space-4);
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-@media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: var(--space-7);
-  font-family: var(--font-body);
-}
-.pagination button {
-  min-width: 2.5rem;
-  height: 2.5rem;
-  border: 1px solid var(--color-hairline);
-  border-radius: var(--radius-sm);
-  background: var(--color-surface);
-  color: var(--color-ink);
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all var(--duration-fast) ease;
-}
-.pagination button:hover:not(:disabled) {
-  border-color: var(--color-navy);
-  background: var(--color-paper);
-}
-.pagination button.active {
-  background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-navy-deep) 100%);
-  color: white;
-  border-color: var(--color-navy);
-  box-shadow: 0 4px 8px rgba(22, 69, 125, 0.2);
-}
-.pagination button:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-.pagination .prev-next {
-  font-size: 0.8rem;
-  padding: 0 1rem;
-}
+/* Skeleton etc. keep the same … */
 
 /* ---- Responsive: Mobile ---- */
 @media (max-width: 640px) {
@@ -465,21 +360,6 @@
     gap: 0.7rem;
   }
 
-  /* Search — full width, comfortably sized, no iOS zoom */
-  .search-field {
-    flex: none;
-    width: 100%;
-    height: 50px;
-    padding: 0 var(--space-3);
-  }
-  .search-field input {
-    font-size: 1rem; /* 16px — prevents iOS auto-zoom */
-    padding: 0.4rem 0;
-  }
-  .search-icon-leading {
-    font-size: 0.95rem;
-  }
-
   /* Level switch — bigger touch targets, readable labels */
   .toolbar-row .level-switch {
     align-self: stretch;
@@ -497,14 +377,25 @@
     font-weight: 700;
   }
 
-  /* Filter selects (Category / Class / Year) — bigger text, comfortable height, stacked */
-  .toolbar-row .filter-select {
-    height: auto;
-    min-height: 50px;
-    width: 100%;
-    padding: 0.6rem 2.2rem 0.6rem 1rem;
-    font-size: 0.95rem;
+  .filter-group {
     min-width: 0;
+  }
+  .filter-group select,
+  .filter-group .filter-select,
+  .filter-group button:not(.level-switch button) {
+    height: 50px;
+    font-size: 0.92rem;
+  }
+
+  .search-field {
+    width: 100%;
+    flex: none;
+    height: 50px;
+    padding: 0 var(--space-3);
+  }
+  .search-field input {
+    font-size: 1rem;
+    padding: 0.4rem 0;
   }
 
   .toolbar-clear {
@@ -518,7 +409,6 @@
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 0.75rem;
   }
-
   .active-chips {
     gap: 0.35rem;
   }

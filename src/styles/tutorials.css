@@ -576,3 +576,61 @@
   from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* Filter groups (wrapping the <Filter /> component) */
+.filter-group {
+  flex: 1 1 160px;
+  min-width: 150px;
+}
+
+.filter-group select,
+.filter-group .filter-select {
+  width: 100%;
+  height: 46px;
+  box-sizing: border-box;
+  appearance: none;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.85rem;
+  color: var(--color-navy-deep);
+  background: var(--color-paper)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%2316457d' d='M1 1l5 5 5-5'/%3E%3C/svg%3E")
+    no-repeat right 0.9rem center;
+  background-size: 10px 7px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-pill);
+  padding: 0 2.1rem 0 1rem;
+  cursor: pointer;
+  transition: border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
+}
+.filter-group select:hover,
+.filter-group select:focus-visible,
+.filter-group .filter-select:hover,
+.filter-group .filter-select:focus-visible {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 4px rgba(253, 212, 26, 0.1);
+  outline: none;
+}
+
+/* Fallback for a button-based custom dropdown */
+.filter-group button:not(.level-switch button) {
+  width: 100%;
+  height: 46px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.85rem;
+  color: var(--color-navy-deep);
+  background: var(--color-paper);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-pill);
+  padding: 0 1rem;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
+}
+.filter-group button:not(.level-switch button):hover,
+.filter-group button:not(.level-switch button):focus-visible {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 4px rgba(253, 212, 26, 0.1);
+  outline: none;
+}

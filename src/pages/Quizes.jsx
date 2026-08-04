@@ -1,3 +1,4 @@
+// pages/Quizes.jsx
 import React, { useState, useEffect } from "react";
 import { useQuizzes } from '../contexts/QuizzesContext';
 import { useNavigate } from "react-router-dom";
@@ -151,57 +152,60 @@ const Quizes = () => {
             description="Test your knowledge across various subjects and classes. Select your level and use filters to find the perfect quiz."
           />
         </div>
-        
-        <div className="level-switch">
-          <button
-            className={level === "primary" ? "active" : ""}
-            onClick={() => setLevel("primary")}
-          >
-            Primary Level
-          </button>
-          <button
-            className={level === "secondary" ? "active" : ""}
-            onClick={() => setLevel("secondary")}
-          >
-            Secondary Level
-          </button>
-        </div>
-        
-        <div className="qz-filters">
-          <div className="filter-group">
-            <Filter
-              id="subject"
-              value={subjectFilter}
-              onChange={setSubjectFilter}
-              options={subjectOptions}
-              showAllOption={false}
-              placeholder="Select subject"
-              disabled={loading}
-            />
-          </div>
-          
-          <div className="filter-group">
-            <Filter
-              id="class"
-              value={classFilter}
-              onChange={setClassFilter}
-              options={classOptions}
-              showAllOption={false}
-              placeholder="Select class"
-              disabled={loading}
-            />
-          </div>
-          
-          <div className="filter-group">
-            <Filter
-              id="difficulty"
-              value={difficultyFilter}
-              onChange={setDifficultyFilter}
-              options={difficultyOptions}
-              showAllOption={false}
-              placeholder="Select difficulty"
-              disabled={loading}
-            />
+
+        {/* ===== TOOLBAR (level switch + filters combined) ===== */}
+        <div className="toolbar-panel">
+          <div className="toolbar-row">
+            <div className="level-switch">
+              <button
+                className={level === "primary" ? "active" : ""}
+                onClick={() => setLevel("primary")}
+              >
+                Primary Level
+              </button>
+              <button
+                className={level === "secondary" ? "active" : ""}
+                onClick={() => setLevel("secondary")}
+              >
+                Secondary Level
+              </button>
+            </div>
+
+            <div className="filter-group">
+              <Filter
+                id="subject"
+                value={subjectFilter}
+                onChange={setSubjectFilter}
+                options={subjectOptions}
+                showAllOption={false}
+                placeholder="Select subject"
+                disabled={loading}
+              />
+            </div>
+
+            <div className="filter-group">
+              <Filter
+                id="class"
+                value={classFilter}
+                onChange={setClassFilter}
+                options={classOptions}
+                showAllOption={false}
+                placeholder="Select class"
+                disabled={loading}
+              />
+            </div>
+
+            <div className="filter-group">
+              <Filter
+                id="difficulty"
+                value={difficultyFilter}
+                onChange={setDifficultyFilter}
+                options={difficultyOptions}
+                showAllOption={false}
+                placeholder="Select difficulty"
+                disabled={loading}
+              />
+            </div>
           </div>
         </div>
         
@@ -216,10 +220,8 @@ const Quizes = () => {
             ) : (
               contextQuizzes?.map((quiz) => (
                 <div key={quiz.id} className="qz-card">
-                  {/* Gold accent bar */}
                   <div className="qz-card-accent"></div>
-                  
-                  {/* Header - Navy gradient with pattern */}
+
                   <div className="qz-card-header">
                     <h3>{quiz.title}</h3>
                     <div className="qz-badges">
@@ -231,32 +233,31 @@ const Quizes = () => {
                       </span>
                     </div>
                   </div>
-                  
-                  {/* Card Body - Stats with icons */}
+
+                  {/* Medallion badge */}
+                  <div className="qz-card-medallion" aria-hidden="true">
+                    <FaQuestionCircle />
+                  </div>
+
                   <div className="qz-card-body">
                     <div className="qz-meta">
                       <div className="qz-meta-item">
-                        <FaQuestionCircle className="qz-meta-icon" />
+                        <span className="qz-meta-icon"><FaQuestionCircle /></span>
                         <span className="qz-meta-value">{quiz.questions?.length || 0} Questions</span>
                       </div>
                       <div className="qz-meta-item">
-                        <FaClock className="qz-meta-icon" />
+                        <span className="qz-meta-icon"><FaClock /></span>
                         <span className="qz-meta-value">{formatTime(calculateTotalTime(quiz.questions))}</span>
                       </div>
                     </div>
-                    {/* Subject & Class info */}
                     <div className="qz-meta-tags">
                       <span className="qz-subject-tag">{quiz.subject || 'General'}</span>
                       <span className="qz-class-tag">Class {quiz.class || 'N/A'}</span>
                     </div>
                   </div>
-                  
-                  {/* Card Footer - Take Quiz Button */}
+
                   <div className="qz-card-footer">
-                    <button 
-                      onClick={() => handleStart(quiz)} 
-                      className="qz-start-btn"
-                    >
+                    <button onClick={() => handleStart(quiz)} className="qz-start-btn">
                       Take Quiz <FaArrowRight className="qz-btn-icon" />
                     </button>
                   </div>
