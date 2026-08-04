@@ -219,7 +219,7 @@ const GlobalSearchPage = () => {
           setSearchValue={setQuery}
         />
 
-        {/* Results count – moved here */}
+        {/* Results count */}
         {total > 0 && (
           <div className="search-results-count-wrapper">
             <span className="search-results-count">{total} results</span>
@@ -245,9 +245,9 @@ const GlobalSearchPage = () => {
             </div>
           )}
         </section>
-
-        <Footer />
       </div>
+      {/* 👇 Footer moved OUTSIDE the container so it spans full width */}
+      <Footer />
     </>
   );
 };

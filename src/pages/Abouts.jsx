@@ -1,3 +1,4 @@
+// pages/About.jsx
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../styles/abouts.css";
@@ -25,35 +26,33 @@ import Header from "../components/Header.jsx";
 
 // ─── Masthead (matches other pages) ──────────────────────────────
 const Masthead = () => (
-  <div className="page-masthead">
-    <div className="masthead-inner">
-      <nav className="breadcrumb" aria-label="Breadcrumb">
+  <div className="about-page-masthead">
+    <div className="about-masthead-inner">
+      <nav className="about-breadcrumb" aria-label="Breadcrumb">
         <Link to="/"><FaHome /> Home</Link>
         <FaChevronRight />
-        <span className="breadcrumb-current">About</span>
+        <span className="about-breadcrumb-current">About</span>
       </nav>
 
-      <div className="masthead-eyebrow">
-        <span className="masthead-eyebrow-icon">
+      <div className="about-masthead-eyebrow">
+        <span className="about-masthead-eyebrow-icon">
           <FaInfoCircle />
         </span>
         Our Story
       </div>
 
-      <h1 className="masthead-title">
-        About <span className="masthead-title-accent">Learn Malawi</span>
+      <h1 className="about-masthead-title">
+        About <span className="about-masthead-title-accent">Learn Malawi</span>
       </h1>
 
-      <p className="masthead-desc">
+      <p className="about-masthead-desc">
         Free, quality digital education for every Malawian secondary student.
       </p>
 
-      <div className="masthead-meta">
-        <span className="masthead-meta-item">Mission Driven</span>
-        <span className="masthead-meta-dot" />
-        <span className="masthead-meta-item">Free Access</span>
-        <span className="masthead-meta-dot" />
-        <span className="masthead-meta-item">Built for Malawi</span>
+      <div className="about-masthead-meta">
+        <span className="about-masthead-meta-item">Mission Driven</span>
+        <span className="about-masthead-meta-item">Free Access</span>
+        <span className="about-masthead-meta-item">Built for Malawi</span>
       </div>
     </div>
   </div>
@@ -149,8 +148,7 @@ const About = () => {
   return (
     <>
       <Header />
-      <div className="about-wrapper">
-        {/* ===== HERO ===== */}
+      <div className="about-container">
         <Masthead />
 
         {/* ===== STORY ===== */}
