@@ -5,7 +5,7 @@ import "../styles/contact.css";
 import Footer from "../components/Footer.jsx";
 import Header from "../components/Header.jsx";
 
-import contactHero from "../images/contact2.jpg";
+import contactHero from "../images/contact1.jpg";
 
 import {
   FaHome,

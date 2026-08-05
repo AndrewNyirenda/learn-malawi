@@ -17,6 +17,8 @@ import {
   FaHome,
   FaChevronRight,
   FaInfoCircle,
+  FaShieldAlt,
+  FaQuoteLeft,
 } from "react-icons/fa";
 import inno from "../images/inno.jpg";
 import willard from "../images/willard.JPG";
@@ -24,9 +26,22 @@ import andrew from "../images/andrew.jpg";
 import Footer from "../components/Footer.jsx";
 import Header from "../components/Header.jsx";
 
-// ─── Masthead (matches other pages) ──────────────────────────────
+// ─── Masthead (matches other pages, now with a stats ledger + seal) ──
 const Masthead = () => (
   <div className="about-page-masthead">
+    <div className="about-masthead-stamp" aria-hidden="true">
+      <span className="about-masthead-stamp-ring" />
+      <span className="about-masthead-stamp-ring about-masthead-stamp-ring--inner" />
+      <span className="about-masthead-stamp-core">
+        <FaShieldAlt className="about-masthead-stamp-icon" />
+        <span className="about-masthead-stamp-text">
+          Est.
+          <br />
+          Malawi
+        </span>
+      </span>
+    </div>
+
     <div className="about-masthead-inner">
       <nav className="about-breadcrumb" aria-label="Breadcrumb">
         <Link to="/"><FaHome /> Home</Link>
@@ -48,6 +63,21 @@ const Masthead = () => (
       <p className="about-masthead-desc">
         Free, quality digital education for every Malawian secondary student.
       </p>
+
+      <div className="about-masthead-stats">
+        <div className="about-masthead-stat">
+          <span className="about-masthead-stat-value">3</span>
+          <span className="about-masthead-stat-label">Team Members</span>
+        </div>
+        <div className="about-masthead-stat">
+          <span className="about-masthead-stat-value">28</span>
+          <span className="about-masthead-stat-label">Districts Reached</span>
+        </div>
+        <div className="about-masthead-stat">
+          <span className="about-masthead-stat-value">100<span className="unit">%</span></span>
+          <span className="about-masthead-stat-label">Free Access</span>
+        </div>
+      </div>
 
       <div className="about-masthead-meta">
         <span className="about-masthead-meta-item">Mission Driven</span>
@@ -176,6 +206,7 @@ const About = () => {
 
             <div className="about-story-image">
               <div className="about-story-placeholder">
+                <FaQuoteLeft className="about-story-quote-mark" />
                 <div className="about-story-content">
                   <FaGraduationCap className="about-story-icon" />
                   <span>Empowering Malawi's Future</span>
@@ -192,6 +223,7 @@ const About = () => {
               const Icon = item.icon;
               return (
                 <div key={index} className="about-mv-block">
+                  <span className="about-mv-index">0{index + 1}</span>
                   <div className="about-mv-icon-wrap">
                     <Icon className="about-mv-icon" />
                   </div>
