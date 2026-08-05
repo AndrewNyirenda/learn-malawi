@@ -2,7 +2,7 @@
 @import "./theme.css";
 
 /* ============================================================
-   HEADER — Complete Styles
+   HEADER — Enhanced, with flat desktop, tablet dropdown
    ============================================================ */
 
 .HeaderWrapper {
@@ -14,14 +14,26 @@
   justify-content: space-between;
   gap: clamp(1rem, 3vw, 2.5rem);
   padding: 0 clamp(1.25rem, 3vw, 2.5rem);
-  height: 78px;
-  background: var(--color-navy-deep);
+  height: 88px;
+  background: linear-gradient(135deg, var(--color-navy-deep) 0%, var(--color-navy) 100%);
   border-bottom: 3px solid var(--color-gold);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.04);
   font-family: var(--font-body);
 }
 
-/* ---- Logo ---- */
+/* subtle gold glow below border */
+.HeaderWrapper::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 10%;
+  width: 80%;
+  height: 6px;
+  background: radial-gradient(ellipse, rgba(253, 212, 26, 0.25), transparent 70%);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
 .LogoWrapper {
   display: flex;
   align-items: center;
@@ -29,7 +41,7 @@
 }
 
 .LogoWrapper img#Logo {
-  height: 68px;
+  height: 80px;
   width: auto;
   display: block;
   transition: opacity var(--duration-fast) ease, transform 0.3s ease;
@@ -37,14 +49,13 @@
 
 .LogoWrapper a:hover img#Logo {
   opacity: 0.85;
-  transform: scale(1.02);
+  transform: scale(1.03);
 }
 
-/* ---- Desktop Navigation ---- */
 .Menu {
   display: flex;
   align-items: center;
-  gap: clamp(0.5rem, 2vw, 1.75rem);
+  gap: clamp(0.5rem, 1.6vw, 1.6rem);
 }
 
 .nav-link {
@@ -52,7 +63,7 @@
   font-size: 0.92rem;
   font-weight: 500;
   letter-spacing: 0.02em;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.85);
   text-decoration: none;
   background: none;
   border: none;
@@ -94,7 +105,7 @@
 }
 
 /* ============================================================
-   RESOURCES DROPDOWN (desktop mega-panel)
+   RESOURCES DROPDOWN (tablet only)
    ============================================================ */
 
 .nav-dropdown {
@@ -113,7 +124,7 @@
   font-size: 0.6rem;
   color: rgba(255, 255, 255, 0.6);
   transition: transform var(--duration-fast) var(--ease-standard),
-    color var(--duration-fast) ease;
+              color var(--duration-fast) ease;
 }
 
 .nav-dropdown-trigger:hover .chevron,
@@ -140,7 +151,8 @@
   visibility: hidden;
   pointer-events: none;
   transition: opacity var(--duration-fast) var(--ease-standard),
-    transform var(--duration-fast) var(--ease-standard), visibility var(--duration-fast);
+              transform var(--duration-fast) var(--ease-standard),
+              visibility var(--duration-fast);
   z-index: var(--z-search-dropdown);
 }
 
@@ -217,72 +229,136 @@
 }
 
 /* ============================================================
-   DESKTOP SEARCH
+   SEARCH BAR — white bg, reduced radius, button on right
    ============================================================ */
 
 .desktop-search {
   position: relative;
   display: flex;
   align-items: center;
-  margin-left: var(--space-3);
+  gap: var(--space-2);
 }
 
-.search-form {
-  display: flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 999px;
-  overflow: hidden;
-  transition: background var(--duration-fast) ease, border-color var(--duration-fast) ease;
-}
-
-.desktop-search.search-open .search-form {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: var(--color-gold-bright);
-  box-shadow: 0 0 0 3px rgba(253, 212, 26, 0.12);
-}
-
-.search-icon-btn {
+/* Toggle button (magnifying glass) – always visible */
+.search-toggle-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0.5rem 0.65rem;
   color: rgba(255, 255, 255, 0.8);
-  font-size: 1.05rem;
-  transition: color var(--duration-fast) ease;
+  font-size: 1.1rem;
+  padding: 0.4rem;
+  transition: color var(--duration-fast) ease, background var(--duration-fast) ease;
+  border-radius: var(--radius-md);
 }
 
-.search-icon-btn:hover {
+.search-toggle-btn:hover {
   color: var(--color-gold-light);
+  background: rgba(255, 255, 255, 0.08);
 }
 
-.search-input {
+/* Search form – input and submit button */
+.desktop-search .search-form {
+  display: flex;
+  align-items: center;
+  background: var(--color-surface);
+  border: 1px solid var(--color-hairline);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color var(--duration-fast) ease,
+              box-shadow var(--duration-fast) ease,
+              width var(--duration-base) var(--ease-standard),
+              opacity var(--duration-fast) ease;
   width: 0;
   opacity: 0;
+  pointer-events: none;
+}
+
+.desktop-search.search-open .search-form {
+  width: 280px;
+  opacity: 1;
+  pointer-events: auto;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(253, 212, 26, 0.12);
+}
+
+.desktop-search .search-input {
+  flex: 1;
+  min-width: 0;
   background: transparent;
   border: none;
   outline: none;
-  color: #ffffff;
+  padding: 0.5rem 0.8rem;
   font-family: var(--font-body);
-  font-size: 0.88rem;
-  transition: width var(--duration-base) var(--ease-standard), opacity var(--duration-fast) ease,
-    padding var(--duration-base) ease;
+  font-size: 0.9rem;
+  color: var(--color-ink);
 }
 
-.search-input::placeholder {
-  color: var(--color-text-on-dark-muted);
+.desktop-search .search-input::placeholder {
+  color: var(--color-slate-light);
 }
 
-.search-open .search-input {
-  width: 240px;
-  opacity: 1;
-  padding-right: var(--space-4);
+.desktop-search .search-submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-gold);
+  border: none;
+  color: var(--color-navy-deep);
+  padding: 0.5rem 0.8rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background var(--duration-fast) ease, transform var(--duration-fast) ease;
+  height: 100%;
+  border-radius: 0;
 }
 
+.desktop-search .search-submit-btn:hover {
+  background: var(--color-gold-bright);
+  transform: scale(1.02);
+}
+
+/* Mobile search – same treatment */
+.mobile-search-input {
+  flex: 1;
+  min-width: 0;
+  background: var(--color-surface);
+  color: var(--color-ink);
+  border-radius: 8px;
+  border: 1px solid var(--color-hairline);
+  padding: 0.7rem var(--space-4);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color var(--duration-fast) ease, background var(--duration-fast) ease;
+}
+
+.mobile-search-input:focus {
+  border-color: var(--color-gold);
+  background: var(--color-surface);
+}
+
+.mobile-search-submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-gold);
+  border: none;
+  color: var(--color-navy-deep);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  border-radius: 8px;
+  transition: background var(--duration-fast) ease, transform var(--duration-fast) ease;
+}
+
+.mobile-search-submit-btn:hover {
+  background: var(--color-gold-bright);
+}
+
+/* Suggestions (unchanged) */
 .search-suggestions {
   position: absolute;
   top: calc(100% + 10px);
@@ -309,8 +385,9 @@
   padding: 0.4rem 0.75rem;
   border-radius: 999px;
   text-decoration: none;
-  transition: background var(--duration-fast) ease, border-color var(--duration-fast) ease,
-    color var(--duration-fast) ease;
+  transition: background var(--duration-fast) ease,
+              border-color var(--duration-fast) ease,
+              color var(--duration-fast) ease;
 }
 
 .search-suggestion-chip:hover {
@@ -326,12 +403,8 @@
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* ============================================================
@@ -341,7 +414,7 @@
 .mobile-top-bar {
   display: none;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   width: 100%;
 }
 
@@ -351,7 +424,6 @@
   gap: var(--space-2);
 }
 
-/* Unified 44x44 tap target for all mobile header icon buttons */
 .icon-btn {
   display: flex;
   align-items: center;
@@ -375,7 +447,7 @@
 }
 
 /* ============================================================
-   MOBILE DRAWER (nav)
+   MOBILE DRAWER
    ============================================================ */
 
 .MobileDrawer {
@@ -409,12 +481,19 @@
   flex-shrink: 0;
 }
 
-.drawer-title {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: #ffffff;
-  letter-spacing: 0.01em;
+.drawer-logo {
+  display: flex;
+  align-items: center;
+}
+
+.drawer-logo img {
+  height: 44px;
+  width: auto;
+  display: block;
+}
+
+.drawer-logo a:hover img {
+  opacity: 0.85;
 }
 
 .drawer-scroll {
@@ -456,14 +535,12 @@
   border-left-color: var(--color-gold-bright);
 }
 
-/* Accordion trigger row */
 .drawer-accordion-trigger {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-/* Smoothly animated by inline max-height set from scrollHeight in JS */
 .drawer-accordion-panel {
   overflow: hidden;
   transition: max-height var(--duration-base) var(--ease-standard);
@@ -529,7 +606,6 @@
   line-height: 1.3;
 }
 
-/* ---- Backdrop ---- */
 .backdrop {
   position: fixed;
   inset: 0;
@@ -554,7 +630,8 @@
   opacity: 0;
   visibility: hidden;
   transition: transform var(--duration-base) var(--ease-standard),
-    opacity var(--duration-fast) ease, visibility var(--duration-base);
+              opacity var(--duration-fast) ease,
+              visibility var(--duration-base);
   padding-top: env(safe-area-inset-top);
 }
 
@@ -576,11 +653,7 @@
 .mobile-search-input {
   flex: 1;
   min-width: 0;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 999px;
   padding: 0.7rem var(--space-4);
-  color: #ffffff;
   font-family: var(--font-body);
   font-size: 1rem;
   outline: none;
@@ -588,12 +661,8 @@
 }
 
 .mobile-search-input:focus {
-  border-color: var(--color-gold-bright);
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.mobile-search-input::placeholder {
-  color: var(--color-text-on-dark-muted);
+  border-color: var(--color-gold);
+  background: var(--color-surface);
 }
 
 .mobile-search-body {
@@ -654,67 +723,83 @@
 }
 
 /* ============================================================
-   RESPONSIVE BREAKPOINT (phones + tablets, incl. iPad)
+   RESPONSIVE BREAKPOINTS
    ============================================================ */
 
-@media (max-width: 1023.98px) {
+/* mobile (< 768px) */
+@media (max-width: 767.98px) {
   .HeaderWrapper {
-    height: 62px;
+    height: 70px;
     padding: 0 var(--space-4);
     border-bottom: 2px solid var(--color-gold);
   }
-
+  .HeaderWrapper::after {
+    display: none;
+  }
   .mobile-top-bar {
     display: flex;
   }
-
-  .HeaderWrapper > .LogoWrapper {
-    display: none;
-  }
-
-  .LogoWrapper img#Logo {
-    height: 46px;
-  }
-
-  .backdrop {
-    top: 0;
-  }
-}
-
-/* Slightly larger touch spacing / drawer width on tablets */
-@media (min-width: 600px) and (max-width: 1023.98px) {
-  .HeaderWrapper {
-    height: 72px;
-    padding: 0 var(--space-6);
-  }
-
   .LogoWrapper img#Logo {
     height: 52px;
   }
-
-  .MobileDrawer {
-    width: min(50vw, 400px);
+  .Menu {
+    display: none;
   }
-
-  .mobile-search-bar {
-    padding: var(--space-3) var(--space-6);
-  }
-
-  .mobile-search-body {
-    padding: var(--space-5) var(--space-4) var(--space-8);
-  }
-}
-
-@media (min-width: 1024px) {
-  .backdrop {
+  .desktop-search {
     display: none;
   }
 }
 
-/* ============================================================
-   ACCESSIBILITY & REDUCED MOTION
-   ============================================================ */
+/* tablet (768 – 1199px) */
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  .HeaderWrapper {
+    height: 76px;
+    padding: 0 var(--space-5);
+  }
+  .LogoWrapper img#Logo {
+    height: 58px;
+  }
+  .Menu {
+    gap: clamp(0.5rem, 1.2vw, 1.2rem);
+  }
+  .nav-link {
+    font-size: 0.85rem;
+  }
+  .desktop-search.search-open .search-form {
+    width: 220px;
+  }
+  .dropdown-panel {
+    min-width: 280px;
+  }
+  .mobile-top-bar {
+    display: none;
+  }
+}
 
+/* desktop (≥ 1200px) */
+@media (min-width: 1200px) {
+  .HeaderWrapper {
+    height: 88px;
+  }
+  .LogoWrapper img#Logo {
+    height: 80px;
+  }
+  .mobile-top-bar {
+    display: none;
+  }
+  /* ensure dropdown is hidden on desktop (flat nav) */
+  .nav-dropdown .dropdown-panel {
+    display: none !important;
+  }
+  .nav-dropdown .chevron {
+    display: none !important;
+  }
+  .nav-dropdown-trigger {
+    pointer-events: none; /* prevent click on desktop */
+  }
+}
+
+/* accessibility & reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .MobileDrawer,
   .mobile-search-overlay,

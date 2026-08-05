@@ -51,17 +51,19 @@ const QUICK_LINKS = [
   { label: "News", to: "/news" },
 ];
 
-const MOBILE_BREAKPOINT = 1024; // covers phones + tablets/iPad
+const MOBILE_BREAKPOINT = 768;    // mobile < 768px
+const TABLET_BREAKPOINT = 1200;   // tablet 768–1199px, desktop ≥ 1200px
 
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [isOpen, setIsOpen] = useState(false); // mobile drawer
+  const [isOpen, setIsOpen] = useState(false);               // mobile drawer
   const [isMobile, setIsMobile] = useState(false);
-  const [resourcesOpen, setResourcesOpen] = useState(false); // desktop dropdown
-  const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false); // mobile accordion
-  const [searchOpen, setSearchOpen] = useState(false); // used by both, but mobile = full overlay
+  const [isTablet, setIsTablet] = useState(false);
+  const [resourcesOpen, setResourcesOpen] = useState(false); // tablet dropdown
+  const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
 
   const dropdownRef = useRef(null);
@@ -69,24 +71,26 @@ const Header = () => {
   const searchInputRef = useRef(null);
   const accordionInnerRef = useRef(null);
 
-  /* ---------- responsive check ---------- */
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    const checkSize = () => {
+      const w = window.innerWidth;
+      setIsMobile(w < MOBILE_BREAKPOINT);
+      setIsTablet(w >= MOBILE_BREAKPOINT && w < TABLET_BREAKPOINT);
+    };
+    checkSize();
+    window.addEventListener("resize", checkSize);
+    return () => window.removeEventListener("resize", checkSize);
   }, []);
 
-  /* ---------- close everything on route change ---------- */
   useEffect(() => {
     setIsOpen(false);
     setMobileResourcesOpen(false);
-    setSearchOpen(false);
     setResourcesOpen(false);
+    setSearchOpen(false);
     setQuery("");
   }, [location.pathname]);
 
-  /* ---------- scroll lock (iOS-safe) ---------- */
+  // scroll lock for mobile
   useEffect(() => {
     const shouldLock = (isOpen && isMobile) || (searchOpen && isMobile);
     if (shouldLock) {
@@ -104,21 +108,13 @@ const Header = () => {
     }
   }, [isOpen, isMobile, searchOpen]);
 
-  /* ---------- outside click (desktop dropdown / desktop search only) ---------- */
+  // outside click for tablet dropdown and desktop search
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (
-        !isMobile &&
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setResourcesOpen(false);
       }
-      if (
-        !isMobile &&
-        searchRef.current &&
-        !searchRef.current.contains(e.target)
-      ) {
+      if (!isMobile && searchRef.current && !searchRef.current.contains(e.target)) {
         setSearchOpen(false);
       }
     };
@@ -126,7 +122,6 @@ const Header = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isMobile]);
 
-  /* ---------- Escape closes everything ---------- */
   useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === "Escape") {
@@ -139,7 +134,6 @@ const Header = () => {
     return () => document.removeEventListener("keydown", handleEsc);
   }, []);
 
-  /* ---------- autofocus search input when opened ---------- */
   useEffect(() => {
     if (searchOpen) {
       const t = setTimeout(() => searchInputRef.current?.focus(), 120);
@@ -147,7 +141,7 @@ const Header = () => {
     }
   }, [searchOpen]);
 
-  const toggleMenu = () => setIsOpen((prev) => !prev);
+  const toggleMenu = () => setIsOpen(prev => !prev);
   const closeMenu = () => {
     setIsOpen(false);
     setMobileResourcesOpen(false);
@@ -170,63 +164,22 @@ const Header = () => {
   };
 
   const filteredQuickLinks = query
-    ? QUICK_LINKS.filter((l) => l.label.toLowerCase().includes(query.toLowerCase()))
+    ? QUICK_LINKS.filter(l => l.label.toLowerCase().includes(query.toLowerCase()))
     : QUICK_LINKS;
 
   const navLinkClass = ({ isActive }) => (isActive ? "nav-link active" : "nav-link");
+  const resourcesActive = RESOURCE_LINKS.some(r => location.pathname.startsWith(r.to));
 
-  const resourcesActive = RESOURCE_LINKS.some((r) =>
-    location.pathname.startsWith(r.to)
-  );
+  // ---- render desktop & tablet navigation ----
+  const renderNav = () => {
+    if (isMobile) return null; // handled separately
 
-  return (
-    <header className="HeaderWrapper">
-      {/* Desktop Logo */}
-      {!isMobile && (
-        <div className="LogoWrapper">
-          <Link to="/" onClick={closeMenu}>
-            <img src={logo} alt="Learn Malawi logo" id="Logo" />
-          </Link>
-        </div>
-      )}
+    return (
+      <nav className="Menu">
+        <NavLink to="/" className={navLinkClass} end>Home</NavLink>
 
-      {/* Mobile Top Bar */}
-      <div className="mobile-top-bar">
-        <div className="LogoWrapper">
-          <Link to="/" onClick={closeMenu}>
-            <img src={logo} alt="Learn Malawi logo" id="Logo" />
-          </Link>
-        </div>
-
-        <div className="mobile-actions">
-          <button
-            type="button"
-            className="icon-btn"
-            aria-label="Search"
-            onClick={openSearch}
-          >
-            <FaSearch />
-          </button>
-
-          <button
-            type="button"
-            className="icon-btn hamburger"
-            aria-label={isOpen ? "Close menu" : "Open menu"}
-            aria-expanded={isOpen}
-            onClick={toggleMenu}
-          >
-            {isOpen ? <FaTimes /> : <FaBars />}
-          </button>
-        </div>
-      </div>
-
-      {/* ============ Desktop Nav ============ */}
-      {!isMobile && (
-        <nav className="Menu">
-          <NavLink to="/" className={navLinkClass} end>
-            Home
-          </NavLink>
-
+        {isTablet ? (
+          // Tablet: Resources dropdown
           <div
             className={`nav-dropdown ${resourcesOpen ? "dropdown-open" : ""}`}
             ref={dropdownRef}
@@ -240,7 +193,7 @@ const Header = () => {
               }`}
               aria-haspopup="true"
               aria-expanded={resourcesOpen}
-              onClick={() => setResourcesOpen((p) => !p)}
+              onClick={() => setResourcesOpen(p => !p)}
             >
               Resources
               <FaChevronDown className={`chevron ${resourcesOpen ? "flipped" : ""}`} />
@@ -256,9 +209,7 @@ const Header = () => {
                     className="dropdown-item"
                     role="menuitem"
                   >
-                    <span className="dropdown-item-icon">
-                      <Icon />
-                    </span>
+                    <span className="dropdown-item-icon"><Icon /></span>
                     <span className="dropdown-item-text">
                       <span className="dropdown-item-label">{label}</span>
                       <span className="dropdown-item-desc">{desc}</span>
@@ -268,43 +219,85 @@ const Header = () => {
               </div>
             </div>
           </div>
+        ) : (
+          // Desktop: flat resources (no dropdown)
+          RESOURCE_LINKS.map(({ to, label }) => (
+            <NavLink key={to} to={to} className={navLinkClass}>
+              {label}
+            </NavLink>
+          ))
+        )}
 
-          <NavLink to="/quizes" className={navLinkClass}>
-            Quizzes
-          </NavLink>
-          <NavLink to="/news" className={navLinkClass}>
-            News
-          </NavLink>
-          <NavLink to="/abouts" className={navLinkClass}>
-            About
-          </NavLink>
-          <NavLink to="/contact" className={navLinkClass}>
-            Contact
-          </NavLink>
-        </nav>
+        <NavLink to="/quizes" className={navLinkClass}>Quizzes</NavLink>
+        <NavLink to="/news" className={navLinkClass}>News</NavLink>
+        <NavLink to="/abouts" className={navLinkClass}>About</NavLink>
+        <NavLink to="/contact" className={navLinkClass}>Contact</NavLink>
+      </nav>
+    );
+  };
+
+  return (
+    <header className="HeaderWrapper">
+      {/* Logo – always visible on desktop/tablet, hidden on mobile (shown in drawer) */}
+      {!isMobile && (
+        <div className="LogoWrapper">
+          <Link to="/" onClick={closeMenu}>
+            <img src={logo} alt="Learn Malawi logo" id="Logo" />
+          </Link>
+        </div>
       )}
 
-      {/* Desktop Search */}
-      {!isMobile && (
-        <div className={`desktop-search ${searchOpen ? "search-open" : ""}`} ref={searchRef}>
-          <form className="search-form" onSubmit={handleSearchSubmit}>
-            <button
-              type="button"
-              className="search-icon-btn"
-              aria-label="Toggle search"
-              onClick={() => (searchOpen ? closeSearch() : openSearch())}
-            >
+      {/* Mobile top bar (only on mobile) – contains hamburger and search toggle */}
+      {isMobile && (
+        <div className="mobile-top-bar">
+          <div className="mobile-actions">
+            <button type="button" className="icon-btn" aria-label="Search" onClick={openSearch}>
               <FaSearch />
             </button>
+            <button
+              type="button"
+              className="icon-btn hamburger"
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
+              onClick={toggleMenu}
+            >
+              {isOpen ? <FaTimes /> : <FaBars />}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Desktop & tablet navigation */}
+      {!isMobile && renderNav()}
+
+      {/* Desktop & tablet search */}
+      {!isMobile && (
+        <div className={`desktop-search ${searchOpen ? "search-open" : ""}`} ref={searchRef}>
+          {/* Toggle button outside the form */}
+          <button
+            type="button"
+            className="search-toggle-btn"
+            aria-label="Toggle search"
+            onClick={() => (searchOpen ? closeSearch() : openSearch())}
+          >
+            <FaSearch />
+          </button>
+
+          <form className="search-form" onSubmit={handleSearchSubmit}>
             <input
               ref={searchInputRef}
               type="text"
               className="search-input"
-              placeholder="Search past papers, notes, tutorials…"
+              placeholder="Search For Resources"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               tabIndex={searchOpen ? 0 : -1}
             />
+            {searchOpen && (
+              <button type="submit" className="search-submit-btn" aria-label="Search">
+                <FaSearch />
+              </button>
+            )}
           </form>
 
           {searchOpen && (
@@ -328,23 +321,20 @@ const Header = () => {
         <>
           <nav className={`MobileDrawer ${isOpen ? "open" : ""}`} aria-hidden={!isOpen}>
             <div className="drawer-header">
-              <span className="drawer-title">Menu</span>
-              <button
-                type="button"
-                className="icon-btn"
-                aria-label="Close menu"
-                onClick={closeMenu}
-              >
+              {/* Logo instead of "Menu" */}
+              <div className="drawer-logo">
+                <Link to="/" onClick={closeMenu}>
+                  <img src={logo} alt="Learn Malawi logo" />
+                </Link>
+              </div>
+              <button type="button" className="icon-btn" aria-label="Close menu" onClick={closeMenu}>
                 <FaTimes />
               </button>
             </div>
 
             <div className="drawer-scroll">
-              <NavLink to="/" onClick={closeMenu} className="drawer-link" end>
-                Home
-              </NavLink>
+              <NavLink to="/" onClick={closeMenu} className="drawer-link" end>Home</NavLink>
 
-              {/* Resources accordion */}
               <div className="drawer-accordion">
                 <button
                   type="button"
@@ -352,33 +342,22 @@ const Header = () => {
                     mobileResourcesOpen || resourcesActive ? "active" : ""
                   }`}
                   aria-expanded={mobileResourcesOpen}
-                  onClick={() => setMobileResourcesOpen((p) => !p)}
+                  onClick={() => setMobileResourcesOpen(p => !p)}
                 >
                   <span>Resources</span>
-                  <FaChevronDown
-                    className={`chevron ${mobileResourcesOpen ? "flipped" : ""}`}
-                  />
+                  <FaChevronDown className={`chevron ${mobileResourcesOpen ? "flipped" : ""}`} />
                 </button>
 
                 <div
                   className="drawer-accordion-panel"
                   style={{
-                    maxHeight: mobileResourcesOpen
-                      ? accordionInnerRef.current?.scrollHeight ?? 0
-                      : 0,
+                    maxHeight: mobileResourcesOpen ? accordionInnerRef.current?.scrollHeight ?? 0 : 0,
                   }}
                 >
                   <div className="drawer-accordion-inner" ref={accordionInnerRef}>
                     {RESOURCE_LINKS.map(({ to, label, desc, icon: Icon }) => (
-                      <NavLink
-                        key={to}
-                        to={to}
-                        onClick={closeMenu}
-                        className="drawer-sublink"
-                      >
-                        <span className="drawer-sublink-icon">
-                          <Icon />
-                        </span>
+                      <NavLink key={to} to={to} onClick={closeMenu} className="drawer-sublink">
+                        <span className="drawer-sublink-icon"><Icon /></span>
                         <span className="drawer-sublink-text">
                           <span className="drawer-sublink-label">{label}</span>
                           <span className="drawer-sublink-desc">{desc}</span>
@@ -389,18 +368,10 @@ const Header = () => {
                 </div>
               </div>
 
-              <NavLink to="/quizes" onClick={closeMenu} className="drawer-link">
-                Quizzes
-              </NavLink>
-              <NavLink to="/news" onClick={closeMenu} className="drawer-link">
-                News
-              </NavLink>
-              <NavLink to="/abouts" onClick={closeMenu} className="drawer-link">
-                About
-              </NavLink>
-              <NavLink to="/contact" onClick={closeMenu} className="drawer-link">
-                Contact
-              </NavLink>
+              <NavLink to="/quizes" onClick={closeMenu} className="drawer-link">Quizzes</NavLink>
+              <NavLink to="/news" onClick={closeMenu} className="drawer-link">News</NavLink>
+              <NavLink to="/abouts" onClick={closeMenu} className="drawer-link">About</NavLink>
+              <NavLink to="/contact" onClick={closeMenu} className="drawer-link">Contact</NavLink>
             </div>
           </nav>
 
@@ -412,33 +383,26 @@ const Header = () => {
       {isMobile && (
         <div className={`mobile-search-overlay ${searchOpen ? "open" : ""}`}>
           <form className="mobile-search-bar" onSubmit={handleSearchSubmit}>
-            <button
-              type="button"
-              className="icon-btn"
-              aria-label="Close search"
-              onClick={closeSearch}
-            >
+            <button type="button" className="icon-btn" aria-label="Close search" onClick={closeSearch}>
               <FaArrowLeft />
             </button>
             <input
               ref={searchInputRef}
               type="text"
               className="mobile-search-input"
-              placeholder="Search past papers, notes…"
+              placeholder="Search For Resources"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               tabIndex={searchOpen ? 0 : -1}
             />
             {query && (
-              <button
-                type="button"
-                className="icon-btn"
-                aria-label="Clear search"
-                onClick={() => setQuery("")}
-              >
+              <button type="button" className="icon-btn" aria-label="Clear search" onClick={() => setQuery("")}>
                 <FaTimes />
               </button>
             )}
+            <button type="submit" className="mobile-search-submit-btn" aria-label="Search">
+              <FaSearch />
+            </button>
           </form>
 
           <div className="mobile-search-body">
