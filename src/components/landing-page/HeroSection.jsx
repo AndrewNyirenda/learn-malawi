@@ -1,11 +1,20 @@
 // components/landing-page/HeroSection.jsx
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HeroSlideshow from "../Heroslideshow.jsx";
 import "../../styles/landing-page/hero-section.css";
 
 const HeroSection = () => {
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    const trimmed = searchQuery.trim();
+    if (trimmed) {
+      navigate(`/search?q=${encodeURIComponent(trimmed)}`);
+    }
+  };
 
   return (
     <section className="hero-section">
@@ -20,9 +29,20 @@ const HeroSection = () => {
             student, from secondary school to tertiary education.
           </p>
 
-          <button className="hero-button" onClick={() => navigate("/study-notes")}>
-            Explore Resources
-          </button>
+          {/* Search bar replaces the old button */}
+          <form className="hero-search-form" onSubmit={handleSearchSubmit}>
+            <input
+              type="text"
+              className="hero-search-input"
+              placeholder="Search for resources..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              aria-label="Search"
+            />
+            <button type="submit" className="hero-search-btn">
+              Search
+            </button>
+          </form>
         </div>
 
         <div className="hero-slideshow-container">

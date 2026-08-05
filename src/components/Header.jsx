@@ -141,7 +141,9 @@ const Header = () => {
     }
   }, [searchOpen]);
 
-  const toggleMenu = () => setIsOpen(prev => !prev);
+  const toggleMenu = () => {
+    setIsOpen(prev => !prev);
+  };
   const closeMenu = () => {
     setIsOpen(false);
     setMobileResourcesOpen(false);
@@ -238,7 +240,7 @@ const Header = () => {
 
   return (
     <header className="HeaderWrapper">
-      {/* Logo – always visible on desktop/tablet, hidden on mobile (shown in drawer) */}
+      {/* Logo – always visible on desktop/tablet, hidden on mobile (shown in top bar) */}
       {!isMobile && (
         <div className="LogoWrapper">
           <Link to="/" onClick={closeMenu}>
@@ -247,9 +249,14 @@ const Header = () => {
         </div>
       )}
 
-      {/* Mobile top bar (only on mobile) – contains hamburger and search toggle */}
+      {/* Mobile top bar (only on mobile) – now includes logo on left */}
       {isMobile && (
         <div className="mobile-top-bar">
+          <div className="LogoWrapper">
+            <Link to="/" onClick={closeMenu}>
+              <img src={logo} alt="Learn Malawi logo" id="Logo" />
+            </Link>
+          </div>
           <div className="mobile-actions">
             <button type="button" className="icon-btn" aria-label="Search" onClick={openSearch}>
               <FaSearch />
@@ -273,7 +280,6 @@ const Header = () => {
       {/* Desktop & tablet search */}
       {!isMobile && (
         <div className={`desktop-search ${searchOpen ? "search-open" : ""}`} ref={searchRef}>
-          {/* Toggle button outside the form */}
           <button
             type="button"
             className="search-toggle-btn"
@@ -319,9 +325,8 @@ const Header = () => {
       {/* ============ Mobile Drawer ============ */}
       {isMobile && (
         <>
-          <nav className={`MobileDrawer ${isOpen ? "open" : ""}`} aria-hidden={!isOpen}>
+          <div className={`MobileDrawer ${isOpen ? "open" : ""}`} aria-hidden={!isOpen}>
             <div className="drawer-header">
-              {/* Logo instead of "Menu" */}
               <div className="drawer-logo">
                 <Link to="/" onClick={closeMenu}>
                   <img src={logo} alt="Learn Malawi logo" />
@@ -373,7 +378,7 @@ const Header = () => {
               <NavLink to="/abouts" onClick={closeMenu} className="drawer-link">About</NavLink>
               <NavLink to="/contact" onClick={closeMenu} className="drawer-link">Contact</NavLink>
             </div>
-          </nav>
+          </div>
 
           {isOpen && <div className="backdrop" onClick={closeMenu}></div>}
         </>

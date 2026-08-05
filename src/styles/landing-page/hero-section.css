@@ -313,3 +313,97 @@
   .hero-button { border: 2px solid #000; }
   .hero-title { color: #000; }
 }
+
+/* ============================================================
+   HERO SEARCH FORM — replaces the button
+   ============================================================ */
+
+.hero-search-form {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  max-width: 480px;
+  width: 100%;
+  margin-top: clamp(1rem, 2vw, 1.5rem);
+}
+
+.hero-search-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.9rem 1.2rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: 2px solid #d1d5db; /* prominent gray border */
+  border-radius: 8px;
+  outline: none;
+  transition: border-color var(--duration-fast) ease,
+              box-shadow var(--duration-fast) ease,
+              background var(--duration-fast) ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); /* subtle depth */
+}
+
+.hero-search-input:focus {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(253, 212, 26, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+  background: var(--color-surface);
+}
+
+.hero-search-input::placeholder {
+  color: var(--color-slate-light);
+}
+
+.hero-search-btn {
+  flex-shrink: 0;
+  padding: 0.9rem 1.8rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-navy-deep) 100%);
+  color: var(--color-surface);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform var(--duration-fast) ease,
+              box-shadow var(--duration-fast) ease,
+              background var(--duration-fast) ease;
+  box-shadow: 0 4px 12px rgba(22, 69, 125, 0.2);
+  white-space: nowrap;
+}
+
+.hero-search-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(22, 69, 125, 0.3);
+  background: linear-gradient(135deg, var(--color-navy-deep) 0%, var(--color-blue) 130%);
+}
+
+.hero-search-btn:active {
+  transform: scale(0.96);
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 767px) {
+  .hero-search-form {
+    flex-direction: column;
+    align-items: stretch;
+    max-width: 100%;
+  }
+
+  .hero-search-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero-search-form {
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-search-form {
+    max-width: 420px;
+  }
+}
