@@ -1,5 +1,14 @@
 // pages/GlobalSearchPage.jsx
 import React, { useState, useEffect, useMemo, useCallback } from "react";
+import {
+  FaSearch,
+  FaTimes,
+  FaHome,
+  FaChevronRight,
+  FaEye,
+  FaDownload,
+  FaBookOpen,   
+} from "react-icons/fa";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useStudyNotes } from "../contexts/StudyNotesContext";
 import { usePastPapers } from "../contexts/PastPapersContext";
@@ -9,12 +18,9 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ResourceCard from "./ResourceCard";
 import "../styles/globalSearch.css";
-import {
-  FaSearch,
-  FaTimes,
-  FaHome,
-  FaChevronRight,
-} from "react-icons/fa";
+import "../styles/modal.css"; 
+
+  
 
 // ─── Masthead (matches other pages) ──────────────────────────────
 const Masthead = ({ query, total, onSearch, onClear, searchValue, setSearchValue }) => (
@@ -86,9 +92,13 @@ const GlobalSearchPage = () => {
   const [results, setResults] = useState({ studyNotes: [], pastPapers: [], careerResources: [], news: [] });
   const [total, setTotal] = useState(0);
 
+  // Modal state
+  const [selectedResource, setSelectedResource] = useState(null);
+  const [resourceType, setResourceType] = useState(null); // 'study-notes', 'past-papers', 'career-resources'
+
   // Contexts
-  const { books, fetchBooks } = useStudyNotes();
-  const { pastPapers, fetchPastPapers } = usePastPapers();
+  const { books, fetchBooks, getViewUrl: getStudyNoteViewUrl, getDownloadUrl: getStudyNoteDownloadUrl } = useStudyNotes();
+  const { pastPapers, fetchPastPapers, getViewUrl: getPastPaperViewUrl, getDownloadUrl: getPastPaperDownloadUrl } = usePastPapers();
   const { careerResources, fetchCareerResources } = useCareerResources();
   const { news, fetchNews } = useNews();
 
@@ -166,6 +176,56 @@ const GlobalSearchPage = () => {
     setTotal(0);
   };
 
+  // ── Modal handlers ──
+  const handleCardClick = (item, type) => {
+    setSelectedResource(item);
+    setResourceType(type);
+  };
+
+  const closeModal = () => {
+    setSelectedResource(null);
+    setResourceType(null);
+  };
+
+  const handleViewResource = async () => {
+    if (!selectedResource) return;
+    let viewUrl = "";
+    if (resourceType === "study-notes") {
+      const { viewUrl: url } = await getStudyNoteViewUrl(selectedResource.id);
+      viewUrl = url;
+    } else if (resourceType === "past-papers") {
+      const { viewUrl: url } = await getPastPaperViewUrl(selectedResource.id);
+      viewUrl = url;
+    } else if (resourceType === "career-resources") {
+      viewUrl = selectedResource.link || "#";
+    }
+    if (viewUrl) window.open(viewUrl, "_blank");
+  };
+
+  const handleDownloadResource = async () => {
+    if (!selectedResource) return;
+    if (resourceType === "study-notes") {
+      const { downloadUrl, fileName } = await getStudyNoteDownloadUrl(selectedResource.id);
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = fileName || selectedResource.title;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else if (resourceType === "past-papers") {
+      const { downloadUrl, fileName } = await getPastPaperDownloadUrl(selectedResource.id);
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = fileName || selectedResource.title;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else if (resourceType === "career-resources") {
+      // Career resources often just have a link
+      window.open(selectedResource.link || "#", "_blank");
+    }
+  };
+
   const renderCard = (item) => {
     const type = item._type;
     if (type === "study-notes" || type === "past-papers" || type === "career-resources") {
@@ -178,8 +238,7 @@ const GlobalSearchPage = () => {
           category={item.category}
           class={item.class}
           year={item.year}
-          onView={() => window.open(item.link || "#", "_blank")}
-          onDownload={() => {}}
+          onClick={() => handleCardClick(item, type)}
         />
       );
     } else if (type === "news") {
@@ -246,7 +305,49 @@ const GlobalSearchPage = () => {
           )}
         </section>
       </div>
-      {/* 👇 Footer moved OUTSIDE the container so it spans full width */}
+
+      {/* ─── Modal (same as StudyNotes) ──────────────────────────── */}
+      {selectedResource && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={closeModal}>
+              <FaTimes />
+            </button>
+
+            <div className="modal-image">
+              {selectedResource.thumbnailUrl ? (
+                <img src={selectedResource.thumbnailUrl} alt={selectedResource.title} />
+              ) : (
+                <FaBookOpen className="modal-fallback-icon" />
+              )}
+            </div>
+
+            <h2 className="modal-title">{selectedResource.title}</h2>
+
+            <div className="modal-meta">
+              {selectedResource.category && (
+                <span className="modal-meta-item">{selectedResource.category}</span>
+              )}
+              {selectedResource.class && (
+                <span className="modal-meta-item">{selectedResource.class}</span>
+              )}
+              {selectedResource.year && (
+                <span className="modal-meta-item">{selectedResource.year}</span>
+              )}
+            </div>
+
+            <div className="modal-actions">
+              <button className="modal-btn modal-view" onClick={handleViewResource}>
+                <FaEye /> View
+              </button>
+              <button className="modal-btn modal-download" onClick={handleDownloadResource}>
+                <FaDownload /> Download
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </>
   );
