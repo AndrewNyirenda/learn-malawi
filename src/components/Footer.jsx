@@ -23,7 +23,7 @@ import {
 
 const Footer = () => {
   const contactDetails = {
-    email: "learnmalaw@gmail.com",
+    email: "wzimba777@gmail.com",
     whatsapp: "+265 997 674 758",
     office: "Area 8, Biwi, Lilongwe",
   };

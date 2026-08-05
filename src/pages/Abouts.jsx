@@ -72,7 +72,7 @@ const About = () => {
       role: "Founder & Director",
       bio: "Leading educational innovation in Malawi with a vision for accessible, quality digital learning for all students.",
       image: willard,
-      social: { linkedin: "#", twitter: "#", email: "willard@learnmalawi.com" },
+      social: { linkedin: "#", twitter: "#", email: "wzimba777@gmail.com" },
     },
     /*
     // Developers commented out – uncomment when needed
