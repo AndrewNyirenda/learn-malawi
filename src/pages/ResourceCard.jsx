@@ -6,19 +6,19 @@ import bookPng from "../images/book.png";
 
 const ResourceCard = ({
   title,
-  thumbnail,
+  // thumbnail,        // ← removed from usage (API image ignored)
   category,
   class: resourceClass,
   year,
   type = "PDF",
   customImage = null,
-  onClick, // 👈 new prop
+  onClick,
 }) => {
   const getImageSrc = () => {
-    if (thumbnail) return thumbnail;
+    // Only use customImage if explicitly provided, otherwise use bookPng for "book" type
     if (customImage) return customImage;
     if (type?.toLowerCase() === "book") return bookPng;
-    return null;
+    return null; // fallback to icon
   };
 
   const imageSrc = getImageSrc();
