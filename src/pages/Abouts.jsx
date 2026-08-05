@@ -17,31 +17,17 @@ import {
   FaHome,
   FaChevronRight,
   FaInfoCircle,
-  FaShieldAlt,
   FaQuoteLeft,
 } from "react-icons/fa";
-import inno from "../images/inno.jpg";
 import willard from "../images/willard.JPG";
-import andrew from "../images/andrew.jpg";
+// import inno from "../images/inno.jpg";   // commented out
+// import andrew from "../images/andrew.jpg"; // commented out
 import Footer from "../components/Footer.jsx";
 import Header from "../components/Header.jsx";
 
-// ─── Masthead (matches other pages, now with a stats ledger + seal) ──
+// ─── Masthead – clean, without stats or seal ──────────────────────
 const Masthead = () => (
   <div className="about-page-masthead">
-    <div className="about-masthead-stamp" aria-hidden="true">
-      <span className="about-masthead-stamp-ring" />
-      <span className="about-masthead-stamp-ring about-masthead-stamp-ring--inner" />
-      <span className="about-masthead-stamp-core">
-        <FaShieldAlt className="about-masthead-stamp-icon" />
-        <span className="about-masthead-stamp-text">
-          Est.
-          <br />
-          Malawi
-        </span>
-      </span>
-    </div>
-
     <div className="about-masthead-inner">
       <nav className="about-breadcrumb" aria-label="Breadcrumb">
         <Link to="/"><FaHome /> Home</Link>
@@ -64,21 +50,6 @@ const Masthead = () => (
         Free, quality digital education for every Malawian secondary student.
       </p>
 
-      <div className="about-masthead-stats">
-        <div className="about-masthead-stat">
-          <span className="about-masthead-stat-value">3</span>
-          <span className="about-masthead-stat-label">Team Members</span>
-        </div>
-        <div className="about-masthead-stat">
-          <span className="about-masthead-stat-value">28</span>
-          <span className="about-masthead-stat-label">Districts Reached</span>
-        </div>
-        <div className="about-masthead-stat">
-          <span className="about-masthead-stat-value">100<span className="unit">%</span></span>
-          <span className="about-masthead-stat-label">Free Access</span>
-        </div>
-      </div>
-
       <div className="about-masthead-meta">
         <span className="about-masthead-meta-item">Mission Driven</span>
         <span className="about-masthead-meta-item">Free Access</span>
@@ -94,6 +65,7 @@ const About = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  // ── Team – only founder visible, developers commented out ──
   const teamMembers = [
     {
       name: "Willard Zimba",
@@ -102,6 +74,8 @@ const About = () => {
       image: willard,
       social: { linkedin: "#", twitter: "#", email: "willard@learnmalawi.com" },
     },
+    /*
+    // Developers commented out – uncomment when needed
     {
       name: "Andrew Kwanjana Nyirenda",
       role: "Full Stack Developer",
@@ -116,6 +90,7 @@ const About = () => {
       image: inno,
       social: { linkedin: "#", twitter: "#", email: "innocent@learnmalawi.com" },
     },
+    */
   ];
 
   const missionVision = [
@@ -284,35 +259,37 @@ const About = () => {
           </div>
         </section>
 
-        {/* ===== TEAM ===== */}
+        {/* ===== TEAM – centered, heading "Leadership" ===== */}
         <section className="about-team-section">
           <div className="about-section-header">
             <div className="about-section-header-row">
               <span className="about-section-eyebrow">Meet the Makers</span>
               <div className="about-section-divider"></div>
             </div>
-            <h2>Leadership & Development Team</h2>
+            <h2>Leadership</h2>
           </div>
-          <div className="about-team-grid">
-            {teamMembers.map((member, index) => (
-              <div key={index} className="about-team-card">
-                <div className="about-team-image">
-                  <img src={member.image} alt={member.name} />
-                  <div className="about-team-overlay">
-                    <div className="about-team-social">
-                      <a href={member.social.linkedin} aria-label="LinkedIn"><FaLinkedinIn /></a>
-                      <a href={member.social.twitter} aria-label="Twitter"><FaTwitter /></a>
-                      <a href={`mailto:${member.social.email}`} aria-label="Email"><FaEnvelope /></a>
+          <div className="about-team-wrapper">
+            <div className="about-team-grid">
+              {teamMembers.map((member, index) => (
+                <div key={index} className="about-team-card">
+                  <div className="about-team-image">
+                    <img src={member.image} alt={member.name} />
+                    <div className="about-team-overlay">
+                      <div className="about-team-social">
+                        <a href={member.social.linkedin} aria-label="LinkedIn"><FaLinkedinIn /></a>
+                        <a href={member.social.twitter} aria-label="Twitter"><FaTwitter /></a>
+                        <a href={`mailto:${member.social.email}`} aria-label="Email"><FaEnvelope /></a>
+                      </div>
                     </div>
                   </div>
+                  <div className="about-team-info">
+                    <h3>{member.name}</h3>
+                    <span>{member.role}</span>
+                    <p>{member.bio}</p>
+                  </div>
                 </div>
-                <div className="about-team-info">
-                  <h3>{member.name}</h3>
-                  <span>{member.role}</span>
-                  <p>{member.bio}</p>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </section>
       </div>
