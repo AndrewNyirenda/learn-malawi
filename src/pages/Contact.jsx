@@ -1,285 +1,272 @@
-import React, { useState, useEffect } from "react";
+// pages/Contact.jsx
+import React, { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { useContact } from '../contexts/ContactContext';
-import "../styles/Contact.css";
+import "../styles/contact.css";
 import Footer from "../components/Footer.jsx";
-import Header from '../components/Header';
-import { 
-  FaPaperPlane, 
-  FaMapMarkerAlt, 
-  FaWhatsapp, 
-  FaEnvelope,
-  FaPhone,
-  FaClock,
-  FaArrowRight,
+import Header from "../components/Header.jsx";
+
+import contactHero from "../images/contact2.jpg";
+
+import {
   FaHome,
   FaChevronRight,
-  FaInfoCircle
+  FaCommentDots,
+  FaMapMarkerAlt,
+  FaPhoneAlt,
+  FaEnvelope,
+  FaClock,
+  FaPaperPlane,
+  FaShieldAlt,
+  FaFacebookF,
+  FaTwitter,
+  FaInstagram,
+  FaLinkedinIn,
+  FaCheck,
 } from "react-icons/fa";
 
-// ─── Masthead (matches other pages) ──────────────────────────────
-const Masthead = () => (
-  <div className="page-masthead">
-    <div className="masthead-inner">
-      <nav className="breadcrumb" aria-label="Breadcrumb">
+// ─── Hero (stamp & quickbar removed) ──────────────────────────────
+const Hero = () => (
+  <div
+    className="contact-hero"
+    style={{ backgroundImage: `url(${contactHero})` }}
+  >
+    <div className="contact-hero-scrim" />
+
+    <div className="contact-hero-inner">
+      <nav className="contact-breadcrumb" aria-label="Breadcrumb">
         <Link to="/"><FaHome /> Home</Link>
         <FaChevronRight />
-        <span className="breadcrumb-current">Contact</span>
+        <span className="contact-breadcrumb-current">Contact</span>
       </nav>
 
-      <div className="masthead-eyebrow">
-        <span className="masthead-eyebrow-icon">
-          <FaInfoCircle />
+      <div className="contact-eyebrow">
+        <span className="contact-eyebrow-icon">
+          <FaCommentDots />
         </span>
-        Get in Touch
+        We'd Love to Hear From You
       </div>
 
-      <h1 className="masthead-title">
-        Contact <span className="masthead-title-accent">Learn Malawi</span>
+      <h1 className="contact-hero-title">
+        Let's Start a <span className="contact-hero-title-accent">Conversation</span>
       </h1>
 
-      <p className="masthead-desc">
-        Reach our team for support or inquiries. We're committed to assisting your educational journey.
+      <p className="contact-hero-desc">
+        Questions, partnership ideas, or feedback on the platform — our team
+        reads every message and replies personally.
       </p>
-
-      <div className="masthead-meta">
-        <span className="masthead-meta-item">24hr Response</span>
-        <span className="masthead-meta-dot" />
-        <span className="masthead-meta-item">Free Support</span>
-        <span className="masthead-meta-dot" />
-        <span className="masthead-meta-item">We're Here to Help</span>
-      </div>
     </div>
   </div>
 );
 
-// ─── Main component ────────────────────────────────────────────────
-const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    subject: "",
-    message: ""
-  });
-  
-  const { loading, error, success, sendMessage, clearError, clearSuccess } = useContact();
+// ─── Contact form ─────────────────────────────────────────────────
+const initialForm = { name: "", email: "", subject: "", message: "" };
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
+const ContactForm = () => {
+  const [form, setForm] = useState(initialForm);
+  const [submitting, setSubmitting] = useState(false);
+  const [sent, setSent] = useState(false);
+
+  const handleChange = useCallback((e) => {
+    const { name, value } = e.target;
+    setForm((f) => ({ ...f, [name]: value }));
   }, []);
 
-  const contactInfo = [
-    {
-      icon: <FaEnvelope />,
-      title: "Email Address",
-      details: "learnmalaw@gmail.com",
-      link: "mailto:learnmalaw@gmail.com",
-      action: "Send Email",
-      description: "For general inquiries and support"
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      setSubmitting(true);
+      await new Promise((res) => setTimeout(res, 900));
+      setSubmitting(false);
+      setSent(true);
+      setForm(initialForm);
     },
-    {
-      icon: <FaWhatsapp />,
-      title: "WhatsApp",
-      details: "+265 889 766 298",
-      link: "https://wa.me/265889766298",
-      action: "Chat on WhatsApp",
-      description: "Quick responses for urgent matters"
-    },
-    {
-      icon: <FaPhone />,
-      title: "Phone",
-      details: "+265 889 766 298",
-      link: "tel:+265889766298",
-      action: "Call Us",
-      description: "Available during business hours"
-    },
-    {
-      icon: <FaMapMarkerAlt />,
-      title: "Office Location",
-      details: "Area 8, Biwi, Lilongwe",
-      link: null,
-      action: null,
-      description: "Visit our office in Lilongwe"
-    },
-    {
-      icon: <FaClock />,
-      title: "Business Hours",
-      details: "Mon - Fri: 8:00 AM - 5:00 PM",
-      link: null,
-      action: null,
-      description: "Saturday: 9:00 AM - 1:00 PM"
-    }
-  ];
+    []
+  );
 
-  const handleChange = (e) => {
-    setFormData({...formData, [e.target.name]: e.target.value });
-  };
+  if (sent) {
+    return (
+      <div className="contact-form-card contact-form-success">
+        <div className="contact-success-icon">
+          <FaCheck />
+        </div>
+        <h3>Message sent</h3>
+        <p>
+          Thank you for reaching out — a member of the Learn Smart team will
+          reply within one business day.
+        </p>
+        <button type="button" className="contact-success-reset" onClick={() => setSent(false)}>
+          Send another message
+        </button>
+      </div>
+    );
+  }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    clearError();
-    clearSuccess();
-    try {
-      await sendMessage(formData);
-      setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  return (
+    <form className="contact-form-card" onSubmit={handleSubmit} noValidate>
+      <span className="contact-form-eyebrow">Send a Message</span>
+      <h2 className="contact-form-title">Tell us how we can help</h2>
+
+      <div className="contact-field-row">
+        <div className="contact-field">
+          <input
+            id="name"
+            name="name"
+            type="text"
+            placeholder=" "
+            value={form.name}
+            onChange={handleChange}
+            required
+          />
+          <label htmlFor="name">Full name</label>
+        </div>
+
+        <div className="contact-field">
+          <input
+            id="email"
+            name="email"
+            type="email"
+            placeholder=" "
+            value={form.email}
+            onChange={handleChange}
+            required
+          />
+          <label htmlFor="email">Email address</label>
+        </div>
+      </div>
+
+      <div className="contact-field">
+        <input
+          id="subject"
+          name="subject"
+          type="text"
+          placeholder=" "
+          value={form.subject}
+          onChange={handleChange}
+          required
+        />
+        <label htmlFor="subject">Subject</label>
+      </div>
+
+      <div className="contact-field">
+        <textarea
+          id="message"
+          name="message"
+          rows={5}
+          placeholder=" "
+          value={form.message}
+          onChange={handleChange}
+          required
+        />
+        <label htmlFor="message">Your message</label>
+      </div>
+
+      <button type="submit" className="contact-submit" disabled={submitting}>
+        {submitting ? (
+          <span className="contact-submit-spinner" aria-hidden="true" />
+        ) : (
+          <>
+            Send Message <FaPaperPlane />
+          </>
+        )}
+      </button>
+
+      <p className="contact-form-note">
+        By submitting, you agree to be contacted by the Learn Smart team
+        regarding your enquiry.
+      </p>
+    </form>
+  );
+};
+
+// ─── Contact details panel ─────────────────────────────────────────
+const details = [
+  {
+    icon: FaMapMarkerAlt,
+    label: "Our Office",
+    lines: ["Learn Smart HQ", "Lilongwe, Central Region", "Malawi"],
+  },
+  {
+    icon: FaPhoneAlt,
+    label: "Phone",
+    lines: ["+265 888 000 000", "+265 999 000 000"],
+  },
+  {
+    icon: FaEnvelope,
+    label: "Email",
+    lines: ["hello@learnmalawi.com", "support@learnmalawi.com"],
+  },
+  {
+    icon: FaClock,
+    label: "Office Hours",
+    lines: ["Mon – Fri: 8:00 – 17:00", "Sat: 9:00 – 13:00"],
+  },
+];
+
+const socials = [
+  { icon: FaFacebookF, label: "Facebook", href: "#" },
+  { icon: FaTwitter, label: "Twitter", href: "#" },
+  { icon: FaInstagram, label: "Instagram", href: "#" },
+  { icon: FaLinkedinIn, label: "LinkedIn", href: "#" },
+];
+
+const ContactDetails = () => (
+  <aside className="contact-details-card">
+    <span className="contact-form-eyebrow">Get in Touch</span>
+    <h3 className="contact-details-title">Reach us directly</h3>
+
+    <ul className="contact-details-list">
+      {details.map(({ icon: Icon, label, lines }) => (
+        <li key={label} className="contact-details-item">
+          <span className="contact-details-icon">
+            <Icon />
+          </span>
+          <span className="contact-details-text">
+            <span className="contact-details-label">{label}</span>
+            {lines.map((line) => (
+              <span className="contact-details-line" key={line}>
+                {line}
+              </span>
+            ))}
+          </span>
+        </li>
+      ))}
+    </ul>
+
+    <div className="contact-details-divider" />
+
+    <div className="contact-social-block">
+      <span className="contact-details-label">Follow Learn Smart</span>
+      <div className="contact-social-row">
+        {socials.map(({ icon: Icon, label, href }) => (
+          <a key={label} href={href} aria-label={label} className="contact-social-link">
+            <Icon />
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <div className="contact-trust-badge">
+      <FaShieldAlt />
+      <span>Every enquiry is reviewed by a real person on our team.</span>
+    </div>
+  </aside>
+);
+
+// ─── Main component ────────────────────────────────────────────────
+const Contact = () => {
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>
       <Header />
-      <div className="lm-contact-wrapper">
-        <Masthead />
+      <div className="contact-container">
+        <Hero />
 
-        <section className="lm-contact-info-section">
-          <div className="lm-contact-info-grid">
-            {contactInfo.map((info, i) => (
-              <div key={i} className="lm-contact-card">
-                <div className="lm-contact-icon">{info.icon}</div>
-                <h3>{info.title}</h3>
-                <p className="lm-contact-details">{info.details}</p>
-                <p className="lm-contact-desc">{info.description}</p>
-                {info.link && info.action && (
-                  <a 
-                    href={info.link} 
-                    target="_blank" 
-                    rel="noopener noreferrer nofollow"
-                    className="lm-contact-action"
-                  >
-                    {info.action} <FaArrowRight />
-                  </a>
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="lm-contact-form-section">
-          <div className="lm-section-header">
-            <h2>Send Us a Message</h2>
-            <p className="lm-section-subtitle">
-              We'll respond within 24 hours — usually much sooner
-            </p>
-          </div>
-
-          <div className="lm-contact-form-container">
-            {success && (
-              <div className="lm-success-message">
-                <div className="lm-status-content">
-                  <div className="lm-status-icon">✓</div>
-                  <div>
-                    <h3>Message Sent Successfully</h3>
-                    <p>Thank you for reaching out. We'll respond within 24 hours.</p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {error && (
-              <div className="lm-error-message">
-                <div className="lm-status-content">
-                  <div className="lm-status-icon">✗</div>
-                  <div>
-                    <h3>Message Failed to Send</h3>
-                    <p>Please try again or use one of our alternative contact methods.</p>
-                    <button className="lm-retry-btn" onClick={clearError}>
-                      Try Again
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <form className="lm-contact-form" onSubmit={handleSubmit}>
-              <div className="lm-form-row">
-                <div className="lm-form-group">
-                  <label>Full Name *</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    placeholder="Your Full Name"
-                    disabled={loading}
-                    className="lm-form-input"
-                  />
-                </div>
-                <div className="lm-form-group">
-                  <label>Email Address *</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    placeholder="Your Email Address"
-                    disabled={loading}
-                    className="lm-form-input"
-                  />
-                </div>
-              </div>
-
-              <div className="lm-form-row">
-                <div className="lm-form-group">
-                  <label>Phone Number</label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    placeholder="+265 XXX XXX XXX"
-                    disabled={loading}
-                    className="lm-form-input"
-                  />
-                </div>
-                <div className="lm-form-group">
-                  <label>Subject *</label>
-                  <input
-                    type="text"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    required
-                    placeholder="How can we help?"
-                    disabled={loading}
-                    className="lm-form-input"
-                  />
-                </div>
-              </div>
-
-              <div className="lm-form-group">
-                <label>Message *</label>
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  rows="6"
-                  placeholder="Please describe how we can assist you..."
-                  disabled={loading}
-                  className="lm-form-textarea"
-                  required
-                />
-              </div>
-
-              <button 
-                type="submit" 
-                className={`lm-submit-btn ${loading ? 'loading' : ''}`}
-                disabled={loading}
-              >
-                {loading ? (
-                  <>Sending Message...</>
-                ) : (
-                  <>
-                    <FaPaperPlane className="lm-btn-icon" /> Send Message
-                  </>
-                )}
-              </button>
-            </form>
-          </div>
+        <section className="contact-main">
+          <ContactForm />
+          <ContactDetails />
         </section>
       </div>
       <Footer />

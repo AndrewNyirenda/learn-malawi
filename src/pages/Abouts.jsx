@@ -42,7 +42,7 @@ const Masthead = () => (
       </div>
 
       <h1 className="about-masthead-title">
-        About <span className="about-masthead-title-accent">Learn Malawi</span>
+        About <span className="about-masthead-title-accent">Learn Smart</span>
       </h1>
 
       <p className="about-masthead-desc">
@@ -75,14 +75,14 @@ const About = () => {
     {
       name: "Andrew Kwanjana Nyirenda",
       role: "Full Stack Developer",
-      bio: "Architected and developed the Learn Malawi platform infrastructure, ensuring scalable and reliable performance.",
+      bio: "Architected and developed the Learn Smart platform infrastructure, ensuring scalable and reliable performance.",
       image: andrew,
       social: { linkedin: "#", twitter: "#", email: "andrew@learnmalawi.com" },
     },
     {
       name: "Innocent Frank Gomwa",
       role: "Full Stack Developer",
-      bio: "Architected and developed the Learn Malawi platform infrastructure, ensuring scalable and reliable performance.",
+      bio: "Architected and developed the Learn Smart platform infrastructure, ensuring scalable and reliable performance.",
       image: inno,
       social: { linkedin: "#", twitter: "#", email: "innocent@learnmalawi.com" },
     },
@@ -156,9 +156,9 @@ const About = () => {
           <div className="about-story-grid">
             <div className="about-story-left">
               <span className="about-story-eyebrow">Our Journey</span>
-              <h2>Why We Built Learn Malawi</h2>
+              <h2>Why We Built Learn Smart</h2>
               <p>
-                Learn Malawi was created to eliminate educational inequality
+                Learn Smart was created to eliminate educational inequality
                 across Malawi. We believe access to structured, high-quality
                 learning resources should not depend on geography or income.
               </p>
