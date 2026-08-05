@@ -193,7 +193,7 @@ const details = [
   {
     icon: FaEnvelope,
     label: "Email",
-    lines: ["hello@learnmalawi.com", "support@learnmalawi.com"],
+    lines: ["wzimba777@gmail.com", "support@learnmalawi.com"],
   },
   {
     icon: FaClock,

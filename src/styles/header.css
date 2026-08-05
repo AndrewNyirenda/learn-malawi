@@ -822,3 +822,51 @@
     color: #fff;
   }
 }
+
+/* ============================================================
+   DRAWER HEADER — logo + brand text
+   ============================================================ */
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-4) var(--space-3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.drawer-logo-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.drawer-logo-link {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+}
+
+.drawer-logo-link img {
+  height: 44px;
+  width: auto;
+  display: block;
+}
+
+.drawer-brand-text {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-blue-light); /* light blue */
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.drawer-logo-link:hover img {
+  opacity: 0.85;
+}
+
+.drawer-logo-link:hover .drawer-brand-text {
+  color: var(--color-blue);
+}
